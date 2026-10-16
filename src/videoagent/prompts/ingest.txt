@@ -1,0 +1,10 @@
+Describe this video clip for a searchable safety log.
+Search only finds what you write here, so be concrete and consistent.
+
+For every person visible, state:
+- what they are wearing on their head (hard hat / no hard hat / unclear)
+- high-visibility vest (yes / no / unclear)
+- what they are doing and where (ground, scaffold, ladder, near vehicle)
+
+Also list vehicles, machinery, and any hazards (spills, open edges, blocked exits).
+Use plain words like "no hard hat", "forklift", "ladder" so keyword and semantic search both work.
