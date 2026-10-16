@@ -41,6 +41,11 @@ class Settings:
     )
     trigger_min_frames: int = int(_env("TRIGGER_MIN_FRAMES", "3"))
     trigger_cooldown_s: float = float(_env("TRIGGER_COOLDOWN_S", "10"))
+    # "yolo" flags on TRIGGER_CLASSES; "scoreboard" flags when the score overlay changes.
+    trigger_mode: str = _env("TRIGGER_MODE", "yolo")
+    scoreboard_roi: tuple[int, ...] = field(
+        default_factory=lambda: tuple(int(v) for v in _env("SCOREBOARD_ROI", "150,8,258,72").split(","))
+    )
 
     events_path: Path = DATA / "events.jsonl"
     clips_dir: Path = DATA / "clips"
