@@ -1607,11 +1607,13 @@ class Handler(BaseHTTPRequestHandler):
         path = strip_base(parsed.path.rstrip("/") or "/")
         query = urllib.parse.parse_qs(parsed.query)
         if path == "/health":
+            data = load_data()
             return self._json(
                 200,
                 {
                     "ok": True,
                     "data_source": data_source(),
+                    "incidents": len(data.get("incidents") or []),
                     "segments": len(load_segments()),
                     "base_path": BASE_PATH,
                 },
