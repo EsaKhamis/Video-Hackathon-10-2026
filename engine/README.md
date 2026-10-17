@@ -16,6 +16,7 @@ Everything lives in `data/`. The app reads only `segments.json`, `screen.json` a
 | `stage_e.json` | Stage E, `engine/report.py`: report / lesson text per segment | `build_incidents.py` |
 | `near_misses.json` | Eye check of clips (person in the roadway, or a vehicle in the lane). Not a fault verdict | `build_incidents.py` fills unknown colour, type and position; adds clips the rules had dropped |
 | `incidents.json` | `engine/build_incidents.py` (+ `report.py` adds text) | app |
+| `coach.json`, `coach.md` | `engine/coach.py`: rider-fault incidents grouped by habit (plain Python) + W&B coaching text, checked by a critic call | reference; Weave object `rider-coach-report` |
 | `stage_f.json` | Stage F, `engine/bikelane.py`: vehicles stopped in the bike lane + vehicle ID (crops in `data/bikelane/`, gitignored) | `build_incidents.py` (rule 9) |
 
 ```bash
@@ -23,6 +24,7 @@ python3 engine/detect.py           # Stage B -> data/geometry.json (~2 min)
 python3 engine/confirm.py          # Stage C -> data/stage_c.json (~2.5 min, 102 segments)
 python3 engine/build_incidents.py  # -> data/incidents.json
 python3 engine/report.py           # Stage E -> W&B text in incidents.json (~1 min, cached in stage_e.json)
+python3 engine/coach.py            # rider coaching report from all rider-fault incidents -> data/coach.md
 k8s/update-data.sh                 # live in /app within about a minute
 ```
 
