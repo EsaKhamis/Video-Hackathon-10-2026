@@ -1,0 +1,528 @@
+{
+ "stage": "C",
+ "model": "nvidia/cosmos3-nano-reasoner",
+ "rows": [
+  {
+   "id": "GOPR0130_chunk_0026_segment_003",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the right edge at about 4.17 s, filling 56% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "suv",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.17,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black SUV remains in its own lane on the right side of the road and does not enter the rider's path; the rider continues straight without any interaction."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"suv\",\n    \"colour\": \"black\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 4.17,\n  \"rider_position\": \"traffic_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"unknown\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The black SUV remains in its own lane on the right side of the road and does not enter the rider's path; the rider continues straight without any interaction.\"\n}\n```",
+   "still_t": 3.2,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 4.4
+  },
+  {
+   "id": "GX050001_chunk_0019_segment_001",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the right edge at about 1.43 s, filling 52% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 1.43,
+    "rider_position": "bike_lane",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The white car on the right remains in its own lane, separated by a physical barrier, and does not enter the rider's path."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"car\",\n    \"colour\": \"white\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 1.43,\n  \"rider_position\": \"bike_lane\",\n  \"separator\": \"yes\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"unknown\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The white car on the right remains in its own lane, separated by a physical barrier, and does not enter the rider's path.\"\n}\n```",
+   "still_t": 0.4,
+   "still_signal": "green",
+   "still_raw": "green",
+   "secs": 4.5
+  },
+  {
+   "id": "GOPR0130_chunk_0017_segment_005",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the right edge at about 4.63 s, filling 53% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "taxi",
+     "colour": "yellow",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.63,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The rider is in a bike lane and the yellow taxi is in its own lane, with no physical contact or path crossing; the rider proceeds on red, making the situation a rider fault."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"taxi\",\n    \"colour\": \"yellow\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 4.63,\n  \"rider_position\": \"bike_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"red\",\n  \"rider_entered_on_red\": true,\n  \"fault\": \"rider\",\n  \"evidence\": \"The rider is in a bike lane and the yellow taxi is in its own lane, with no physical contact or path crossing; the rider proceeds on red, making the situation a rider fault.\"\n}\n```",
+   "still_t": 3.6,
+   "still_signal": "red",
+   "still_raw": "red",
+   "secs": 4.5
+  },
+  {
+   "id": "GOPR0130_chunk_0026_segment_002",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the right edge at about 2.7 s, filling 56% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "van",
+     "colour": "yellow",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.7,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "green",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The yellow van remains in its own lane and does not enter the rider's path, so no conflict occurs."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"van\",\n    \"colour\": \"yellow\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 2.7,\n  \"rider_position\": \"traffic_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"green\",\n  \"rider_entered_on_red\": false,\n  \"fault\": \"none\",\n  \"evidence\": \"The yellow van remains in its own lane and does not enter the rider's path, so no conflict occurs.\"\n}\n```",
+   "still_t": 1.7,
+   "still_signal": "green",
+   "still_raw": "green",
+   "secs": 5.2
+  },
+  {
+   "id": "GX010001_chunk_0018_segment_003",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a truck on the left edge at about 4.83 s, filling 47% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.83,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black UPS truck is parked on the left side of the street, separated from the sidewalk by a metal railing and a curb, and does not interact with the cyclist on the sidewalk."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"truck\",\n    \"colour\": \"black\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 4.83,\n  \"rider_position\": \"sidewalk\",\n  \"separator\": \"yes\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none_visible\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The black UPS truck is parked on the left side of the street, separated from the sidewalk by a metal railing and a curb, and does not interact with the cyclist on the sidewalk.\"\n}\n```",
+   "still_t": 3.8,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 4.6
+  },
+  {
+   "id": "GX010001_chunk_0004_segment_004",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the left edge at about 2.4 s, filling 61% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "suv",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.4,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black SUV remains in its own lane and does not enter the rider's path, so no conflict occurs."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"suv\",\n    \"colour\": \"black\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 2.4,\n  \"rider_position\": \"bike_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none_visible\",\n  \"rider_entered_on_red\": false,\n  \"fault\": \"none\",\n  \"evidence\": \"The black SUV remains in its own lane and does not enter the rider's path, so no conflict occurs.\"\n}\n```",
+   "still_t": 1.4,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 4.4
+  },
+  {
+   "id": "GOPR0130_chunk_0021_segment_004",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a bus on the right edge at about 4.27 s, filling 99% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.27,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black UPS delivery truck is parked on the street to the right of the sidewalk, separated by metal scaffolding poles and a curb; the cyclist remains on the sidewalk and does not interact with the truck, which stays in its own lane without encroaching on the rider's path."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"truck\",\n    \"colour\": \"black\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 4.27,\n  \"rider_position\": \"sidewalk\",\n  \"separator\": \"yes\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none_visible\",\n  \"rider_entered_on_red\": false,\n  \"fault\": \"none\",\n  \"evidence\": \"The black UPS delivery truck is parked on the street to the right of the sidewalk, separated by metal scaffolding poles and a curb; the cyclist remains on the sidewalk and does not interact with the truck, which stays in its own lane without encroaching on the rider's path.\"\n}\n```",
+   "still_t": 3.3,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 4.5
+  },
+  {
+   "id": "GX010001_chunk_0018_segment_004",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the left edge at about 1.47 s, filling 47% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 1.47,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The silver car is parked on the left side of the street, separated from the sidewalk by a curb and metal scaffolding, and does not interact with the cyclist."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"car\",\n    \"colour\": \"silver\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 1.47,\n  \"rider_position\": \"sidewalk\",\n  \"separator\": \"yes\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none\",\n  \"rider_entered_on_red\": false,\n  \"fault\": \"none\",\n  \"evidence\": \"The silver car is parked on the left side of the street, separated from the sidewalk by a curb and metal scaffolding, and does not interact with the cyclist.\"\n}\n```",
+   "still_t": 0.5,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 7.7
+  },
+  {
+   "id": "GX010001_chunk_0016_segment_001",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the right edge at about 4.73 s, filling 73% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.73,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "The black car cuts into the bike lane from the right, moving ahead of the cyclist without a clear separator, creating a close pass."
+   },
+   "raw": "```json\n{\n  \"near_miss\": true,\n  \"event\": \"cut_in\",\n  \"vehicle\": {\n    \"type\": \"car\",\n    \"colour\": \"black\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"under_1m\",\n  \"peak_time_sec\": 4.73,\n  \"rider_position\": \"bike_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"overtaking\",\n  \"vehicle_entered_rider_path\": true,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"unknown\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"driver\",\n  \"evidence\": \"The black car cuts into the bike lane from the right, moving ahead of the cyclist without a clear separator, creating a close pass.\"\n}\n```",
+   "still_t": 3.7,
+   "still_signal": "red",
+   "still_raw": "Red",
+   "secs": 7.9
+  },
+  {
+   "id": "GX050001_chunk_0014_segment_006",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a bus on the right edge at about 0.6 s, filling 17% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.6,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The white truck on the right remains in its own lane and does not interact with the rider."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"truck\",\n    \"colour\": \"white\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 0.6,\n  \"rider_position\": \"unknown\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"unknown\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The white truck on the right remains in its own lane and does not interact with the rider.\"\n}\n```",
+   "still_t": 0.0,
+   "still_signal": "red",
+   "still_raw": "red",
+   "secs": 6.4
+  },
+  {
+   "id": "GX050001_chunk_0018_segment_004",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the left edge at about 4.6 s, filling 42% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "suv",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.6,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black SUV on the left is in its own lane and does not enter the rider's path."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"suv\",\n    \"colour\": \"black\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 4.6,\n  \"rider_position\": \"unknown\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"none\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The black SUV on the left is in its own lane and does not enter the rider's path.\"\n}\n```",
+   "still_t": 3.6,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 6.1
+  },
+  {
+   "id": "GX010001_chunk_0007_segment_004",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the left edge at about 2.6 s, filling 53% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black car on the left side of the road cuts into the lane ahead of the cyclist, moving directly into its path without clear indication, requiring the cyclist to brake and yield."
+   },
+   "raw": "```json\n{\n  \"near_miss\": true,\n  \"event\": \"cut_in\",\n  \"vehicle\": {\n    \"type\": \"car\",\n    \"colour\": \"black\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"under_1m\",\n  \"peak_time_sec\": 2.6,\n  \"rider_position\": \"traffic_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"overtaking\",\n  \"vehicle_entered_rider_path\": true,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none_visible\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"driver\",\n  \"evidence\": \"A black car on the left side of the road cuts into the lane ahead of the cyclist, moving directly into its path without clear indication, requiring the cyclist to brake and yield.\"\n}\n```",
+   "still_t": 1.6,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 8.0
+  },
+  {
+   "id": "GX010001_chunk_0003_segment_006",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera.",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "none",
+     "side": "none"
+    },
+    "closest_distance": "unknown",
+    "peak_time_sec": 0,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a cyclist riding on a city street with clearly marked bus and truck lanes, no vehicles are present in the immediate path, and there are no interactions or conflicts with other road users."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"none\",\n    \"colour\": \"none\",\n    \"side\": \"none\"\n  },\n  \"closest_distance\": \"unknown\",\n  \"peak_time_sec\": 0,\n  \"rider_position\": \"traffic_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"none\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The video shows a cyclist riding on a city street with clearly marked bus and truck lanes, no vehicles are present in the immediate path, and there are no interactions or conflicts with other road users.\"\n}\n```",
+   "still_t": 1.5,
+   "still_signal": "red",
+   "still_raw": "red",
+   "secs": 6.6
+  },
+  {
+   "id": "GX010001_chunk_0006_segment_001",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the right edge at about 4.9 s, filling 71% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "suv",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.9,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "cut_in",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "The black SUV cuts into the bike lane from the right, moving ahead of the cyclist without a clear separator, creating a close pass."
+   },
+   "raw": "```json\n{\n  \"near_miss\": true,\n  \"event\": \"cut_in\",\n  \"vehicle\": {\n    \"type\": \"suv\",\n    \"colour\": \"black\",\n    \"side\": \"right\"\n  },\n  \"closest_distance\": \"under_1m\",\n  \"peak_time_sec\": 4.9,\n  \"rider_position\": \"bike_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"cut_in\",\n  \"vehicle_entered_rider_path\": true,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"none_visible\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"driver\",\n  \"evidence\": \"The black SUV cuts into the bike lane from the right, moving ahead of the cyclist without a clear separator, creating a close pass.\"\n}\n```",
+   "still_t": 3.9,
+   "still_signal": "red",
+   "still_raw": "red",
+   "secs": 5.1
+  },
+  {
+   "id": "GX010001_chunk_0007_segment_006",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a truck on the left edge at about 3.57 s, filling 49% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.57,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The white truck on the left remains in its own lane and does not enter the rider's path, so no conflict occurs."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"truck\",\n    \"colour\": \"white\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 3.57,\n  \"rider_position\": \"traffic_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"unknown\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The white truck on the left remains in its own lane and does not enter the rider's path, so no conflict occurs.\"\n}\n```",
+   "still_t": 2.6,
+   "still_signal": "none_visible",
+   "still_raw": "none_visible",
+   "secs": 5.9
+  },
+  {
+   "id": "GOPR0130_chunk_0005_segment_005",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the left edge at about 4.63 s, filling 68% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.63,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black car on the left remains in its own lane and does not enter the rider's path, so no conflict occurs."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"car\",\n    \"colour\": \"black\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 4.63,\n  \"rider_position\": \"traffic_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"unknown\",\n  \"rider_entered_on_red\": null,\n  \"fault\": \"none\",\n  \"evidence\": \"The black car on the left remains in its own lane and does not enter the rider's path, so no conflict occurs.\"\n}\n```",
+   "still_t": 3.6,
+   "still_signal": "red",
+   "still_raw": "red",
+   "secs": 5.4
+  },
+  {
+   "id": "GOPR0130_chunk_0006_segment_002",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera.",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "none",
+     "side": "none"
+    },
+    "closest_distance": "unknown",
+    "peak_time_sec": 0.0,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The rider is seen entering the intersection on a red light, which is a traffic violation."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"none\",\n    \"colour\": \"none\",\n    \"side\": \"none\"\n  },\n  \"closest_distance\": \"unknown\",\n  \"peak_time_sec\": 0.0,\n  \"rider_position\": \"bike_lane\",\n  \"separator\": \"no\",\n  \"vehicle_action\": \"none\",\n  \"vehicle_entered_rider_path\": null,\n  \"rider_moved_into_vehicle_path\": null,\n  \"signal_for_rider\": \"red\",\n  \"rider_entered_on_red\": true,\n  \"fault\": \"rider\",\n  \"evidence\": \"The rider is seen entering the intersection on a red light, which is a traffic violation.\"\n}\n```",
+   "still_t": 1.5,
+   "still_signal": "red",
+   "still_raw": "red",
+   "secs": 4.8
+  },
+  {
+   "id": "GOPR0130_chunk_0006_segment_003",
+   "hint": "You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a car on the left edge at about 4.97 s, filling 40% of the frame height, which then moved ahead of the rider. Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?",
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "bus",
+     "colour": "blue",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.97,
+    "rider_position": "bike_lane",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The blue bus is traveling in its own lane on the left side of the road, separated from the bike lane by a physical barrier, and does not enter the rider's path. The rider proceeds through a red light, which is the primary safety concern."
+   },
+   "raw": "```json\n{\n  \"near_miss\": false,\n  \"event\": \"none\",\n  \"vehicle\": {\n    \"type\": \"bus\",\n    \"colour\": \"blue\",\n    \"side\": \"left\"\n  },\n  \"closest_distance\": \"over_2m\",\n  \"peak_time_sec\": 4.97,\n  \"rider_position\": \"bike_lane\",\n  \"separator\": \"yes\",\n  \"vehicle_action\": \"parallel_in_own_lane\",\n  \"vehicle_entered_rider_path\": false,\n  \"rider_moved_into_vehicle_path\": false,\n  \"signal_for_rider\": \"red\",\n  \"rider_entered_on_red\": true,\n  \"fault\": \"rider\",\n  \"evidence\": \"The blue bus is traveling in its own lane on the left side of the road, separated from the bike lane by a physical barrier, and does not enter the rider's path. The rider proceeds through a red light, which is the primary safety concern.\"\n}\n```",
+   "still_t": 4.0,
+   "still_signal": "red",
+   "still_raw": "red",
+   "secs": 4.6
+  }
+ ]
+}
