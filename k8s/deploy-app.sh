@@ -20,12 +20,11 @@ export KUBECONFIG="/config/${NS}-k8s.yaml"
 
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
-# Keep the ConfigMap small and free of local review state / bytecode.
+# Keep the ConfigMap small and free of local device state / bytecode (reviews.json seeds REVIEWS_PATH).
 shopt -s nullglob
-for f in "$APP_DIR"/*.py "$APP_DIR"/*.json "$APP_DIR"/requirements.txt; do
-  base="$(basename "$f")"
-    case "$base" in
-    reviews.json|devices.json) continue ;;
+for f in "$APP_DIR"/*.py "$APP_DIR"/*.json "$APP_DIR"/*.html "$APP_DIR"/requirements.txt; do
+  case "$(basename "$f")" in
+    devices.json) continue ;;
   esac
   cp "$f" "$STAGE/"
 done
@@ -41,7 +40,7 @@ kubectl -n "$NS" create secret generic "${APP_NAME}-vss-creds" \
   --from-literal=VSS_PASSWORD="$TEAM_PASS" \
   --dry-run=client -o yaml | kubectl apply -f -
 
-# Optional mounts: D's segment index + team.config for VastDB reads when present.
+# Optional mount: team.config for VastDB reads when present.
 EXTRA_MOUNTS=""
 EXTRA_VOLUMES=""
 if kubectl -n "$NS" get secret witness-config >/dev/null 2>&1; then
@@ -72,9 +71,9 @@ spec:
         env:
         - {name: PORT, value: "${APP_PORT}"}
         - {name: BASE_PATH, value: "/app"}
-        - {name: DATA_DIR, value: "/data"}
         - {name: REVIEWS_PATH, value: "/tmp/reviews.json"}
         - {name: DEVICES_PATH, value: "/tmp/devices.json"}
+        - {name: DATA_DIR, value: "/data"}
         - {name: PYTHONUNBUFFERED, value: "1"}
         - name: VSS_URL
           valueFrom: {secretKeyRef: {name: ${APP_NAME}-vss-creds, key: VSS_URL}}
@@ -98,8 +97,10 @@ spec:
           periodSeconds: 10
           failureThreshold: 18
       volumes:
-      - {name: code, configMap: {name: ${APP_NAME}-code}}
-      - {name: data, configMap: {name: ${APP_NAME}-data, optional: true}}${EXTRA_VOLUMES}
+      - name: code
+        configMap: {name: ${APP_NAME}-code}
+      - name: data
+        configMap: {name: ${APP_NAME}-data, optional: true}${EXTRA_VOLUMES}
 ---
 apiVersion: v1
 kind: Service

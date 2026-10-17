@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent
 STUB = ROOT / "incidents.stub.json"
 SEGMENTS_FILE = ROOT / "segments.json"
 PORT = int(os.environ.get("PORT", "8090"))
-# In the pod the code is a read-only ConfigMap mount: reviews and device registrations go to a writable path.
+# In the pod the code is a read-only ConfigMap mount: reviews go to a writable path, seeded from app/reviews.json.
 REVIEWS = Path(os.environ.get("REVIEWS_PATH", str(ROOT / "reviews.json")))
 DEVICES = Path(os.environ.get("DEVICES_PATH", str(ROOT / "devices.json")))
 # Engine output lives in its own ConfigMap at /data (k8s/update-data.sh), re-read on every request.
@@ -269,6 +269,7 @@ def cameras_in_data(data: dict) -> list[str]:
 
 
 _segments_cache: list[dict] | None = None
+_segments_key: tuple[str, float] | None = None
 _data_source = "stub"
 
 
@@ -359,15 +360,15 @@ def load_from_vastdb() -> dict | None:
 
 
 def load_segments() -> list[dict]:
-    global _segments_cache
-    if _segments_cache is not None:
-        return _segments_cache
+    global _segments_cache, _segments_key
     for path in (DATA_DIR / "segments.json", SEGMENTS_FILE):
         if path.is_file():
-            _segments_cache = json.loads(path.read_text())
+            key = (str(path), path.stat().st_mtime)
+            if _segments_cache is None or _segments_key != key:
+                _segments_cache = json.loads(path.read_text())
+                _segments_key = key
             return _segments_cache
-    _segments_cache = []
-    return _segments_cache
+    return []
 
 
 def find_segment(source: str) -> dict | None:
@@ -409,7 +410,6 @@ def segment_neighbors(source: str) -> tuple[dict | None, dict | None, dict | Non
 def load_data() -> dict:
     global _data_source
     data = None
-    # D's engine output in data/incidents.json wins over the hero stub.
     for path in (DATA_DIR / "incidents.json", ROOT / "incidents.json"):
         if path.is_file():
             data = json.loads(path.read_text())
@@ -422,11 +422,10 @@ def load_data() -> dict:
     if data is None:
         data = json.loads(STUB.read_text())
         _data_source = "stub"
+    reviews = load_reviews()
     for item in data.get("incidents") or []:
         if not item.get("preview_source"):
             item["preview_source"] = resolve_source(item.get("source", ""))
-    reviews = load_reviews()
-    for item in data.get("incidents") or []:
         override = reviews.get(item["id"])
         if override:
             item["review"] = {**item.get("review", {}), **override}

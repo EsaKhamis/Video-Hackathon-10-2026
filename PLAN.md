@@ -202,6 +202,15 @@ If the bar isn't met at 13:30, freeze the current version and demo only clips wh
 **Changelog** (one line per change: what changed, what it fixed, survivors and wrong driver verdicts before/after):
 
 - v1: definition above, not yet run.
+- 14:15 Stage C (`engine/confirm.py`) on all 18 labelled clips, rules in `engine/fault.py`, scored by `probe/eval_labels.py`.
+  v1–v3 (rider rules before the separator drop; driver needs Cosmos `vehicle_entered_rider_path` **and** YOLO corridor, no pan):
+  8/18 agree, 0 wrong driver. Most misses: the still alone says "red" on mid-block clips.
+- v4: red needs video **and** still: 11/18 agree, 0 wrong driver.
+- v5: hint and rules use the track the Stage B shape flagged (H1's corridor hit was a different car on the left); a
+  close-pass shape within 1 m at ≥ 45% height is `unclear` even in its own lane: 10/18 agree, 0 wrong driver, H1 kept.
+- **Halfway gate (14:30): not met → cut to H1 + H3.** Cosmos says H1 (and H4) is "own lane, over 2 m" while YOLO says
+  ~1 m, so the rules give `unclear`, never `driver`. Demo: H1 is "unclear, you decide"; the reviewer picks driver and
+  gets the authority report. H3 = rider, red in video and still. `build_incidents.py --only H1,H3` → deployed.
 
 ## Prompts (fixed, shared by D and A)
 
