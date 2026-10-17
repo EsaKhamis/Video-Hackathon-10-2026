@@ -44,7 +44,8 @@ and a timeline of how every segment was screened.
   ├─ C  Cosmos again on A ∪ B flags, 5 calls, majority vote     ─ + full-resolution still for the signal
   ├─ D  Plain-Python fault rules (no LLM)                       ─ driver / rider / unclear, plus severity
   ├─ E  W&B Inference (gpt-oss-120b) writes the report or lesson from the facts
-  └─ F  Cosmos on the bike lane, then YOLO crops for vehicle ID ─ parked in the bike lane (rule 9)
+  ├─ F  Cosmos on the bike lane, then YOLO crops for vehicle ID ─ parked in the bike lane (rule 9)
+  └─ G  Coach: rider-fault incidents grouped by habit in Python; W&B Inference writes, a critic call checks
         │
         └─ data/incidents.json → stdlib web app on K8s (/app); video and boxes proxied from the VSS backend
 ```
@@ -72,7 +73,13 @@ All five hero clips match: H1 and H4 driver, H3 rider (entered on red, 5/5 votes
 H2 (a van in the next lane) dropped.
 
 Across all 465 segments: **105 incidents (12 driver, 25 rider, 45 unclear, 23 parked)**.
-W&B wrote the report or lesson text on 79 of them. The 23 parked reports are a title only.
+W&B wrote the report or lesson text on 82 of them. The 23 parked reports are a title only.
+**Coach report** (`engine/coach.py`, the W&B Report "Your riding coach"): the 25 rider incidents come down to
+3 habits, entering junctions on red (14), riding on the sidewalk (10) and changing line into traffic (1), each
+with a pattern, what to practise and a cue. Python does all the counting; the writer's text passes hard checks
+(no numbers, no legal claims) and a critic call (no unsafe advice, nothing invented, a one-off is not a habit).
+The critic was added after an early draft told the rider to go on red once nothing was "within about a metre".
+
 How the near-miss definition was tuned, round by round: [PLAN.md](PLAN.md) ("Near-miss definition") and
 [definition_log.md](definition_log.md).
 
@@ -89,7 +96,8 @@ How the near-miss definition was tuned, round by round: [PLAN.md](PLAN.md) ("Nea
 ## Built on
 
 VAST DataEngine + VastDB (index, YOLO detections, video), NVIDIA Cosmos3-Reason (screening, fault facts, bike-lane check),
-YOLO11 (geometry and vehicle crops), W&B Inference `openai/gpt-oss-120b` (report and lesson text), Kubernetes on the VAST
+YOLO11 (geometry and vehicle crops), W&B Inference `openai/gpt-oss-120b` (report, lesson and coach text), W&B Weave (traces of every Cosmos and
+LLM call, label evaluation per rules version, versioned coach report) and W&B Reports, Kubernetes on the VAST
 runtime, Cursor and Claude Code.
 
 ## Repo
@@ -100,6 +108,8 @@ runtime, Cursor and Claude Code.
 | `engine/confirm.py` | Stage C: Cosmos confirmation with majority vote |
 | `engine/fault.py`, `engine/build_incidents.py` | Stage D: fault rules, severity, `data/incidents.json` |
 | `engine/report.py` | Stage E: W&B writes the reports and lessons |
+| `engine/coach.py` | Stage G: the rider coaching report (data/coach.md, W&B Report "Your riding coach") |
+| `engine/wb_trace.py`, `engine/wandb_sync.py` | Weave tracing; incidents, labels and the rules evaluation to W&B |
 | `engine/bikelane.py` | Stage F: vehicles stopped in the bike lane, plus vehicle ID |
 | `app/main.py` | Web app (stdlib `http.server`): rides, three tabs, incident review, report, lesson, devices, timeline |
 | `k8s/` | `deploy-app.sh` (deploy to `/app`; pulls reviews first), `update-data.sh` (push new data) |

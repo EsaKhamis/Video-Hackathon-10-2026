@@ -4,7 +4,10 @@ Plain Python groups and counts (as in Stage D, no LLM decides anything); W&B Inf
 text from those counts and the per-incident lessons; Weave traces each step and keeps every version of the
 report as the object `rider-coach-report`.
 
-  python3 engine/coach.py           # -> data/coach.json + data/coach.md
+  python3 engine/coach.py           # -> data/coach.json + data/coach.md + a W&B Report
+
+The W&B Report ("Your riding coach") is updated in place on every run (its URL is kept in coach.json as
+`wandb_report`); it needs the `wandb-workspaces` package and is skipped without it.
 
 Reads data/incidents.json (after build_incidents.py, so the cyclist's reviews already apply). Dismissed
 incidents are left out. Needs WANDB_API_KEY; Model: STAGE_E_MODEL, default openai/gpt-oss-120b.
@@ -213,6 +216,32 @@ def markdown(r):
     return '\n'.join(out) + '\n'
 
 
+def publish_report(r, md, url=None):
+    """The report as a W&B Report page in our project; updates `url` when given. Returns the URL or None."""
+    try:
+        import wandb_workspaces.reports.v2 as wr
+    except ImportError:
+        print('W&B Report skipped: pip install wandb-workspaces')
+        return None
+    entity, _, name = trace.project(trace.settings()).partition('/')
+    body = md.split('\n', 2)[2]  # the Report has its own title
+    weave_url = f'https://wandb.ai/{entity}/{name}/weave/objects/rider-coach-report/versions'
+    blocks = [wr.TableOfContents(), wr.MarkdownBlock(text=body), wr.HorizontalRule(),
+              wr.MarkdownBlock(text=f'Every version of this report, with the traced writer and critic calls behind it: '
+                                    f'[Weave: rider-coach-report]({weave_url}).')]
+    title, desc = 'Your riding coach', f"{r['rider_incidents']} rider-fault moments across {len(r['rides'])} rides, grouped by habit"
+    with trace.own_key():
+        try:
+            rep = wr.Report.from_url(url) if url else None
+        except Exception as e:  # deleted or not ours: make a new one
+            print(f'W&B Report {url} not reusable ({type(e).__name__}); creating a new one')
+            rep = None
+        rep = rep or wr.Report(entity=entity, project=name)
+        rep.title, rep.description, rep.blocks, rep.width = title, desc, blocks, 'readable'
+        rep.save()
+    return rep.url
+
+
 def main():
     report.load_env()
     if not os.environ.get('WANDB_API_KEY', '').strip():
@@ -220,12 +249,17 @@ def main():
     model = os.environ.get('STAGE_E_MODEL', '').strip() or 'openai/gpt-oss-120b'
     trace.init()
     incidents = json.load(open(report.INCIDENTS))['incidents']
+    previous = json.load(open(OUT_JSON)) if os.path.exists(OUT_JSON) else {}
     r = build_report(incidents, model)
-    json.dump(r, open(OUT_JSON, 'w'), indent=1)
-    open(OUT_MD, 'w').write(markdown(r))
+    md = markdown(r)
     if trace.client:
         trace.weave.publish(r, name='rider-coach-report')
+        r['wandb_report'] = publish_report(r, md, previous.get('wandb_report')) or previous.get('wandb_report')
+    json.dump(r, open(OUT_JSON, 'w'), indent=1)
+    open(OUT_MD, 'w').write(md)
     print(f"coach: {r['rider_incidents']} rider incidents, {len(r['issues'])} habits -> {OUT_JSON}, {OUT_MD}")
+    if r.get('wandb_report'):
+        print(f"W&B Report: {r['wandb_report']}")
 
 
 if __name__ == '__main__':

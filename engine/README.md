@@ -24,9 +24,16 @@ python3 engine/detect.py           # Stage B -> data/geometry.json (~2 min)
 python3 engine/confirm.py          # Stage C -> data/stage_c.json (~2.5 min, 102 segments)
 python3 engine/build_incidents.py  # -> data/incidents.json
 python3 engine/report.py           # Stage E -> W&B text in incidents.json (~1 min, cached in stage_e.json)
-python3 engine/coach.py            # rider coaching report from all rider-fault incidents -> data/coach.md
+python3 engine/coach.py            # rider coaching report -> data/coach.md + the W&B Report "Your riding coach"
 k8s/update-data.sh                 # live in /app within about a minute
 ```
+
+**W&B (optional).** The stages run on the stdlib alone. For Weave traces, the evaluation and the W&B Report, run
+them with a venv that has `weave` and `wandb-workspaces` (the VM has no pip, but has uv):
+`uv venv --python 3.12 ~/.venvs/witness && uv pip install --python ~/.venvs/witness/bin/python weave wandb-workspaces`,
+then `~/.venvs/witness/bin/python engine/...`. Traces and reports use `WANDB_*` from the repo `.env`, which wins over
+the VM's `/etc/environment` (the organisers' account, still used for Stage E's Inference calls).
+`python3 engine/wandb_sync.py` publishes the incidents and labels and scores the rules as a Weave evaluation.
 
 `build_incidents.py` gives Stage D survivors `fault: rider` (rule 3, rider lesson) and the 12 most severe
 Stage B close + encroaching vehicles `fault: unclear` (rule 8). It makes **no driver verdicts**: rule 7 needs
