@@ -881,15 +881,14 @@ def ride_list(data: dict) -> bytes:
             </a>"""
         )
     body = f"""<h1>Your rides</h1>
-<p id="page-audience">For you, the cyclist. Open a ride to review risky moments: reports you may send, and private lessons that never leave this app.</p>
-<p class="meta">{esc(summary_line(total))} across these rides.</p>
+<p id="page-audience">Helmet-cam moments worth a second look — reports you may send, and private lessons that stay with you.</p>
+<p class="meta">{esc(summary_line(total))} across these rides · {esc(data_source())}</p>
 <div class="toolbar">
   <a class="button" href="{u('/devices')}">Register device</a>
   <a class="button secondary" href="{u('/about')}">About / how it works</a>
 </div>
 <main class="rides">{''.join(cards)}</main>
-<p class="meta"><a href="{u('/timeline')}">How the agent screened every 5-second segment</a></p>
-<p class="foot">Camera ids label which physical stream filmed each ride. <a href="{u('/devices')}">Why so many ids?</a></p>"""
+<p class="foot">Camera ids label which physical stream filmed each ride. <a href="{u('/devices')}">Why so many ids?</a> · <a href="{u('/timeline')}">How the agent screened every segment</a></p>"""
     return page("Your rides", body)
 
 
