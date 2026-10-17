@@ -79,14 +79,20 @@ RULE_EVENT = {3: 'entered_on_red', 4: 'sidewalk', 5: 'changed_line'}
 
 def stage_c_incident(seg, geo_row, row, hero):
     f = row['facts'] or {}
-    verdict, rule, title = fault.decide(f, row['still_signal'], geo_row)
+    votes = row.get('votes')
+    verdict, rule, title = fault.decide(f, row['still_signal'], geo_row, votes)
     if verdict == 'drop':
         return None
     g = fault.track(geo_row)
     shape = 'close_pass' if (geo_row or {}).get('pass') else 'cut_in' if (geo_row or {}).get('cut') else 'close_vehicle'
     event = RULE_EVENT.get(rule) or EVENT.get(f.get('event')) or shape
     v = f.get('vehicle') or {}
+    if g:  # Cosmos gets side and colour wrong without a hint (H4's yellow taxi on the right: "black car, left")
+        v = {'type': g['label'], 'colour': 'cyclist to confirm', 'side': g['side']}
     evidence = 'Cosmos: ' + (f.get('evidence') or '').strip()
+    if votes:
+        evidence += (f" (near miss in {sum(x is True for x in votes['near_miss'])} of {votes['n']} Cosmos checks, "
+                     f"vehicle entered the rider's path in {sum(x is True for x in votes['entered_path'])} of {votes['n']}.)")
     if g:
         evidence += (f" YOLO: the {g['label']} on the {g['side']} reached {round(g['peak_h'] * 100)}% of frame height "
                      f"and came within about {g['min_gap_m']} m of the rider's line.")
@@ -112,10 +118,12 @@ def stage_c_incident(seg, geo_row, row, hero):
         'model_agreement': (f.get('fault') == verdict) if verdict != 'unclear' else False,
         'document': {'kind': {'driver': 'authority_report', 'rider': 'rider_lesson'}.get(verdict, 'both'),
                      'title': title if verdict != 'unclear' else
-                     f"Close pass: {v.get('colour', '')} {'SUV' if v.get('type') == 'suv' else v.get('type', 'vehicle')} "
+                     f"Close {'SUV' if v.get('type') == 'suv' else v.get('type', 'vehicle')} "
                      f"on the {v.get('side', '')}".replace('  ', ' ')},
         'stage_c': {'rules': fault.VERSION, 'hint': row['hint']},
     })
+    if votes:
+        inc['votes'] = votes
     return inc
 
 

@@ -18,7 +18,7 @@ for lab in csv.DictReader(open(os.path.join(ROOT, 'probe/labels.csv'))):
     k = lab['segment']
     if k not in sc:
         continue
-    verdict, rule, _ = fault.decide(sc[k]['facts'], sc[k]['still_signal'], geo.get(k))
+    verdict, rule, _ = fault.decide(sc[k]['facts'], sc[k]['still_signal'], geo.get(k), sc[k].get('votes'))
     want = EXPECT.get(lab['label'], 'drop')
     ok = verdict == want
     agree += ok

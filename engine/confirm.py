@@ -1,24 +1,38 @@
-"""Stage C: focused Cosmos confirmation (PLAN.md "Stage C focused prompt").
+"""Stage C: Cosmos3-Reason confirms each flagged segment with a detector hint (PLAN.md "Prompts").
 
-For each segment: download from the backend, transcode to 1280 px @ 6 fps, ask Cosmos3-Reason with the
-Stage B detector hint + the full schema, then ask for the signal on a full-resolution still 1 s before the
-peak. Writes data/stage_c.json, read by engine/build_incidents.py (fault via the Stage D rules there).
+For every candidate (Stage B flags, the labelled clips, or a list of ids):
+  1. download the segment from the backend, ffmpeg -> 1280 px @ 6 fps, no audio (~0.6 MB)
+  2. Cosmos on the video with the facts schema, blind (no detector hint; --hint to add one)
+  3. Cosmos on a full-resolution still 1 s before the peak: the traffic signal facing the rider
 
-  python3 engine/confirm.py GOPR0130_chunk_0026_segment_003 GOPR0130_chunk_0017_segment_005
+Blind, not hinted: on the 18 labelled clips a detector hint made Cosmos agree with it (near miss + driver on
+almost every clip, including adjacent-lane, sidewalk and separated ones). Blind, it rejected H2, H5 and the
+adjacent-lane passes and still caught H1 and H4. Fault comes from the rules in build_incidents.py, which
+pair these facts with the Stage B geometry; Cosmos's own `fault` is stored, never used.
+Writes data/stage_c.json. Stdlib + ffmpeg; runs on the VM.
+
+  python3 engine/confirm.py                               # every Stage B flag + labelled clips (~3 min)
+  python3 engine/confirm.py --only-labels                 # labelled clips, prints a check table
+  python3 engine/confirm.py GOPR0130_chunk_0026_segment_003 ...   # these segments, merged into stage_c.json
+  python3 probe/eval_labels.py                            # score the rules in engine/fault.py against the labels
+
+Rows keep the field names engine/fault.py and probe/eval_labels.py read: facts, still_signal, still_t, hint.
 """
-import argparse, base64, glob, json, os, re, subprocess, sys, tempfile, time, urllib.parse, urllib.request
+import argparse, base64, collections, csv, glob, json, os, re, subprocess, sys, tempfile, time, urllib.error, urllib.parse, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-DATA = os.path.join(ROOT, 'data')
+sys.path.insert(0, os.path.join(ROOT, 'probe'))
+from vss_client import B, tok
+
 cfg = {}
 for l in open(glob.glob('/config/*.config')[0]):
     if '=' in l and not l.startswith('#'):
         k, v = l.strip().split('=', 1)
         cfg[k] = v.strip('"\'')
-B = cfg['INGRESS_URL']
-GPU = os.environ.get('GPU_HOST') or cfg.get('GPU_HOST') or 'http://166.19.38.112:8001'
-GH = {'Authorization': 'Bearer ' + cfg['GPU_BEARER_TOKEN'], 'Content-Type': 'application/json'}
+COSMOS = os.environ.get('COSMOS_URL', 'http://166.19.38.112:8001')
+CH = {'Authorization': 'Bearer ' + cfg['GPU_BEARER_TOKEN'], 'Content-Type': 'application/json'}
+MODEL = json.load(urllib.request.urlopen(urllib.request.Request(COSMOS + '/v1/models', headers=CH)))['data'][0]['id']
 
 SCHEMA = """Answer ONLY with JSON:
 {"near_miss": true|false,
@@ -36,90 +50,181 @@ SCHEMA = """Answer ONLY with JSON:
  "fault": "driver"|"rider"|"shared"|"unclear"|"none",
  "evidence": "one sentence"}
 "separator" means a physical barrier between the rider and the vehicle (posts, curb, parked cars); a painted line is not a separator."""
-HINT = ("You are reviewing a 5-second clip from a cyclist's helmet camera. A detector flagged a {label} on the {side} "
-        "edge at about {t} s, filling {h}% of the frame height, which then moved ahead of the rider. Look closely at "
-        "that vehicle around that time. Describe THAT vehicle's actual colour and type. Did it stay in its own lane, "
-        "or move into the rider's path? Did the rider move into its path?\n")
-STILL = ("What colour is the traffic signal facing the camera's direction of travel? "
-         "Answer red, green, yellow, none_visible or unknown.")
+
+INTRO = "You are reviewing a 5-second clip from a cyclist's helmet camera."
+HINT = ("A detector flagged a {label} on the {side} at about {t} s, filling {h}% of the frame height{after}. "
+        "Look closely at that vehicle around that time. Describe THAT vehicle's actual colour and type. "
+        "Did it stay in its own lane, or move into the rider's path? Did the rider move into its path?")
+SIGNAL = ("What colour is the traffic signal facing the camera's direction of travel? "
+          "Answer with one word: red, green, yellow, none_visible or unknown.")
 
 
-def backend_token():
-    r = urllib.request.Request(B + '/api/v1/auth/login', headers={'Content-Type': 'application/json'},
-                               data=json.dumps({'username': cfg['USERNAME'], 'password': cfg['PASSWORD']}).encode())
-    return json.load(urllib.request.urlopen(r, timeout=60))['access_token']
+def ask(content, max_tokens=500, tries=3):
+    body = {'model': MODEL, 'temperature': 0, 'max_tokens': max_tokens,
+            'messages': [{'role': 'user', 'content': content}]}
+    for n in range(tries):
+        try:
+            r = json.load(urllib.request.urlopen(urllib.request.Request(
+                COSMOS + '/v1/chat/completions', data=json.dumps(body).encode(), headers=CH), timeout=240))
+            return r['choices'][0]['message']['content']
+        except (urllib.error.URLError, TimeoutError) as e:
+            if n == tries - 1:
+                raise
+            time.sleep(2 * 2 ** n)
 
 
-def model_id():
-    return json.load(urllib.request.urlopen(urllib.request.Request(GPU + '/v1/models', headers=GH), timeout=30))['data'][0]['id']
+def parse(text):
+    text = re.sub(r'<think>.*?</think>', '', text, flags=re.S)
+    m = re.search(r'\{.*\}', text, flags=re.S)
+    if not m:
+        return None
+    try:
+        return json.loads(m.group(0))
+    except json.JSONDecodeError:
+        return None
 
 
-def cosmos(model, media, text, max_tokens=600):
-    body = {'model': model, 'temperature': 0, 'max_tokens': max_tokens,
-            'messages': [{'role': 'user', 'content': [media, {'type': 'text', 'text': text}]}]}
-    r = urllib.request.Request(GPU + '/v1/chat/completions', data=json.dumps(body).encode(), headers=GH)
-    return json.load(urllib.request.urlopen(r, timeout=240))['choices'][0]['message']['content']
+def download(source, path, tries=4):
+    url = B + '/api/v1/videos/stream?' + urllib.parse.urlencode({'source': source, 'token': tok})  # token in the query
+    for n in range(tries):
+        try:
+            with urllib.request.urlopen(url, timeout=120) as r, open(path, 'wb') as f:
+                f.write(r.read())
+            return
+        except Exception:
+            if n == tries - 1:
+                raise
+            time.sleep(1.5 * 2 ** n)
 
 
-def parse_json(s):
-    m = re.search(r'\{.*\}', s, re.S)
-    return json.loads(m.group(0)) if m else None
+def majority(answers):
+    """Field-by-field vote over several Cosmos answers (it is not deterministic, even at temperature 0)."""
+    answers = [a for a in answers if a]
+    if not answers:
+        return None
+    out = {}
+    for k in answers[0]:
+        vals = [a.get(k) for a in answers]
+        if isinstance(vals[0], dict):
+            out[k] = majority([v for v in vals if isinstance(v, dict)])
+        else:
+            out[k] = collections.Counter(json.dumps(v) for v in vals).most_common(1)[0][0]
+            out[k] = json.loads(out[k])
+    return out
 
 
-def confirm(seg, geo, tok, model, tmp):
-    key = seg['_key']
-    raw = os.path.join(tmp, key + '.mp4')
-    url = B + '/api/v1/videos/stream?' + urllib.parse.urlencode({'source': seg['source'], 'token': tok})
-    with urllib.request.urlopen(url, timeout=120) as r:
-        open(raw, 'wb').write(r.read())
-    small = os.path.join(tmp, key + '_1280.mp4')
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', raw, '-an', '-vf', 'scale=1280:-2', '-r', '6', small], check=True)
-    g = (geo or {}).get('geometry')
-    shape = (geo or {}).get('pass') or (geo or {}).get('cut')
-    if shape:  # the shape's track is the one the flag is about; geometry's "most threatening" can be another car
-        g = {'label': shape['label'], 'side': shape.get('side') or g['side'], 't_peak': shape.get('t', shape.get('t1')),
-             'peak_h': shape.get('peak_h', shape.get('h'))}
-    hint = HINT.format(label=g['label'], side=g['side'], t=g['t_peak'], h=round(g['peak_h'] * 100)) if g else \
-        "You are reviewing a 5-second clip from a cyclist's helmet camera.\n"
+def signal_word(text):
+    w = re.findall(r'none_visible|red|green|yellow|unknown', re.sub(r'<think>.*?</think>', '', text, flags=re.S).lower())
+    return w[-1] if w else 'unknown'
+
+
+def hint_for(row):
+    g = row.get('geometry')
+    if not g:
+        return ''
+    after = ''
+    if row.get('pass'):
+        after = ', which then moved ahead of the rider'
+    elif row.get('cut') and not row['cut'].get('pan_suspect'):
+        after = ', which then moved sideways across the rider\'s view'
+    return HINT.format(label=g['label'], side=g['side'] + ' side', t=g['t_peak'],
+                       h=round(g['peak_h'] * 100), after=after) + '\n'
+
+
+def confirm(row, hinted=False, votes=1):
+    out = {'id': row['id'], 'source': row['source'], 'still_t': None, 'hint': ''}
     t0 = time.time()
-    video = {'type': 'video_url', 'video_url': {'url': 'data:video/mp4;base64,' + base64.b64encode(open(small, 'rb').read()).decode()}}
-    text = cosmos(model, video, hint + SCHEMA)
-    t_still = max(0.0, (g['t_peak'] if g else 2.5) - 1.0)
-    jpg = os.path.join(tmp, key + '.jpg')
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(t_still), '-i', raw, '-frames:v', '1', jpg], check=True)
-    still = cosmos(model, {'type': 'image_url', 'image_url': {'url': 'data:image/jpeg;base64,' + base64.b64encode(open(jpg, 'rb').read()).decode()}},
-                   STILL, max_tokens=20)
-    sig = next((w for w in ('none_visible', 'unknown', 'red', 'green', 'yellow') if w in still.lower()), 'unknown')
-    return {'id': key, 'hint': hint.strip(), 'facts': parse_json(text), 'raw': text,
-            'still_t': round(t_still, 1), 'still_signal': sig, 'still_raw': still.strip(), 'secs': round(time.time() - t0, 1)}
+    with tempfile.TemporaryDirectory() as d:
+        raw, small, still = (os.path.join(d, n) for n in ('raw.mp4', 'small.mp4', 'still.jpg'))
+        try:
+            download(row['source'], raw)
+            subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', raw, '-vf', 'scale=1280:-2,fps=6', '-an',
+                            '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '28', small], check=True)
+            g = row.get('geometry')
+            t_still = max(0.0, (g['t_peak'] if g else 2.5) - 1.0)
+            out['still_t'] = round(t_still, 1)
+            subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(t_still), '-i', raw, '-frames:v', '1',
+                            '-q:v', '3', still], check=True)
+            video = base64.b64encode(open(small, 'rb').read()).decode()
+            hint = hint_for(row) if hinted else ''
+            out['hint'] = hint.strip()
+            texts = [ask([{'type': 'video_url', 'video_url': {'url': 'data:video/mp4;base64,' + video}},
+                          {'type': 'text', 'text': INTRO + '\n' + hint + SCHEMA}]) for _ in range(votes)]
+            img = base64.b64encode(open(still, 'rb').read()).decode()
+            sigs = [ask([{'type': 'image_url', 'image_url': {'url': 'data:image/jpeg;base64,' + img}},
+                         {'type': 'text', 'text': SIGNAL}], max_tokens=200) for _ in range(votes)]
+        except Exception as e:
+            return {**out, 'err': str(e)[:200]}
+    parsed = [parse(t) for t in texts]
+    facts = majority(parsed)
+    words = [signal_word(t) for t in sigs]
+    res = {**out, 'facts': facts,
+           'still_signal': collections.Counter(words).most_common(1)[0][0],
+           'raw': texts[0] if facts is None else None, 'sec': round(time.time() - t0, 1)}
+    if votes > 1:
+        res['votes'] = {'n': votes, 'near_miss': [p.get('near_miss') if p else None for p in parsed],
+                        'entered_path': [p.get('vehicle_entered_rider_path') if p else None for p in parsed],
+                        'rider_position': [p.get('rider_position') if p else None for p in parsed],
+                        'still_signal': words}
+    return res
 
 
-def main(keys, out):
-    segs = {os.path.basename(s['source']).split('_', 2)[2].rsplit('_of_', 1)[0]: s
-            for s in json.load(open(os.path.join(DATA, 'segments.json')))}
-    geo = {r['id']: r for r in json.load(open(os.path.join(DATA, 'geometry.json')))['rows']}
-    tok, model = backend_token(), model_id()
-    prev = {r['id']: r for r in json.load(open(out))['rows']} if os.path.exists(out) else {}
-    with tempfile.TemporaryDirectory() as tmp, ThreadPoolExecutor(6) as ex:
-        jobs = {k: ex.submit(confirm, {**segs[k], '_key': k}, geo.get(k), tok, model, tmp) for k in keys if k in segs}
-        for k in keys:
-            if k not in jobs:
-                print('no segment:', k, file=sys.stderr)
-                continue
-            try:
-                prev[k] = jobs[k].result()
-                f = prev[k]['facts'] or {}
-                print(k, prev[k]['secs'], 's', f.get('event'), f.get('signal_for_rider'), 'still:', prev[k]['still_signal'],
-                      '|', f.get('evidence'))
-            except Exception as e:
-                print(k, 'ERROR', e, file=sys.stderr)
-    json.dump({'stage': 'C', 'model': model, 'rows': list(prev.values())}, open(out, 'w'), indent=1)
-    print(len(prev), 'rows ->', out)
+def check(res, labels):
+    print(f"\n{'segment':32} {'label':13} {'hero':4} nm    event          veh             dist      pos          sep  action               v>r   r>v   sig/still     fault")
+    for r in sorted(res, key=lambda r: labels[r['id']]['label'] if r['id'] in labels else 'z'):
+        lab = labels.get(r['id'], {})
+        f = r.get('facts') or {}
+        v = f.get('vehicle') or {}
+        if 'err' in r or not f:
+            print(f"{r['id'][:32]:32} {lab.get('label', ''):13} ERROR {r.get('err') or (r.get('raw') or '')[:80]}")
+            continue
+        print(f"{r['id'][:32]:32} {lab.get('label', ''):13} {lab.get('hero', ''):4} {str(f.get('near_miss'))[:5]:5} "
+              f"{str(f.get('event'))[:14]:14} {(str(v.get('colour')) + ' ' + str(v.get('type')) + '/' + str(v.get('side')))[:15]:15} "
+              f"{str(f.get('closest_distance'))[:9]:9} {str(f.get('rider_position'))[:12]:12} {str(f.get('separator'))[:4]:4} "
+              f"{str(f.get('vehicle_action'))[:20]:20} {str(f.get('vehicle_entered_rider_path'))[:5]:5} "
+              f"{str(f.get('rider_moved_into_vehicle_path'))[:5]:5} {str(f.get('signal_for_rider'))[:5]}/{r['still_signal'][:5]:7} "
+              f"{f.get('fault')}")
 
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('keys', nargs='+')
-    ap.add_argument('--out', default=os.path.join(DATA, 'stage_c.json'))
+    ap.add_argument('--geometry', default=os.path.join(ROOT, 'data', 'geometry.json'))
+    ap.add_argument('--labels', default=os.path.join(ROOT, 'probe', 'labels.csv'))
+    ap.add_argument('--only-labels', action='store_true', help='only the labelled clips')
+    ap.add_argument('keys', nargs='*', help='segment ids; merged into an existing --out')
+    ap.add_argument('--out', default=os.path.join(ROOT, 'data', 'stage_c.json'))
+    ap.add_argument('--workers', type=int, default=6)
+    ap.add_argument('--votes', type=int, default=5, help='Cosmos calls per close-pass candidate (majority vote)')
+    ap.add_argument('--vote-all', action='store_true', help='vote on every segment in this run, not just close passes')
+    ap.add_argument('--merge', action='store_true', help='replace these rows in an existing --out file')
+    ap.add_argument('--hint', action='store_true', help='add the Stage B detector hint (biases Cosmos toward yes)')
     a = ap.parse_args()
-    main(a.keys, a.out)
+    geo = {r['id']: r for r in json.load(open(a.geometry))['rows'] if 'err' not in r}
+    labels = {r['segment']: r for r in csv.DictReader(open(a.labels))}
+    if a.keys:
+        want, a.merge = set(a.keys), True
+    elif a.only_labels:
+        want = set(labels)
+    else:
+        want = {k for k, r in geo.items() if r.get('flag')} | set(labels)
+    rows = [geo[k] for k in sorted(want) if k in geo]
+    print(f'Stage C: {len(rows)} segments, {a.workers}-way, model {MODEL}', flush=True)
+    t = time.time()
+    with ThreadPoolExecutor(a.workers) as ex:
+        # driver candidates (Stage B close-pass shape, not a camera pan) get a majority vote
+        res = list(ex.map(lambda r: confirm(r, a.hint, a.votes if a.vote_all or (r.get('pass') and not
+                                            (r.get('geometry') or {}).get('pan_suspect')) else 1), rows))
+        # one call says "sidewalk" or "red" too easily: re-ask those with a vote (fault.py rules 3 and 4)
+        again = {r['id'] for r in res if 'votes' not in r and ((r.get('facts') or {}).get('rider_position') == 'sidewalk'
+                                                                or r.get('still_signal') == 'red')}
+        if again and a.votes > 1:
+            redo = {r['id']: r for r in ex.map(lambda r: confirm(r, a.hint, a.votes), [geo[k] for k in sorted(again)])}
+            res = [redo.get(r['id'], r) for r in res]
+    if a.merge and os.path.exists(a.out):
+        new = {r['id']: r for r in res}
+        res = [new.pop(r['id'], r) for r in json.load(open(a.out))['rows']] + list(new.values())
+    errs = [r for r in res if 'err' in r or not r.get('facts')]
+    json.dump({'stage': 'C', 'model': MODEL, 'hinted': a.hint, 'count': len(res), 'errors': len(errs), 'rows': res},
+              open(a.out, 'w'), indent=1)
+    print(f'{len(res) - len(errs)}/{len(res)} ok in {round(time.time() - t)} s -> {a.out}')
+    check([r for r in res if r['id'] in labels] if not a.keys else [r for r in res if r['id'] in want], labels)
