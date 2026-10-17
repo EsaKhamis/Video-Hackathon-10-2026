@@ -6,13 +6,18 @@
   data/stage_c.json   Stage C Cosmos facts (engine/confirm.py)           -> fault via engine/fault.py; replaces
                       the rows above for the same segment
   data/segments.json  playable source + ride offset per segment
+  data/reviews.json   the rider's reviews from the app (k8s/pull-reviews.sh)  -> the fault they chose wins
+                      over the rules (rule 0); the rules' answer stays in `engine`
 
   python3 engine/build_incidents.py                 # -> data/incidents.json
   python3 engine/build_incidents.py --only H1,H3    # halfway-gate cut: hero clips only (ids from probe/labels.csv)
 """
-import argparse, csv, json, os
+import argparse, csv, json, os, sys
 
 import fault
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'probe'))
+from eval_labels import evaluate, load_reviews, review_segment  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 DATA = os.path.join(ROOT, 'data')
@@ -114,7 +119,7 @@ def stage_c_incident(seg, geo_row, row, hero):
                                       'side': v.get('side', 'none')},
                              closest_distance=f.get('closest_distance', 'unknown'),
                              evidence=evidence, model_fault=f.get('fault'),
-                             still_signal=row['still_signal']),
+                             still_signal=row['still_signal'], still_t=row.get('still_t')),
         'model_agreement': (f.get('fault') == verdict) if verdict != 'unclear' else False,
         'document': {'kind': {'driver': 'authority_report', 'rider': 'rider_lesson'}.get(verdict, 'both'),
                      'title': title if verdict != 'unclear' else
@@ -125,6 +130,33 @@ def stage_c_incident(seg, geo_row, row, hero):
     if votes:
         inc['votes'] = votes
     return inc
+
+
+DOC_KIND = {'driver': 'authority_report', 'rider': 'rider_lesson'}
+
+
+def apply_reviews(incidents, heroes):
+    """Matched by segment, so a review survives the incident's id changing (B- -> C-) between builds."""
+    hero_seg = {h: seg for seg, h in heroes.items()}
+    by_seg = {}
+    for incident_id, r in load_reviews().items():
+        seg = review_segment(incident_id, r, hero_seg)
+        if seg:
+            by_seg[seg] = r
+    matched = changed = 0
+    for inc in incidents:
+        r = by_seg.get(inc['source'])
+        if not r:
+            continue
+        matched += 1
+        inc['review'].update({k: r[k] for k in ('status', 'plate', 'street', 'fault_override', 'recorded_at') if k in r})
+        want = r.get('fault_override')
+        if want in ('driver', 'rider', 'unclear', 'shared') and want != inc['fault']:
+            inc['engine'] = {'fault': inc['fault'], 'rule': inc['fault_rule']}
+            inc['fault'], inc['fault_rule'] = want, 0
+            inc['document']['kind'] = DOC_KIND.get(want, 'both')
+            changed += 1
+    return matched, changed
 
 
 def main(out, only):
@@ -194,6 +226,7 @@ def main(out, only):
         unclear.append(inc)
     unclear.sort(key=lambda i: -i['_raw'])
     incidents += unclear[:MAX_UNCLEAR]
+    reviewed, overridden = apply_reviews(incidents, heroes)
     if only:
         incidents = [i for i in incidents if i['id'] in only]
 
@@ -215,13 +248,15 @@ def main(out, only):
                       'duration_min': round(dur / 60), 'segments': len(segs)})
 
     json.dump({'generated_from': f'engine/build_incidents.py: stage_c.json (Cosmos facts, rules {fault.VERSION}) + '
-                                 'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8)'
+                                 'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + '
+                                 f'reviews.json ({reviewed} reviews, {overridden} verdicts changed, rule 0)'
                                  + (f"; only {','.join(sorted(only))}" if only else ''),
+               'evaluation': {k: v for k, v in evaluate().items() if k != 'rows'},
                'rides': rides, 'incidents': incidents}, open(out, 'w'), indent=1)
     c = {}
     for i in incidents:
         c[i['fault']] = c.get(i['fault'], 0) + 1
-    print(f'{len(incidents)} incidents {c} -> {out}')
+    print(f'{len(incidents)} incidents {c} -> {out}; {reviewed} reviews applied, {overridden} changed the verdict')
 
 
 if __name__ == '__main__':

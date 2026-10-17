@@ -1,14 +1,1 @@
-{
-  "H1": {
-    "status": "approved",
-    "plate": "",
-    "street": "Broadway",
-    "fault_override": "driver"
-  },
-  "H4": {
-    "status": "dismissed",
-    "plate": "",
-    "street": "",
-    "fault_override": "rider"
-  }
-}
+{}

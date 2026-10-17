@@ -110,6 +110,8 @@ Live check at 11:50: login OK, dashboard `healthy: true`, `pending_index: 0`, 3,
   7. Deployed at `/app` with `deploy-app-no-registry`.
   8. **Evaluation**: accuracy on the labelled set (`probe/labels.csv`, H1–H5 + the 12 clips checked by eye, grown to ~30
      in the definition loop) printed by `probe/eval_labels.py` and shown on an "About / how it works" panel.
+     Reviews made in the app join that set: `k8s/apply-feedback.sh` pulls them into `data/reviews.json`, and a review
+     replaces the hand label for the same clip. The About panel says how many labels came from reviews.
 - **Should:**
   1. **Dashcam witness feed** (Toronto `pie_cam-3`): Stage A over the 24 candidates in `dash_close.json`
      (or all 1,080 segments, about 15 min, if time allows), plate crop drawn client-side from the box.
@@ -121,7 +123,8 @@ Live check at 11:50: login OK, dashboard `healthy: true`, `pending_index: 0`, 3,
   4. Lead-up and aftermath: previous/next segment, found by `original_video` + `segment_number` (never guessed filenames).
   5. Door-zone and following-too-close rider rules (Must covers red light + sidewalk).
 - **Could (only if ahead; nobody starts these before 15:00):**
-  - Persist review decisions in VastDB (`vast-database-vastdb-write`).
+  - Persist review decisions in VastDB (`vast-database-vastdb-write`). Done for the demo as `data/reviews.json`
+    instead: the app writes `/tmp/reviews.json` in the pod, and `k8s/pull-reviews.sh` copies it out before any restart.
   - W&B Weave tracing of the Cosmos + W&B calls.
   - Email draft (`mailto:`) export; face blurring in exported frames; "rider score" across rides.
 - **Out of scope:**
@@ -181,7 +184,8 @@ Each round takes about 15 minutes:
 2. I labels each strip in `probe/labels.csv` with one of: `driver`, `rider`, `shared`, `adjacent_lane`, `separated`,
    `stationary`, `rider_turning`, `other_fp`.
 3. `probe/eval_labels.py` compares engine against labels: what share of survivors are real near misses, and a
-   fault table (engine verdict vs label). This is also the Must 8 evaluation.
+   fault table (engine verdict vs label). This is also the Must 8 evaluation. Labels are `probe/labels.csv` plus
+   `data/reviews.json`; where both cover a clip, the review is the newer judgement and wins.
 4. D changes **one thing** (a threshold, an exclusion, a prompt field or a rule), logs it in the changelog, and reruns.
    Re-running Stages B–D on the labelled clips only takes about a minute, so rounds stay short.
 
@@ -216,6 +220,14 @@ If the bar isn't met at 13:30, freeze the current version and demo only clips wh
   path; YOLO close-pass shape + that vote is a driver path (H1). Sidewalk and red stills are voted too.
   12/18 agree, 0 wrong driver; H1, H4 driver, H3 rider (red 5/5), H5 sidewalk, H2 dropped. Full set: 13 driver
   (11 unchecked by eye), 25 rider, 42 unclear.
+- Review feedback: the rider's fault choice in the app is an input, not only a display override. `k8s/apply-feedback.sh`
+  pulls `/tmp/reviews.json` into `data/reviews.json` (tagged with the clip segment, so it still matches after an id
+  changes from `B-` to `C-`), `engine/build_incidents.py` applies it as rule 0, and `probe/eval_labels.py` scores the
+  rules against it. Approve or Save with a different fault replaces the rules' verdict on that incident and keeps the
+  rules' answer in `engine`; Dismiss counts the clip as not an incident (`other_fp`), so dismissing a driver verdict
+  raises the wrong-driver count. The rules themselves stay fixed until someone edits `engine/fault.py`. Only clips
+  Cosmos double-checked are scored; reviews of the rest still change their verdict. `k8s/deploy-app.sh` pulls reviews
+  before it restarts the pod and seeds them back, because `/tmp` is wiped on restart.
 
 ## Prompts (fixed, shared by D and A)
 
@@ -277,6 +289,12 @@ corridor), `lateral_toward_rider` (sideways speed of the inner edge toward the c
 
 `shared` is never assigned automatically; the reviewer can pick it with "change fault".
 
+**Rule 0, your review** (applied after the table, by `engine/build_incidents.py`, matched on the clip segment):
+if `data/reviews.json` has a fault for that clip (`driver`, `rider`, `unclear`, `shared`) and it differs from the
+rules, that fault wins, `fault_rule` becomes 0, and the report or lesson switches to match. The rules' verdict and
+rule number are kept on the incident as `engine`, and the evidence panel says "the rules said …". A dismissed review
+does not change the verdict; it labels the clip as not an incident when the rules are scored.
+
 **Severity** is separate from fault: rank by YOLO peak box height × approach speed, scaled 0–100 across the
 incidents, shown as High (≥ 70) / Med (40–69) / Low. Night clips (GX050001) are flagged "low light".
 
@@ -317,6 +335,8 @@ VastDB vss-collection (camera_id=nyc_bike_gopro-1, 465 rows)         main.py (st
   ├─► E report.py   W&B gpt-oss-120b → report / lesson text          └─ POST /api/submit     dummy outbox
   │                                                                  
   └─► VastDB table witness-incidents  +  incidents.json  ───────────►  read by the app
+       ▲                                                                  │
+       └─ data/reviews.json ◄── k8s/apply-feedback.sh ◄── POST /api/review (pod /tmp/reviews.json)
                                                                      
 Pipeline (Should 2): ingest-reingest-chunk on 3 hero chunks with the near-miss prompt
   → Reasoner (Cosmos3-Reason) → Embedder (Cosmos Embed1) → VSS search finds incidents
@@ -332,7 +352,8 @@ Incident schema (shared by engine and app): `id, ride, source, ride_offset_sec, 
 fault, fault_rule, facts{signal_for_rider, rider_position, separator, vehicle_action, vehicle_entered_rider_path,
 rider_moved_into_vehicle_path, vehicle{type, colour, side}, closest_distance, evidence, model_fault},
 geometry{peak_h, side, bbox, pan_suspect, entered_corridor, lateral_toward_rider}, model_agreement, evidence_frames[t], document{kind: authority_report | rider_lesson, ...},
-review{status, plate, street, fault_override, recorded_at}`.
+review{status, plate, street, fault_override, recorded_at}`, and, when a review changed the verdict,
+`engine{fault, rule}` holding what the rules said before rule 0.
 
 Code lives in the team repo `~/Video-Hackathon-10-2026` (`engine/`, `app/`, `k8s/`), reusing `probe/vss_client.py`.
 
@@ -399,6 +420,7 @@ If anything blocks for more than 15 minutes, run `/ask-cosmos`, post the note on
 - No face blurring yet in exported frames.
 - No recording date/GPS in the corpus; the cyclist confirms date and street.
 - The near-miss definition was tuned on a small hand-labelled set (~30 clips), and accuracy is reported on that set, not a benchmark.
+- A review decides that one incident. It does not change the fault rules; the next `k8s/apply-feedback.sh` run shows whether the rules still disagree.
 
 ## Demo script
 
