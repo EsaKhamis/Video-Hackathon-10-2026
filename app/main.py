@@ -42,6 +42,48 @@ def u(path: str = "/") -> str:
     return f"{BASE_PATH}{path}" if BASE_PATH else path
 
 
+ART = {
+    "road": ("art-road.jpg", "image/jpeg"),
+    "tree": ("art-tree.jpg", "image/jpeg"),
+    "tree-green": ("art-tree-green.jpg", "image/jpeg"),
+    "tree-flowers": ("art-tree-flowers.jpg", "image/jpeg"),
+    "bike": ("art-bike.jpg", "image/jpeg"),
+    "street": ("art-street.jpg", "image/jpeg"),
+    "cars": ("art-cars.jpg", "image/jpeg"),
+    "signal-rider": ("art-signal-rider.jpg", "image/jpeg"),
+    "signal": ("art-signal.jpg", "image/jpeg"),
+    "taxi": ("art-taxi.jpg", "image/jpeg"),
+    "police": ("art-police.jpg", "image/jpeg"),
+    "safe": ("art-safe.jpg", "image/jpeg"),
+    "flower": ("art-flower.jpg", "image/jpeg"),
+    "meadow": ("art-meadow.jpg", "image/jpeg"),
+    "ground": ("art-ground.png", "image/png"),
+    "license": ("art-license.png", "image/png"),
+    "bike-icon": ("art-bike-icon.jpg", "image/jpeg"),
+    "walker": ("art-walker.jpg", "image/jpeg"),
+}
+RIDE_ART = ("street", "bike", "cars", "signal-rider")
+
+
+def art(key: str, alt: str, cls: str = "illu") -> str:
+    if key not in ART:
+        return ""
+    return f'<img class="{esc(cls)}" src="{u("/static/" + key)}" alt="{esc(alt)}">'
+
+
+def scene_for_fault(fault: str, item: dict | None = None) -> tuple[str, str]:
+    facts = (item or {}).get("facts") or {}
+    if fault == "rider" and facts.get("signal_for_rider") == "red":
+        return "signal-rider", "Rider waiting at a red signal"
+    if fault == "rider":
+        return "bike", "Rider on a bicycle"
+    if fault == "driver":
+        return "taxi", "Driver in a close call"
+    if fault == "shared":
+        return "street", "A car beside a rider"
+    return "street", "A car beside a rider"
+
+
 def strip_base(path: str) -> str:
     if BASE_PATH and (path == BASE_PATH or path.startswith(BASE_PATH + "/")):
         return path[len(BASE_PATH) :] or "/"
@@ -481,7 +523,9 @@ def summary_line(found: dict[str, int]) -> str:
     )
 
 
-def page(title: str, body: str, extra_head: str = "") -> bytes:
+def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True) -> bytes:
+    left_tree = art("tree", "Yellow tree", "tree") if show_trees else ""
+    right_tree = art("tree-green", "Green tree", "tree") if show_trees else ""
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -494,16 +538,17 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
 <style>
   :root {{
     color-scheme: light;
-    --ink: #152018;
-    --muted: #5a6a5f;
-    --line: #c9d4cc;
-    --paper: #eef3ef;
-    --card: rgba(255,255,255,0.78);
-    --driver: #b42318;
-    --rider: #c47a12;
-    --unclear: #3d5248;
-    --lane: #7dd37a;
-    --glow: rgba(196, 122, 18, 0.18);
+    --ink: #2a3b4f;
+    --muted: #4d6270;
+    --line: #2a3b4f;
+    --paper: #d7f0ff;
+    --card: #fffdf6;
+    --driver: #d23b2f;
+    --rider: #e39b12;
+    --unclear: #3d6b8a;
+    --lane: #7dce6a;
+    --sky: #8ecdf2;
+    --grass: #8ed36a;
   }}
   * {{ box-sizing: border-box; }}
   body {{
@@ -511,22 +556,7 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
     min-height: 100vh;
     color: var(--ink);
     font: 16px/1.5 Sora, "Segoe UI", sans-serif;
-    background:
-      radial-gradient(1200px 520px at 12% -10%, var(--glow), transparent 55%),
-      radial-gradient(900px 480px at 92% 8%, rgba(125, 211, 122, 0.16), transparent 50%),
-      linear-gradient(165deg, #f4f7f4 0%, #e7eee8 42%, #dfe8e2 100%);
-  }}
-  body::before {{
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.035;
-    background-image: repeating-linear-gradient(
-      -12deg,
-      #152018 0 1px,
-      transparent 1px 14px
-    );
+    background: linear-gradient(180deg, var(--sky) 0 220px, #e7f8c8 220px 420px, var(--grass) 420px);
   }}
   a {{ color: inherit; }}
   .shell {{
@@ -535,13 +565,25 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
     margin: 0 auto;
     padding: 28px 0 48px;
   }}
+  .mast {{
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin: 0 0 14px;
+  }}
+  .mast .tree {{
+    width: 72px;
+    height: 96px;
+    object-fit: contain;
+    background: transparent;
+  }}
   .brand {{
     font-family: Fraunces, Georgia, serif;
     font-size: clamp(2.6rem, 7vw, 4.2rem);
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 0.95;
-    margin: 0 0 18px;
+    margin: 0;
     animation: rise 0.7s ease both;
   }}
   .brand span {{
@@ -590,16 +632,26 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
   .card {{
     display: block;
     background: var(--card);
-    border: 1px solid var(--line);
-    padding: 18px 20px;
+    border: 3px solid var(--line);
+    border-radius: 18px;
+    padding: 16px 18px;
     text-decoration: none;
-    backdrop-filter: blur(8px);
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }}
+  .card.with-art {{
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 14px;
+    align-items: center;
+  }}
+  .card .thumb {{
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
   }}
   .card:hover {{
-    border-color: #6f8a76;
-    transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(21, 32, 24, 0.08);
+    transform: translateY(-3px);
+    box-shadow: 6px 8px 0 rgba(42, 59, 79, 0.18);
   }}
   .row {{ display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }}
   .summary {{
@@ -612,9 +664,10 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
   .tabs a, .tabs button {{
     font: 500 14px/1 Sora, sans-serif;
     text-decoration: none;
-    border: 1px solid var(--line);
+    border: 3px solid var(--line);
+    border-radius: 999px;
     padding: 10px 14px;
-    background: rgba(255,255,255,0.55);
+    background: #fffdf6;
     color: inherit;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -638,9 +691,42 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
   }}
   .panel {{
     background: var(--card);
-    border: 1px solid var(--line);
+    border: 3px solid var(--line);
+    border-radius: 18px;
     padding: 18px;
-    backdrop-filter: blur(8px);
+  }}
+  .banner {{
+    border: 3px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+    margin: 0 0 16px;
+    background: #5f6b73;
+  }}
+  .banner img {{ display: block; width: 100%; height: auto; object-fit: fill; }}
+  .split {{
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 14px;
+    align-items: center;
+  }}
+  .split img, .figure {{
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+  }}
+  .flower-strip {{
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: fill;
+    border: 3px solid var(--line);
+    border-radius: 18px;
+    margin: 8px 0 18px;
+  }}
+  @media (max-width: 640px) {{
+    .card.with-art, .split {{ grid-template-columns: 72px 1fr; }}
+    .card .thumb, .split img, .figure {{ width: 72px; height: 72px; }}
+    .mast .tree {{ width: 48px; height: 64px; }}
   }}
   .player {{
     position: relative;
@@ -772,7 +858,11 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
 </head>
 <body>
 <div class="shell">
-  <p class="brand"><span>Witness</span></p>
+  <div class="mast">
+    {left_tree}
+    <p class="brand"><span>Witness</span></p>
+    {right_tree}
+  </div>
   {body}
 </div>
 </body>
@@ -788,7 +878,10 @@ def about_page(data: dict) -> bytes:
     found = counts(data.get("incidents") or [])
     body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
 <h1>About / how it works</h1>
-<p class="summary">A helmet-cam witness that drafts a report when a driver is at fault, and a private lesson when you are.</p>
+<div class="split" style="margin:12px 0 16px;">
+  {art("bike", "Cyclist in a helmet")}
+  <p class="summary" style="margin:0;">A helmet-cam witness that drafts a report when a driver is at fault, and a private lesson when you are.</p>
+</div>
 <section class="panel" style="margin:18px 0;">
   <h3>Pipeline</h3>
   <p>Cosmos3-Reason screens the archive; YOLO measures closeness; plain rules decide fault; W&amp;B writes the report or lesson text. The app only reads the result and lets you review it.</p>
@@ -820,7 +913,10 @@ def devices_page(data: dict) -> bytes:
         if cam not in known
     )
     body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
-<h1>Register device</h1>
+<div class="split">
+  {art("license", "Illustrated bicycle registration card")}
+  <h1>Register device</h1>
+</div>
 <p id="page-audience">Each camera in the archive has a <b>camera id</b> (the stream label VSS indexed). That is why you see many ids in the lab — every helmet cam, dashcam, and team feed gets its own. Your rides show their camera id in brackets so you know which device filmed them.</p>
 <section class="panel" style="margin:18px 0;">
   <h3>On your rides now</h3>
@@ -866,21 +962,26 @@ def ride_list(data: dict) -> bytes:
     total = counts(incidents)
     registered = set(load_devices().get("registered") or [])
     cards = []
-    for ride in data["rides"]:
+    for index, ride in enumerate(data["rides"]):
         mine = [item for item in incidents if item["ride"] == ride["id"]]
         found = counts(mine)
         unclear = f" · {found['unclear']} to decide" if found["unclear"] else ""
         situation = ride.get("situation") or ride.get("conditions") or ""
         cam = camera_id_for_ride(ride)
         reg_mark = " · registered" if cam in registered else ""
+        thumb = RIDE_ART[index % len(RIDE_ART)]
         cards.append(
-            f"""<a class="card" href="{u('/ride/' + ride['id'])}">
-              <div class="row"><h2>{esc(ride_label(ride))}</h2><span class="when">{esc(clock((ride.get('duration_min') or 0) * 60))} ride</span></div>
-              <p class="summary">{esc(summary_line(found))}{esc(unclear)}</p>
-              <p class="meta">{esc(situation)} <span class="cam">({esc(cam)}{esc(reg_mark)})</span></p>
+            f"""<a class="card with-art" href="{u('/ride/' + ride['id'])}">
+              {art(thumb, ride_label(ride), "thumb")}
+              <div>
+                <div class="row"><h2>{esc(ride_label(ride))}</h2><span class="when">{esc(clock((ride.get('duration_min') or 0) * 60))} ride</span></div>
+                <p class="summary">{esc(summary_line(found))}{esc(unclear)}</p>
+                <p class="meta">{esc(situation)} <span class="cam">({esc(cam)}{esc(reg_mark)})</span></p>
+              </div>
             </a>"""
         )
-    body = f"""<h1>Your rides</h1>
+    body = f"""<div class="banner">{art("ground", "Flowers in the grass", "cover")}</div>
+<h1>Your rides</h1>
 <p id="page-audience">Helmet-cam moments worth a second look — reports you may send, and private lessons that stay with you.</p>
 <p class="meta">{esc(summary_line(total))} across these rides · {esc(data_source())}</p>
 <div class="toolbar">
@@ -888,8 +989,9 @@ def ride_list(data: dict) -> bytes:
   <a class="button secondary" href="{u('/about')}">About / how it works</a>
 </div>
 <main class="rides">{''.join(cards)}</main>
+{art("meadow", "A field of flowers under a blue sky", "flower-strip")}
 <p class="foot">Camera ids label which physical stream filmed each ride. <a href="{u('/devices')}">Why so many ids?</a> · <a href="{u('/timeline')}">How the agent screened every segment</a></p>"""
-    return page("Your rides", body)
+    return page("Your rides", body, show_trees=False)
 
 
 def effective_fault(item: dict) -> str:
@@ -1254,8 +1356,12 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
     lead_disabled = "disabled" if not lead_src else ""
     after_disabled = "disabled" if not after_src else ""
 
+    scene_key, scene_alt = scene_for_fault(fault, item)
     body = f"""<p class="kicker"><a href="{u('/ride/' + item['ride'])}">Back to {esc(ride_label(ride))}</a></p>
-<h1>{esc(item['document']['title'])}</h1>
+<div class="split">
+  {art(scene_key, scene_alt, "figure")}
+  <h1>{esc(item['document']['title'])}</h1>
+</div>
 <p><span class="badge {esc(fault)}" id="fault-badge">{esc(FAULT_LABEL.get(fault, fault))}</span>
 <span class="when"> · {esc(item['severity_label'])} · {esc(clock(item['ride_offset_sec']))} into the ride · peak {esc(item.get('t_peak'))}s</span></p>
 <p>{esc(facts['evidence'])}</p>
@@ -1565,7 +1671,7 @@ def authority_report_page(data: dict, incident_id: str) -> bytes:
     <a class="secondary" href="{u('/incident/' + incident_id)}">Edit review</a>
   </div>
   <section class="panel">
-    <p class="kicker">Authority report · audience: police / 311 / insurer (only if you export)</p>
+    <div class="split noprint">{art("police", "Police car")}<p class="kicker" style="margin:0;">Authority report · audience: police / 311 / insurer (only if you export)</p></div>
     <h1>{esc((item.get('document') or {}).get('title') or 'Incident report')}</h1>
     <p class="audience">Prepared for you, the cyclist, to review. Nothing is submitted until you export or use the demo Send action.</p>
     <p>{esc(report_summary(item))}</p>
@@ -1644,8 +1750,13 @@ def lesson_page(data: dict, incident_id: str) -> bytes:
     <a href="{u('/incident/' + incident_id)}">Edit review</a>
   </div>
   <section class="lesson-card">
-    <p class="kicker">For you</p>
-    <h1>{esc((item.get('document') or {}).get('title') or 'Rider lesson')}</h1>
+    <div class="split">
+      {art("signal" if (item.get("facts") or {}).get("signal_for_rider") == "red" else "bike", "How to ride this moment")}
+      <div>
+        <p class="kicker">For you</p>
+        <h1>{esc((item.get('document') or {}).get('title') or 'Rider lesson')}</h1>
+      </div>
+    </div>
     <h2>What happened</h2>
     <p>{esc(sections['what_happened'])}</p>
     <h2>Why it was risky</h2>
@@ -1687,6 +1798,24 @@ class Handler(BaseHTTPRequestHandler):
             return self.stream(query.get("source", [""])[0])
         if path == "/api/detections":
             return self.detections(query.get("source", [""])[0])
+        if path.startswith("/static/"):
+            key = path[len("/static/") :]
+            spec = ART.get(key)
+            if spec is None:
+                return self._send(404, b"not found", "text/plain")
+            filename, ctype = spec
+            file_path = ROOT / filename
+            if not file_path.is_file():
+                return self._send(404, b"not found", "text/plain")
+            data = file_path.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.end_headers()
+            if self.command != "HEAD":
+                self.wfile.write(data)
+            return
         if path == "/api/rides":
             return self._json(200, ride_summaries(*load_rides()))
         if path.startswith("/api/rides/"):
