@@ -6,6 +6,7 @@
   data/stage_c.json   Stage C Cosmos facts (engine/confirm.py)           -> fault via engine/fault.py; replaces
                       the rows above for the same segment
   data/segments.json  playable source + ride offset per segment
+  data/stage_e.json   Stage E report / lesson text (engine/report.py)    -> document text, if the verdict matches
 
   python3 engine/build_incidents.py                 # -> data/incidents.json
   python3 engine/build_incidents.py --only H1,H3    # halfway-gate cut: hero clips only (ids from probe/labels.csv)
@@ -13,6 +14,7 @@
 import argparse, csv, json, os
 
 import fault
+import report
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 DATA = os.path.join(ROOT, 'data')
@@ -214,6 +216,9 @@ def main(out, only):
         rides.append({'id': rid, 'title': title, 'situation': situation, 'conditions': conditions,
                       'duration_min': round(dur / 60), 'segments': len(segs)})
 
+    stage_e = os.path.join(DATA, 'stage_e.json')  # Stage E text (engine/report.py), kept while the verdict holds
+    n_text = report.merge(incidents, json.load(open(stage_e))) if os.path.exists(stage_e) else 0
+
     json.dump({'generated_from': f'engine/build_incidents.py: stage_c.json (Cosmos facts, rules {fault.VERSION}) + '
                                  'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8)'
                                  + (f"; only {','.join(sorted(only))}" if only else ''),
@@ -221,7 +226,7 @@ def main(out, only):
     c = {}
     for i in incidents:
         c[i['fault']] = c.get(i['fault'], 0) + 1
-    print(f'{len(incidents)} incidents {c} -> {out}')
+    print(f'{len(incidents)} incidents {c}, {n_text} with Stage E text -> {out}')
 
 
 if __name__ == '__main__':

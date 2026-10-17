@@ -784,6 +784,16 @@ def ride_label(ride: dict) -> str:
     return ride.get("title") or ride.get("id") or "Ride"
 
 
+def written_by_line(incidents: list[dict]) -> str:
+    models = [(row.get("document") or {}).get("generated_by") for row in incidents]
+    written = [m for m in models if m]
+    if not written:
+        return "Report and lesson text: built from the facts with fixed templates."
+    rest = "" if len(written) == len(incidents) else "; the rest use fixed templates"
+    return (f"Report and lesson text: {len(written)} of {len(incidents)} written by {written[0]} "
+            f"from the facts above{rest}.")
+
+
 def about_page(data: dict) -> bytes:
     found = counts(data.get("incidents") or [])
     body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
@@ -794,6 +804,7 @@ def about_page(data: dict) -> bytes:
   <p>Cosmos3-Reason screens the archive; YOLO measures closeness; plain rules decide fault; W&amp;B writes the report or lesson text. The app only reads the result and lets you review it.</p>
   <p class="meta">Data source now: <code>{esc(data_source())}</code> · {esc(len(data.get('incidents') or []))} incidents · {esc(len(load_segments()))} segments indexed for lead-up/aftermath.</p>
   <p class="meta">Ride safety on this load: {esc(summary_line(found))}.</p>
+  <p class="meta">{esc(written_by_line(data.get('incidents') or []))}</p>
 </section>
 <section class="panel">
   <h3>What we do not do</h3>
