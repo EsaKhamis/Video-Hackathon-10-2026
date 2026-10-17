@@ -1,0 +1,269 @@
+{
+  "stage": "D",
+  "rules": "v1",
+  "still_review": "Regenerated from the corrected screen. One frame each. A survivor needs the rider in frame and a red traffic-signal head, not a car lamp or a sign.",
+  "labelled": 13,
+  "survivors": 13,
+  "rows": [
+    {
+      "id": "N0181",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 6,
+      "start_sec": 10.0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0203",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 10,
+      "start_sec": 0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": true
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":true}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 2,
+      "still_review": "match"
+    },
+    {
+      "id": "N0205",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 10,
+      "start_sec": 10.0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0207",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 10,
+      "start_sec": 20.0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0209",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 11,
+      "start_sec": 0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "crosswalk",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"crosswalk\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0213",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 11,
+      "start_sec": 20.0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "crosswalk",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"crosswalk\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0245",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 17,
+      "start_sec": 0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0248",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 17,
+      "start_sec": 15.0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "bike_lane",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"bike_lane\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0310",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 27,
+      "start_sec": 25.0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "bike_lane",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"bike_lane\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0311",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 28,
+      "start_sec": 0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0316",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 28,
+      "start_sec": 25.0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0317",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 29,
+      "start_sec": 0,
+      "fields": {
+        "signal": "red",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "crosswalk",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"red\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"crosswalk\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match"
+    },
+    {
+      "id": "N0322",
+      "screen": "H3",
+      "label": "rider/red",
+      "ride": "GOPR0130",
+      "chunk_index": 29,
+      "start_sec": 25.0,
+      "fields": {
+        "signal": "yellow",
+        "rider_visible": true,
+        "clothing_red": false,
+        "place": "road",
+        "vehicle_in_path": false
+      },
+      "raw": "{\"signal\":\"yellow\",\"rider_visible\":true,\"clothing_red\":false,\"place\":\"road\",\"vehicle_in_path\":false}",
+      "keep": true,
+      "rule": "D-red-signal",
+      "rank": 1,
+      "still_review": "match: frame shows a red signal head; the still model said yellow"
+    }
+  ]
+}

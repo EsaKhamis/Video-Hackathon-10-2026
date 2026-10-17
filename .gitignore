@@ -23,3 +23,7 @@ config
 probe/*.jpg
 probe/dash/
 probe/*.json
+
+# Local review decisions while iterating on the stub
+app/reviews.json
+app/__pycache__/

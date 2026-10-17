@@ -27,18 +27,24 @@ REVIEWS = Path(os.environ.get("REVIEWS_PATH", str(ROOT / "reviews.json")))
 DATA_DIR = Path(os.environ.get("DATA_DIR", "/data"))
 if not DATA_DIR.is_dir():
     DATA_DIR = ROOT.parent / "data"
-# Public prefix: the Ingress serves this app at /app/ and strips it, so outgoing links must add it back.
-_PREFIX = os.environ.get("BASE_PATH", "").strip("/")
-BASE = f"/{_PREFIX}/" if _PREFIX else "/"
-_ABS_URL = re.compile(r"""(\b(?:href|src|action)=["']|fetch\(['"]|\.src = ['"])/(?!/)""")
 SEGMENT_KEY = re.compile(r"((?:GOPR|GX)\d+_chunk_\d+_segment_\d+)")
+# Public URL prefix when behind Ingress path /app (rewrite strips it before the app sees the path).
+BASE_PATH = os.environ.get("BASE_PATH", "").rstrip("/")
 
 
-def with_base(html: bytes) -> bytes:
-    """Rewrite root-relative links (/ride/..., /api/...) to sit under BASE."""
-    if BASE == "/":
-        return html
-    return _ABS_URL.sub(lambda m: m.group(1) + BASE, html.decode()).encode()
+def u(path: str = "/") -> str:
+    """Client-facing path, prefixed with BASE_PATH when deployed at /app."""
+    if not path.startswith("/"):
+        path = "/" + path
+    return f"{BASE_PATH}{path}" if BASE_PATH else path
+
+
+def strip_base(path: str) -> str:
+    if BASE_PATH and (path == BASE_PATH or path.startswith(BASE_PATH + "/")):
+        return path[len(BASE_PATH) :] or "/"
+    return path
+
+
 # #region agent log
 _DEBUG_LOG = Path("/home/ria22spberry/.cursor/debug-e63ac1.log")
 
@@ -47,7 +53,7 @@ def _dbg(hypothesis_id: str, location: str, message: str, data: dict | None = No
     try:
         payload = {
             "sessionId": "e63ac1",
-            "runId": "person-a-smoke",
+            "runId": "basepath-fix",
             "hypothesisId": hypothesis_id,
             "location": location,
             "message": message,
@@ -444,7 +450,7 @@ def ride_list(data: dict) -> bytes:
         unclear = f" · {found['unclear']} to decide" if found["unclear"] else ""
         situation = ride.get("situation") or ride.get("conditions") or ""
         cards.append(
-            f"""<a class="card" href="/ride/{esc(ride['id'])}">
+            f"""<a class="card" href="{u('/ride/' + ride['id'])}">
               <div class="row"><h2>{esc(ride_label(ride))}</h2><span class="when">{esc(clock((ride.get('duration_min') or 0) * 60))} ride</span></div>
               <p class="summary">{esc(summary_line(found))}{esc(unclear)}</p>
               <p class="meta">{esc(situation)}</p>
@@ -454,7 +460,7 @@ def ride_list(data: dict) -> bytes:
 <p id="page-audience">For you, the cyclist. Open a ride to review risky moments: reports you may send, and private lessons that never leave this app.</p>
 <p class="meta">{esc(summary_line(total))} across these rides.</p>
 <main class="rides">{''.join(cards)}</main>
-<p class="meta"><a href="/timeline">How the agent screened every 5-second segment</a></p>"""
+<p class="meta"><a href="{u('/timeline')}">How the agent screened every 5-second segment</a></p>"""
     return page("Your rides", body)
 
 
@@ -465,7 +471,7 @@ def effective_fault(item: dict) -> str:
 def incident_list(data: dict, ride_id: str, tab: str) -> bytes:
     ride = next((item for item in data["rides"] if item["id"] == ride_id), None)
     if ride is None:
-        return page("Ride not found", "<h1>Ride not found</h1><p><a href='/'>Your rides</a></p>")
+        return page("Ride not found", f"<h1>Ride not found</h1><p><a href='{u('/')}'>Your rides</a></p>")
     mine = [item for item in data["incidents"] if item["ride"] == ride_id]
     mine.sort(key=lambda item: item.get("severity") or 0, reverse=True)
     found = counts(mine)
@@ -486,7 +492,7 @@ def incident_list(data: dict, ride_id: str, tab: str) -> bytes:
         colour = f"{vehicle['colour']} " if vehicle.get("colour") else ""
         status = item.get("review", {}).get("status") or "pending"
         rows.append(
-            f"""<a class="card" href="/incident/{esc(item['id'])}">
+            f"""<a class="card" href="{u('/incident/' + item['id'])}">
               <div class="row">
                 <h2>{esc(item['document']['title'])}</h2>
                 <span class="badge {esc(fault)}">{esc(FAULT_LABEL.get(fault, fault))}</span>
@@ -497,15 +503,15 @@ def incident_list(data: dict, ride_id: str, tab: str) -> bytes:
         )
     listing = "".join(rows) if rows else f'<p class="empty">{empty}</p>'
     situation = ride.get("situation") or ride.get("conditions") or ""
-    body = f"""<p class="kicker"><a href="/">Your rides</a></p>
+    body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
 <h1>{esc(ride_label(ride))}</h1>
 <p class="summary">{esc(summary_line(found))}</p>
 <p class="meta">{esc(situation)}</p>
 {timeline_html(ride, mine)}
 <p id="page-audience" class="hint">Audience: you. <b>Reports to send</b> are for police, 311, or your insurer — only if you approve. <b>Lessons for you</b> stay private.</p>
 <nav class="tabs">
-  <a class="{'on' if tab == 'reports' else ''}" href="/ride/{esc(ride_id)}?tab=reports">Reports to send</a>
-  <a class="{'on' if tab == 'lessons' else ''}" href="/ride/{esc(ride_id)}?tab=lessons">Lessons for you</a>
+  <a class="{'on' if tab == 'reports' else ''}" href="{u('/ride/' + ride_id)}?tab=reports">Reports to send</a>
+  <a class="{'on' if tab == 'lessons' else ''}" href="{u('/ride/' + ride_id)}?tab=lessons">Lessons for you</a>
 </nav>
 <main class="list">{listing}</main>"""
     return page(ride_label(ride), body)
@@ -658,7 +664,7 @@ def audience_copy(fault: str) -> tuple[str, str]:
 def incident_detail(data: dict, incident_id: str) -> bytes:
     item = next((row for row in data["incidents"] if row["id"] == incident_id), None)
     if item is None:
-        return page("Incident not found", "<h1>Incident not found</h1><p><a href='/'>Your rides</a></p>")
+        return page("Incident not found", f"<h1>Incident not found</h1><p><a href='{u('/')}'>Your rides</a></p>")
     ride = next((r for r in data["rides"] if r["id"] == item["ride"]), {"id": item["ride"], "title": item["ride"]})
     facts = item["facts"]
     geom = item.get("geometry") or {}
@@ -680,13 +686,13 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
     doc_kind = (item.get("document") or {}).get("kind")
     doc_link = ""
     if doc_kind == "authority_report" or fault == "driver":
-        doc_link = f'<a class="button secondary" href="/report/{esc(item["id"])}">Authority report</a>'
+        doc_link = f'<a class="button secondary" href="{u("/report/" + item["id"])}">Authority report</a>'
     if doc_kind == "rider_lesson" or fault == "rider":
-        doc_link += f'<a class="button secondary" href="/lesson/{esc(item["id"])}">Rider lesson</a>'
+        doc_link += f'<a class="button secondary" href="{u("/lesson/" + item["id"])}">Rider lesson</a>'
     if fault in ("unclear", "shared"):
         doc_link = (
-            f'<a class="button secondary" href="/report/{esc(item["id"])}">Authority report</a>'
-            f'<a class="button secondary" href="/lesson/{esc(item["id"])}">Rider lesson</a>'
+            f'<a class="button secondary" href="{u("/report/" + item["id"])}">Authority report</a>'
+            f'<a class="button secondary" href="{u("/lesson/" + item["id"])}">Rider lesson</a>'
         )
 
     fact_rows = [
@@ -729,17 +735,17 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
 
     prev_item, next_item = neighbors(data, item)
     prev_link = (
-        f'<a href="/incident/{esc(prev_item["id"])}">← {esc((prev_item.get("document") or {}).get("title") or prev_item["id"])}</a>'
+        f'<a href="{u("/incident/" + prev_item["id"])}">← {esc((prev_item.get("document") or {}).get("title") or prev_item["id"])}</a>'
         if prev_item
         else "<span></span>"
     )
     next_link = (
-        f'<a href="/incident/{esc(next_item["id"])}">{esc((next_item.get("document") or {}).get("title") or next_item["id"])} →</a>'
+        f'<a href="{u("/incident/" + next_item["id"])}">{esc((next_item.get("document") or {}).get("title") or next_item["id"])} →</a>'
         if next_item
         else "<span></span>"
     )
 
-    body = f"""<p class="kicker"><a href="/ride/{esc(item['ride'])}">Back to {esc(ride_label(ride))}</a></p>
+    body = f"""<p class="kicker"><a href="{u('/ride/' + item['ride'])}">Back to {esc(ride_label(ride))}</a></p>
 <h1>{esc(item['document']['title'])}</h1>
 <p><span class="badge {esc(fault)}" id="fault-badge">{esc(FAULT_LABEL.get(fault, fault))}</span>
 <span class="when"> · {esc(item['severity_label'])} · {esc(clock(item['ride_offset_sec']))} into the ride · peak {esc(item.get('t_peak'))}s</span></p>
@@ -795,6 +801,7 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
 </section>
 
 <script>
+const basePath = {json.dumps(BASE_PATH)};
 const incidentId = {json.dumps(item["id"])};
 const source = {json.dumps(source)};
 const bbox = {bbox_json};
@@ -824,7 +831,7 @@ function draw() {{
 }}
 
 if (source) {{
-  v.src = '/api/stream?source=' + encodeURIComponent(source);
+  v.src = basePath + '/api/stream?source=' + encodeURIComponent(source);
   v.addEventListener('loadedmetadata', () => {{
     status.textContent = `Loaded ${{v.duration.toFixed(1)}} s. Peak at ${{peak}} s.`;
     sizeCanvas();
@@ -876,7 +883,7 @@ async function review(statusValue) {{
     street: document.getElementById('street').value,
     fault_override: chosenFault,
   }};
-  const res = await fetch('/api/review', {{
+  const res = await fetch(basePath + '/api/review', {{
     method: 'POST',
     headers: {{'Content-Type': 'application/json'}},
     body: JSON.stringify(body),
@@ -920,7 +927,7 @@ def timeline_html(ride: dict, incidents: list[dict]) -> str:
         title = (item.get("document") or {}).get("title") or item["id"]
         marks.append(
             f'<a class="mark {esc(fault)}" style="left:{pct:.1f}%" '
-            f'href="/incident/{esc(item["id"])}" title="{esc(title)}"></a>'
+            f'href="{u("/incident/" + item["id"])}" title="{esc(title)}"></a>'
         )
     if not marks:
         return ""
@@ -972,7 +979,7 @@ def report_summary(item: dict) -> str:
 def authority_report_page(data: dict, incident_id: str) -> bytes:
     item = next((row for row in data["incidents"] if row["id"] == incident_id), None)
     if item is None:
-        return page("Not found", "<h1>Not found</h1><p><a href='/'>Your rides</a></p>")
+        return page("Not found", f"<h1>Not found</h1><p><a href='{u('/')}'>Your rides</a></p>")
     ride = next((r for r in data["rides"] if r["id"] == item["ride"]), {"title": item["ride"]})
     facts = item.get("facts") or {}
     vehicle = facts.get("vehicle") or {}
@@ -983,8 +990,8 @@ def authority_report_page(data: dict, incident_id: str) -> bytes:
             "Not a report",
             f"<h1>This is a private lesson</h1>"
             f"<p class='audience'>Audience: you only. Rider-fault moments do not produce an authority report.</p>"
-            f"<p><a href='/lesson/{esc(incident_id)}'>Open the rider lesson</a> · "
-            f"<a href='/incident/{esc(incident_id)}'>Back to incident</a></p>",
+            f"<p><a href='{u('/lesson/' + incident_id)}'>Open the rider lesson</a> · "
+            f"<a href='{u('/incident/' + incident_id)}'>Back to incident</a></p>",
         )
     colour = (vehicle.get("colour") or "").strip()
     kind = vehicle.get("type") or "vehicle"
@@ -1014,12 +1021,12 @@ def authority_report_page(data: dict, incident_id: str) -> bytes:
     .doc .panel {{ border: none; padding: 0; }}
   }}
 </style>
-<p class="kicker noprint"><a href="/incident/{esc(incident_id)}">Back to incident</a></p>
+<p class="kicker noprint"><a href="{u('/incident/' + incident_id)}">Back to incident</a></p>
 <div class="doc">
   <div class="printbar noprint">
     <button type="button" onclick="window.print()">Print / save PDF</button>
     <button type="button" class="secondary" id="send-dummy">Send (demo only)</button>
-    <a class="secondary" href="/incident/{esc(incident_id)}">Edit review</a>
+    <a class="secondary" href="{u('/incident/' + incident_id)}">Edit review</a>
   </div>
   <section class="panel">
     <p class="kicker">Authority report · audience: police / 311 / insurer (only if you export)</p>
@@ -1046,7 +1053,7 @@ def authority_report_page(data: dict, incident_id: str) -> bytes:
 </div>
 <script>
 document.getElementById('send-dummy').onclick = async () => {{
-  const res = await fetch('/api/submit', {{
+  const res = await fetch({json.dumps(u('/api/submit'))}, {{
     method: 'POST',
     headers: {{'Content-Type': 'application/json'}},
     body: JSON.stringify({{id: {json.dumps(incident_id)}, kind: 'authority_report'}}),
@@ -1064,7 +1071,7 @@ document.getElementById('send-dummy').onclick = async () => {{
 def lesson_page(data: dict, incident_id: str) -> bytes:
     item = next((row for row in data["incidents"] if row["id"] == incident_id), None)
     if item is None:
-        return page("Not found", "<h1>Not found</h1><p><a href='/'>Your rides</a></p>")
+        return page("Not found", f"<h1>Not found</h1><p><a href='{u('/')}'>Your rides</a></p>")
     sections = lesson_sections(item)
     fault = effective_fault(item)
     if fault == "driver":
@@ -1072,8 +1079,8 @@ def lesson_page(data: dict, incident_id: str) -> bytes:
             "Not a lesson",
             f"<h1>This is a report to review</h1>"
             f"<p class='audience'>Audience: you may send this onward. Open the authority report instead of a lesson.</p>"
-            f"<p><a href='/report/{esc(incident_id)}'>Open the authority report</a> · "
-            f"<a href='/incident/{esc(incident_id)}'>Back to incident</a></p>",
+            f"<p><a href='{u('/report/' + incident_id)}'>Open the authority report</a> · "
+            f"<a href='{u('/incident/' + incident_id)}'>Back to incident</a></p>",
         )
     body = f"""
 <style>
@@ -1091,11 +1098,11 @@ def lesson_page(data: dict, incident_id: str) -> bytes:
     .lesson-card {{ border: none; padding: 0; }}
   }}
 </style>
-<p class="kicker noprint"><a href="/incident/{esc(incident_id)}">Back to incident</a></p>
+<p class="kicker noprint"><a href="{u('/incident/' + incident_id)}">Back to incident</a></p>
 <div class="doc">
   <div class="printbar noprint">
     <button type="button" onclick="window.print()">Print for yourself</button>
-    <a href="/incident/{esc(incident_id)}">Edit review</a>
+    <a href="{u('/incident/' + incident_id)}">Edit review</a>
   </div>
   <section class="lesson-card">
     <p class="kicker">Rider lesson · audience: you only · never sent</p>
@@ -1122,7 +1129,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         parsed = urllib.parse.urlsplit(self.path)
-        path = parsed.path.rstrip("/") or "/"
+        path = strip_base(parsed.path.rstrip("/") or "/")
         query = urllib.parse.parse_qs(parsed.query)
         if path == "/health":
             return self._json(200, {"ok": True})
@@ -1141,15 +1148,34 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(404, {"error": f"unknown ride {ride}"})
             return self._json(200, {"ride": ride, "legend": screen.get("legend", {}), "segments": rides[ride]})
         if path == "/timeline":
-            html = (ROOT / "timeline.html").read_text().replace("__BASE__", BASE)
+            html = (ROOT / "timeline.html").read_text().replace("__BASE__", u("/"))
             return self._send(200, html.encode(), "text/html; charset=utf-8")
 
         data = load_data()
         # #region agent log
-        _dbg("H1", "Handler.do_GET", "route", {"path": path, "incidents": len(data.get("incidents") or [])})
+        _dbg(
+            "H6",
+            "Handler.do_GET",
+            "route",
+            {"path": path, "base_path": BASE_PATH, "incidents": len(data.get("incidents") or [])},
+        )
         # #endregion
         if path == "/":
             body = ride_list(data)
+            # #region agent log
+            sample = next((r["id"] for r in data.get("rides") or []), "")
+            want = u(f"/ride/{sample}").encode() if sample else b""
+            _dbg(
+                "H6",
+                "Handler.do_GET:home",
+                "prefixed_links",
+                {
+                    "base_path": BASE_PATH,
+                    "sample_href_ok": (want in body) if want else False,
+                    "bare_ride_href": b'href="/ride/' in body,
+                },
+            )
+            # #endregion
         elif path.startswith("/ride/"):
             ride_id = path.split("/", 2)[2]
             body = incident_list(data, ride_id, (query.get("tab") or ["reports"])[0])
@@ -1162,6 +1188,7 @@ class Handler(BaseHTTPRequestHandler):
                     "ride_id": ride_id,
                     "has_timeline": b'class="timeline"' in body,
                     "tab": (query.get("tab") or ["reports"])[0],
+                    "bare_incident_href": b'href="/incident/' in body,
                 },
             )
             # #endregion
@@ -1172,7 +1199,11 @@ class Handler(BaseHTTPRequestHandler):
                 "H3",
                 "Handler.do_GET:incident",
                 "nav",
-                {"has_navrow": b'class="navrow"' in body, "has_report_or_lesson": b"/report/" in body or b"/lesson/" in body},
+                {
+                    "has_navrow": b'class="navrow"' in body,
+                    "has_report_or_lesson": u("/report/").encode() in body or u("/lesson/").encode() in body,
+                    "api_stream_prefixed": (BASE_PATH.encode() + b"/api/stream") in body if BASE_PATH else b"/api/stream" in body,
+                },
             )
             # #endregion
         elif path.startswith("/report/"):
@@ -1191,13 +1222,13 @@ class Handler(BaseHTTPRequestHandler):
             )
             # #endregion
         else:
-            body = page("Not found", "<h1>Not found</h1><p><a href='/'>All rides</a></p>")
+            body = page("Not found", f"<h1>Not found</h1><p><a href='{u('/')}'>All rides</a></p>")
             return self._send(404, body, "text/html; charset=utf-8")
         self._send(200, body, "text/html; charset=utf-8")
 
     def do_POST(self) -> None:
         parsed = urllib.parse.urlsplit(self.path)
-        path = parsed.path.rstrip("/") or "/"
+        path = strip_base(parsed.path.rstrip("/") or "/")
         length = int(self.headers.get("Content-Length") or 0)
         raw = self.rfile.read(length) if length else b"{}"
         try:
@@ -1283,8 +1314,6 @@ class Handler(BaseHTTPRequestHandler):
 
     def _send(self, code: int, body: bytes | str, ctype: str) -> None:
         data = body if isinstance(body, bytes) else body.encode()
-        if ctype.startswith("text/html"):
-            data = with_base(data)
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(data)))
@@ -1302,7 +1331,11 @@ class Handler(BaseHTTPRequestHandler):
 def main() -> None:
     host = os.environ.get("HOST", "0.0.0.0")
     cfg = load_cfg()
-    print(f"http://{host}:{PORT}/ backend={cfg['backend'] or '(unset)'}", flush=True)
+    print(
+        f"http://{host}:{PORT}{BASE_PATH or '/'}"
+        f" base_path={BASE_PATH or '(none)'} backend={cfg['backend'] or '(unset)'}",
+        flush=True,
+    )
     ThreadingHTTPServer((host, PORT), Handler).serve_forever()
 
 
