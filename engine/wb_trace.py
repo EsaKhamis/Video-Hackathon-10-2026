@@ -7,7 +7,7 @@
 Needs WANDB_API_KEY and WANDB_PROJECT (team/project, or with WANDB_TEAM), from the repo .env or the shell. Without them, or without the
 weave package, every stage still runs on the stdlib alone and just logs nothing.
 """
-import os
+import contextlib, os
 
 try:
     import weave
@@ -36,6 +36,31 @@ def dotenv():
     return out
 
 
+def settings():
+    """WANDB_* for our own W&B project: the repo .env wins over the shell (see init)."""
+    return {**{k: v for k, v in os.environ.items() if k.startswith('WANDB_')}, **dotenv()}
+
+
+@contextlib.contextmanager
+def own_key():
+    """The team's own key, entity and project in the environment for the block, then the shell's put back:
+    Stage E's Inference calls use the shell's key with the shell's project. The wandb SDK wants the project
+    without the team (WANDB_ENTITY holds that), so "team/project" is split here."""
+    cfg = settings()
+    entity, _, name = project(cfg).rpartition('/')
+    want = {'WANDB_API_KEY': cfg.get('WANDB_API_KEY', ''), 'WANDB_PROJECT': name, 'WANDB_ENTITY': entity}
+    shell = {k: os.environ.get(k) for k in want}
+    os.environ.update({k: v for k, v in want.items() if v})
+    try:
+        yield
+    finally:
+        for k, v in shell.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+
 def init():
     """Start Weave once; returns the client, or None when tracing is off.
 
@@ -43,17 +68,10 @@ def init():
     (vastdata/team-1), which Stage E still uses for Inference, but traces go to the team's own project.
     """
     global client
-    cfg = {**{k: v for k, v in os.environ.items() if k.startswith('WANDB_')}, **dotenv()}
+    cfg = settings()
     if client is None and weave and cfg.get('WANDB_API_KEY') and project(cfg):
-        shell_key = os.environ.get('WANDB_API_KEY')
-        os.environ['WANDB_API_KEY'] = cfg['WANDB_API_KEY']  # weave logs in from the environment
-        try:
+        with own_key():  # weave logs in from the environment
             client = weave.init(project(cfg))
-        finally:  # put the shell's key back: Stage E's Inference calls use it with the shell's project
-            if shell_key is None:
-                os.environ.pop('WANDB_API_KEY', None)
-            else:
-                os.environ['WANDB_API_KEY'] = shell_key
     return client
 
 
