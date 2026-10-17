@@ -728,6 +728,9 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
   }}
   .segbar button.on {{ border-color: var(--ink); background: var(--ink); color: #f4f7f4; }}
   .segbar button:disabled {{ opacity: 0.45; cursor: not-allowed; }}
+  .lesson-inline {{ margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }}
+  .lesson-inline ul, .reminders {{ margin: 8px 0 0; padding-left: 1.2rem; }}
+  .lesson-inline li, .reminders li {{ margin: 4px 0; }}
   .foot {{
     margin: 0 0 12px;
     font: 13px/1.4 Sora, sans-serif; color: var(--muted);
@@ -1056,14 +1059,56 @@ def story_from_facts(item: dict) -> str:
 
     if fault == "driver":
         parts.append("The rules treat this as driver fault.")
-    elif fault == "rider":
-        parts.append("The rules treat this as a rider lesson, not a report to send.")
     elif fault == "unclear":
         parts.append("The boxes and the model disagree, so a person should decide.")
     elif fault == "shared":
         parts.append("Both sides look involved; the reviewer can choose the final call.")
 
     return " ".join(p for p in parts if p)
+
+
+def rider_reminders(item: dict) -> list[str]:
+    """Short safety reminders for the rider. Not a legal claim and not a filing note."""
+    facts = item.get("facts") or {}
+    rule = item.get("fault_rule")
+    signal = facts.get("signal_for_rider")
+    pos = facts.get("rider_position")
+    action = facts.get("vehicle_action")
+    if rule == 3 or signal == "red":
+        return [
+            "Stop when the signal facing you is red.",
+            "Wait for green before you enter. Do not follow another rider through.",
+            "Look left, ahead, then right again for turning traffic.",
+            "If you are already in the intersection when it changes, clear it; do not start a new entry.",
+        ]
+    if rule == 4 or pos == "sidewalk":
+        return [
+            "Ride in the bike lane or the traffic lane, not on the sidewalk.",
+            "If you must leave the lane, slow to walking pace around people.",
+            "Rejoin the road only when you can see a gap, and signal before you move.",
+        ]
+    if rule == 5 or facts.get("rider_moved_into_vehicle_path"):
+        return [
+            "Look over your shoulder before you change line.",
+            "Signal, then move once, and hold the new line.",
+            "Do not drift into a vehicle that is already beside you.",
+        ]
+    if rule == 6:
+        return [
+            "Leave a door's width when you pass parked cars.",
+            "Watch for a driver in the seat or a door starting to open.",
+            "If the gap is tight, slow down rather than squeeze through.",
+        ]
+    if action == "overtaking":
+        return [
+            "Hold your line so the driver can judge where you are.",
+            "Glance for the pass, and leave yourself room to move left if it is too close.",
+        ]
+    return [
+        "Scan early: signal, mirrors, and the gap in front of you.",
+        "Hold a predictable line instead of swerving late.",
+        "Leave an escape gap so you can brake or move without hitting the curb.",
+    ]
 
 
 def audience_copy(fault: str) -> tuple[str, str]:
@@ -1134,13 +1179,30 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
         ("Closest distance", facts.get("closest_distance")),
         ("Peak height", f"{(geom.get('peak_h') or 0) * 100:.0f}% of frame"),
         ("Entered corridor", yn(geom.get("entered_corridor"))),
-        ("Rule", f"#{item.get('fault_rule')} → {FAULT_LABEL.get(rule_fault, rule_fault)}"),
-        ("Model fault", FAULT_LABEL.get(model_fault, model_fault)),
     ]
+    if fault != "rider":
+        fact_rows.extend(
+            [
+                ("Rule", f"#{item.get('fault_rule')} → {FAULT_LABEL.get(rule_fault, rule_fault)}"),
+                ("Model fault", FAULT_LABEL.get(model_fault, model_fault)),
+            ]
+        )
     facts_html = "".join(
         f"<div><dt>{esc(label)}</dt><dd>{esc(value)}</dd></div>" for label, value in fact_rows
     )
     story = story_from_facts(item)
+    reminders = rider_reminders(item) if fault == "rider" else []
+    reminder_html = ""
+    if reminders:
+        items = "".join(f"<li>{esc(line)}</li>" for line in reminders)
+        reminder_html = (
+            '<div class="lesson-inline">'
+            "<h3>For you, next time</h3>"
+            f"<ul>{items}</ul>"
+            '<p class="hint">A reminder for you. It stays in this app.</p>'
+            "</div>"
+        )
+    agree_html = "" if fault == "rider" else f'<p class="agree {agree_cls}">{esc(agree_txt)}</p>'
     review_heading, review_audience = audience_copy(fault)
     status_now = review.get("status") or "pending"
 
@@ -1198,7 +1260,7 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
 <p><span class="badge {esc(fault)}" id="fault-badge">{esc(FAULT_LABEL.get(fault, fault))}</span>
 <span class="when"> · {esc(item['severity_label'])} · {esc(clock(item['ride_offset_sec']))} into the ride · peak {esc(item.get('t_peak'))}s</span></p>
 <p>{esc(facts['evidence'])}</p>
-<p class="agree {agree_cls}">{esc(agree_txt)}</p>
+{agree_html}
 <nav class="navrow">{prev_link}{next_link}</nav>
 
 <main class="stage">
@@ -1219,6 +1281,7 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
   <section class="panel">
     <h3>What happened</h3>
     <p class="story">{esc(story)}</p>
+    {reminder_html}
     <details class="tech">
       <summary>Technical details</summary>
       <div class="facts">{facts_html}</div>
@@ -1427,21 +1490,20 @@ def lesson_sections(item: dict) -> dict[str, str]:
     story = story_from_facts(item)
     pos = facts.get("rider_position")
     signal = facts.get("signal_for_rider")
-    why = "Close conflict with traffic raises the chance of a crash."
+    why = "A tight gap with traffic leaves little time to brake or change line."
     if pos == "sidewalk":
-        why = "Riding on the sidewalk surprises pedestrians and forces sudden moves into the road."
+        why = "People on the sidewalk do not expect a bike, and rejoining the road means a sudden move into traffic."
     elif signal == "red":
-        why = "Entering while the signal facing you is red puts you into the path of crossing traffic."
+        why = "Crossing traffic still has the green. Entering on red puts you in their path."
     elif facts.get("vehicle_entered_rider_path"):
-        why = "A vehicle entering your line leaves little room to brake or swerve."
-    next_time = "Hold a predictable line, scan early, and give yourself an escape gap."
-    if pos == "sidewalk":
-        next_time = "Stay on the carriageway or bike lane when you can; if you must leave it, slow for pedestrians and rejoin carefully."
-    elif signal == "red":
-        next_time = "Stop for the red facing you. Wait for green or a clear gap before entering the intersection."
-    elif facts.get("vehicle_action") == "overtaking":
-        next_time = "Hold your line, glance right, and leave space to move left if a pass is too close."
-    return {"what_happened": story, "why_risky": why, "next_time": next_time}
+        why = "A vehicle in your line leaves little room to brake or swerve."
+    reminders = rider_reminders(item)
+    return {
+        "what_happened": story,
+        "why_risky": why,
+        "next_time": " ".join(reminders),
+        "reminders": reminders,
+    }
 
 
 def report_summary(item: dict) -> str:
@@ -1562,6 +1624,9 @@ def lesson_page(data: dict, incident_id: str) -> bytes:
   .doc {{ width: min(720px, calc(100% - 32px)); margin: 0 auto 48px; }}
   .lesson-card {{ border: 1px solid var(--line); background: var(--card); padding: 22px; }}
   .lesson-card h2 {{ margin: 18px 0 6px; font-size: 18px; }}
+  .reminders, .lesson-inline ul {{ margin: 8px 0 0; padding-left: 1.2rem; }}
+  .lesson-inline {{ margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }}
+  .lesson-inline h3 {{ margin-bottom: 6px; }}
   .printbar {{ display: flex; gap: 8px; margin: 16px 0; }}
   .printbar button, .printbar a {{
     font: 14px/1 ui-sans-serif, system-ui, sans-serif;
@@ -1580,16 +1645,15 @@ def lesson_page(data: dict, incident_id: str) -> bytes:
     <a href="{u('/incident/' + incident_id)}">Edit review</a>
   </div>
   <section class="lesson-card">
-    <p class="kicker">Rider lesson · audience: you only · never sent</p>
+    <p class="kicker">For you</p>
     <h1>{esc((item.get('document') or {}).get('title') or 'Rider lesson')}</h1>
-    <p class="audience">This stays with you. There is no send button and it is not a police report.</p>
     <h2>What happened</h2>
     <p>{esc(sections['what_happened'])}</p>
     <h2>Why it was risky</h2>
     <p>{esc(sections['why_risky'])}</p>
     <h2>Next time</h2>
-    <p>{esc(sections['next_time'])}</p>
-    <p class="meta">General safety advice only — not legal advice, and not a claim about a fine or offence.</p>
+    <ul class="reminders">{''.join(f'<li>{esc(line)}</li>' for line in sections.get('reminders') or [sections['next_time']])}</ul>
+    <p class="meta">A reminder for how to ride this spot again. General safety advice only.</p>
   </section>
 </div>
 """
