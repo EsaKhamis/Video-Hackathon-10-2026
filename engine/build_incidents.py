@@ -137,6 +137,90 @@ def stage_c_incident(seg, geo_row, row, hero):
     return inc
 
 
+def most(vals):
+    vals = [v for v in vals if v and v not in ('unknown', 'none', 'unreadable')]
+    return max(set(vals), key=vals.count) if vals else 'unknown'
+
+
+def stage_f_incidents(by_key):
+    """Stage F (engine/bikelane.py): a vehicle stopped in the bike lane, its own event type and rule 9.
+    Consecutive segments of the same ride with the same vehicle type are one incident (one parked truck, not 12).
+    Driver only if some segment had all its Cosmos checks say "stopped in a visible bike lane"; else unclear.
+    The ID number read off the vehicle is shown as evidence, never copied into review.plate (the rider types that)."""
+    path = os.path.join(DATA, 'stage_f.json')
+    if not os.path.exists(path):
+        return []
+    rows = [r for r in json.load(open(path))['rows'] if r.get('verdict') in ('driver', 'unclear') and r['id'] in by_key]
+    rows.sort(key=lambda r: (r['ride'], r['ride_offset_sec']))
+    groups = []
+    for r in rows:
+        vtype = (r.get('vehicle_id') or {}).get('type') or (r['facts'].get('vehicle') or {}).get('type')
+        g = groups[-1] if groups else None
+        if g and g[-1]['ride'] == r['ride'] and r['ride_offset_sec'] - g[-1]['ride_offset_sec'] <= 5 and g[-1]['_type'] == vtype:
+            g.append({**r, '_type': vtype})
+        else:
+            groups.append([{**r, '_type': vtype}])
+    out = []
+    for g in groups:
+        ids = [r.get('vehicle_id') or {} for r in g]
+        sure = [r for r in g if r['verdict'] == 'driver' and all(v is True for v in r['votes'])]
+        verdict = 'driver' if sure else 'unclear'
+        number = most([v.get('plate') for v in ids])
+        # representative segment: one where the number was read, else the biggest vehicle box
+        rep = next((r for r, v in zip(g, ids) if number != 'unknown' and v.get('plate') == number), None) or max(
+            g, key=lambda r: max([x['bbox'][3] - x['bbox'][1] for x in (r.get('vehicle_id') or {}).get('reads', [])] or [0]))
+        reads = sorted((rep.get('vehicle_id') or {}).get('reads', []), key=lambda x: x['bbox'][3] - x['bbox'][1], reverse=True)
+        best = reads[0] if reads else {'t': rep['facts'].get('time_sec') or 2.5, 'bbox': None}
+        colour, vtype = most([v.get('colour') for v in ids]), most([v.get('type') for v in ids])
+        make, model = most([v.get('make') for v in ids]), most([v.get('model') for v in ids])
+        side = (rep['facts'].get('vehicle') or {}).get('side', 'none')
+        secs = g[-1]['ride_offset_sec'] + 5 - g[0]['ride_offset_sec']
+        checks = [v for r in g for v in r['votes']]
+        brand = {'bmw': 'BMW', 'ups': 'UPS', 'usps': 'USPS'}.get(make, make.title())
+        kind = 'SUV' if vtype == 'suv' else vtype
+        if model == 'unknown' or model.lower() in (make, 'delivery', 'mail truck'):
+            model = 'unknown'
+        name = ' '.join(x for x in (colour if colour != 'unknown' else '', brand if make != 'unknown' else '',
+                                    model.upper() if len(model) <= 3 else model.title(), kind) if x and x != 'Unknown')
+        evidence = (f"Cosmos: {rep['facts'].get('evidence', '').strip()} (stopped in the bike lane in "
+                    f"{sum(v is True for v in checks)} of {len(checks)} checks over {len(g)} segment"
+                    f"{'s' if len(g) > 1 else ''}, about {secs} s of the ride.) Vehicle from {len(reads)} YOLO crops: {name}.")
+        if number != 'unknown':
+            evidence += (f" Number read on the vehicle: {number}; check it on the clip, it may be a fleet or taxi "
+                         f"number rather than the plate.")
+        seg = by_key[rep['id']]
+        t = best['t']
+        times = sorted({round(x['t'], 1) for x in reads[:3]} | {round(t, 1)})
+        out.append({
+            'id': 'F-' + rep['id'], 'ride': seg['ride'], 'source': seg_key(seg['source']), 'preview_source': seg['source'],
+            'ride_offset_sec': int(seg['offset_sec']), 't_peak': t,
+            'geometry': {'peak_h': round(best['bbox'][3] - best['bbox'][1], 3) if best['bbox'] else None, 'side': side,
+                         'bbox': best['bbox'], 'pan_suspect': False, 'entered_corridor': None,
+                         'lateral_toward_rider': None, 'min_gap_m': None, 'approach': None, 't_peak': t,
+                         'label': (rep.get('vehicle_id') or {}).get('yolo_label') or vtype},
+            'evidence_frames': times,
+            'review': {'status': 'pending', 'plate': '', 'street': '', 'fault_override': None, 'recorded_at': None},
+            'event_type': 'parked_in_bike_lane', 'fault': verdict, 'fault_rule': 9,
+            'facts': blank_facts(rider_position=rep['facts'].get('rider_position', 'unknown'),
+                                 vehicle_action='stopped_in_lane',
+                                 vehicle={'type': vtype, 'colour': colour, 'side': side},
+                                 evidence=evidence, model_fault='driver'),
+            'vehicle_id': {'colour': colour, 'type': vtype, 'make': make, 'model': model, 'number_seen': number,
+                           'crops': len(reads), 'segments': [r['id'] for r in g], 'duration_sec': secs,
+                           'hazard_lights': rep['facts'].get('hazard_lights'),
+                           'driver_visible': rep['facts'].get('driver_visible')},
+            'model_agreement': verdict == 'driver',
+            'document': {'kind': DOC_KIND.get(verdict, 'both'),
+                         'title': f"{name[:1].upper() + name[1:]} parked in the bike lane"},
+            'severity': min(100, 25 * len(g) + 25), 'low_light': seg['ride'] == 'GX050001' or None,
+        })
+    for i in out:
+        i['severity_label'] = 'High' if i['severity'] >= 70 else 'Med' if i['severity'] >= 40 else 'Low'
+        if not i['low_light']:
+            del i['low_light']
+    return out
+
+
 DOC_KIND = {'driver': 'authority_report', 'rider': 'rider_lesson'}
 
 
@@ -145,6 +229,8 @@ def apply_reviews(incidents, heroes):
     hero_seg = {h: seg for seg, h in heroes.items()}
     by_seg = {}
     for incident_id, r in load_reviews().items():
+        if incident_id.startswith('F-'):  # Stage F reviews: by id, in apply_f_reviews (same segment, other event)
+            continue
         seg = review_segment(incident_id, r, hero_seg)
         if seg:
             by_seg[seg] = r
@@ -255,8 +341,21 @@ def main(out, only):
     stage_e = os.path.join(DATA, 'stage_e.json')  # Stage E text (engine/report.py), kept while the verdict holds
     n_text = report.merge(incidents, json.load(open(stage_e))) if os.path.exists(stage_e) else 0
 
+    blocked = [i for i in stage_f_incidents(by_key) if not only or i['id'] in only]  # after merge: no close-pass text
+    reviews = load_reviews()
+    for i in blocked:
+        r = reviews.get(i['id'])
+        if r:
+            i['review'].update({k: r[k] for k in ('status', 'plate', 'street', 'fault_override', 'recorded_at') if k in r})
+            if r.get('fault_override') in ('driver', 'rider', 'unclear', 'shared') and r['fault_override'] != i['fault']:
+                i['engine'] = {'fault': i['fault'], 'rule': 9}
+                i['fault'], i['fault_rule'] = r['fault_override'], 0
+                i['document']['kind'] = DOC_KIND.get(i['fault'], 'both')
+    incidents = sorted(incidents + blocked, key=lambda i: (i['ride'], -i['severity']))
+
     json.dump({'generated_from': f'engine/build_incidents.py: stage_c.json (Cosmos facts, rules {fault.VERSION}) + '
                                  'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + '
+                                 'stage_f.json (parked in bike lane, rule 9) + '
                                  f'reviews.json ({reviewed} reviews, {overridden} verdicts changed, rule 0)'
                                  + (f"; only {','.join(sorted(only))}" if only else ''),
                'evaluation': {k: v for k, v in evaluate().items() if k != 'rows'},

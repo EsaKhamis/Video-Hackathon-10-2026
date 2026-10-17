@@ -92,3 +92,26 @@ is "not confirmed", so a report never states two signals. Colour, plate, date an
 text that mentions fines or offences is rejected and retried. Text is cached per segment and verdict in
 `data/stage_e.json`; `build_incidents.py` merges it back, and an incident whose verdict changes falls back to
 the app's templates until `report.py` runs again.
+
+## Stage F: blocked bike lane + vehicle ID (`bikelane.py`)
+
+```bash
+python3 engine/bikelane.py          # all 465 segments -> data/stage_f.json + data/bikelane/*.jpg (~6 min)
+```
+
+1. **Detection**: one Cosmos call per segment with a bike-lane-only schema (`vehicle_in_bike_lane`,
+   `vehicle_moving`, `bike_lane_visible`, ...). A yes gets two more calls; the majority of three decides.
+   Stages A and C ask about near misses, so a calmly parked car came back `none` there.
+2. **Verdict** (plain Python): `driver` only if the vote says stopped (`vehicle_moving: false`) in a visible bike lane;
+   otherwise `unclear`. Missing facts never make a driver verdict.
+3. **Identification** (flagged only): the YOLO track on the reported side near the reported time, its 5 biggest boxes
+   cropped from the full-resolution frame, one Cosmos call per crop. Type/colour/make/model need a majority of crops;
+   the **plate needs 3 matching reads** (2 when there are only 2-3 crops), else `unreadable`. Every crop is saved so
+   the cyclist checks the plate before a report goes out.
+
+**First run (465 segments, 7.4 min):** 51 flagged segments -> 32 `parked_in_bike_lane` incidents after merging
+consecutive segments of the same vehicle (25 driver, 7 unclear; rule 9 in `build_incidents.py`). Eye check of the
+"agreed" numbers: **none is a licence plate.** `6531286` is the USPS fleet number on the back door (read correctly);
+`5E95` is a misread taxi roof number (`5695`). Small, blurred crops come back `unreadable`, as they should, but
+make/model on those is a guess. The app shows the number as "number read on the vehicle" in the evidence and never
+fills the plate field. Crops stay local (`data/bikelane/` is gitignored); the app draws the box from `geometry.bbox`.
