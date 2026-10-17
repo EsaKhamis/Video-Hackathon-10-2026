@@ -10,11 +10,15 @@ to its templates, so a failed call never breaks a page.
   python3 engine/report.py --only driver    # driver reports only (or rider, unclear)
   python3 engine/report.py --force          # rewrite cached text too
 
-Stdlib only. Needs WANDB_API_KEY (and WANDB_PROJECT, as team/project or with WANDB_TEAM) from the
+Stdlib only; with the `weave` package installed every call is traced to W&B Weave (engine/wb_trace.py).
+Needs WANDB_API_KEY (and WANDB_PROJECT, as team/project or with WANDB_TEAM) from the
 environment or .env. Model: STAGE_E_MODEL, default openai/gpt-oss-120b.
 """
 import argparse, json, os, re, sys, time, urllib.error, urllib.request
 from concurrent.futures import ThreadPoolExecutor
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import wb_trace as trace  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 DATA = os.path.join(ROOT, 'data')
@@ -34,10 +38,7 @@ def load_env():
             os.environ.setdefault(k.strip(), v.strip().strip('"\''))
 
 
-def wandb_project():
-    project = os.environ.get('WANDB_PROJECT', '').strip()
-    team = os.environ.get('WANDB_TEAM', '').strip()
-    return f'{team}/{project}' if team and project and '/' not in project else project
+wandb_project = trace.project
 
 
 SYSTEM = """You write short documents for a cyclist safety app. Footage comes from the cyclist's helmet camera.
@@ -133,6 +134,7 @@ def task_for(item):
     return BOTH, ('summary', 'what_happened', 'why_risky', 'next_time')
 
 
+@trace.op(postprocess_inputs=lambda i: {k: v for k, v in i.items() if k != 'key'})
 def call_llm(messages, model, key, project, tries=3):
     body = {'model': model, 'messages': messages, 'temperature': 0.2, 'max_tokens': 2500}
     if 'gpt-oss' in model:
@@ -163,6 +165,10 @@ def parse_json(text):
     return json.loads(text[start:end + 1])
 
 
+@trace.op(call_display_name=lambda c: f"write {c.inputs['item'].get('fault')} {c.inputs['item'].get('source')}",
+          postprocess_inputs=lambda i: {'item': {k: i['item'].get(k) for k in
+                                                 ('id', 'source', 'ride', 'fault', 'fault_rule', 'severity', 'event_type')},
+                                        'model': i['model']})
 def write_one(item, model, key, project):
     prompt, fields = task_for(item)
     vehicle = ((item.get('facts') or {}).get('vehicle') or {}).get('type') or 'vehicle'
@@ -204,11 +210,13 @@ def main():
         sys.exit('WANDB_API_KEY is not set')
     model = os.environ.get('STAGE_E_MODEL', '').strip() or 'openai/gpt-oss-120b'
     project = wandb_project()
+    trace.init()
 
     data = json.load(open(INCIDENTS))
     cache = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
     todo = [i for i in data['incidents']
-            if (not args.only or i.get('fault') == args.only)
+            if i.get('fault') != 'parked'  # Stage F's own case; no report or lesson prompt here
+            and (not args.only or i.get('fault') == args.only)
             and (args.force or (cache.get(i['source']) or {}).get('verdict') != i.get('fault'))]
     todo.sort(key=lambda i: -(i.get('severity') or 0))
     if args.limit:

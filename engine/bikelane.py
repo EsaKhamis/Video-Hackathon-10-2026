@@ -25,6 +25,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from confirm import MODEL, ask, download, majority, parse
 from detect import VEH, detections, tracks_of
+import wb_trace as trace
 
 INTRO = "You are reviewing a 5-second clip from a cyclist's helmet camera."
 SCHEMA = """Is a motor vehicle stopped or parked IN the bike lane (on the painted or green bike lane, blocking it)?
@@ -144,6 +145,8 @@ def verdict(f):
     return 'unclear'
 
 
+@trace.op(name='bikelane_segment', call_display_name=lambda c: f"bikelane {c.inputs['row'].get('id')}",
+          postprocess_inputs=lambda i: {'row': {k: i['row'].get(k) for k in ('id', 'source')}, 'votes': i['votes']})
 def run(row, votes):
     sid = row['id']
     out = {'id': sid, 'ride': row.get('ride'), 'source': row['source'], 'ride_offset_sec': row.get('ride_offset_sec')}
@@ -179,6 +182,7 @@ if __name__ == '__main__':
     ap.add_argument('--votes', type=int, default=3)
     ap.add_argument('--limit', type=int, default=0, help='first N segments only (smoke test)')
     a = ap.parse_args()
+    trace.init()
     os.makedirs(OUT_DIR, exist_ok=True)
     rows = [r for r in json.load(open(a.geometry))['rows'] if r.get('source')]
     row_source.update({r['id']: r['source'] for r in rows})
