@@ -20,6 +20,7 @@ export KUBECONFIG="/config/${NS}-k8s.yaml"
 
 kubectl -n "$NS" create configmap "${APP_NAME}-code" --from-file="$APP_DIR" \
   --dry-run=client -o yaml | kubectl apply -f -
+"$REPO_DIR/k8s/update-data.sh"
 
 # In-cluster backend: same API as $INGRESS_URL, without the round trip through the Ingress.
 kubectl -n "$NS" create secret generic "${APP_NAME}-vss-creds" \
@@ -59,6 +60,7 @@ spec:
           valueFrom: {secretKeyRef: {name: ${APP_NAME}-vss-creds, key: VSS_PASSWORD}}
         volumeMounts:
         - {name: code, mountPath: /code}
+        - {name: data, mountPath: /data}
         workingDir: /code
         command: ["bash", "-c"]
         args:
@@ -73,6 +75,8 @@ spec:
       volumes:
       - name: code
         configMap: {name: ${APP_NAME}-code}
+      - name: data
+        configMap: {name: ${APP_NAME}-data, optional: true}
 ---
 apiVersion: v1
 kind: Service

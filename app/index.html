@@ -4,29 +4,131 @@
 <meta charset="utf-8">
 <title>Rider safety agent</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem; color: #222; }
+  h1 { margin-bottom: .2rem; }
+  .sub { color: #666; margin-top: 0; }
+  .banner { background: #fff6e0; border: 1px solid #f0d48a; padding: .5rem .8rem; border-radius: 6px; font-size: .9rem; }
+  .rides { display: flex; gap: .8rem; flex-wrap: wrap; margin: 1rem 0; }
+  .ride { border: 1px solid #ddd; border-radius: 8px; padding: .7rem 1rem; cursor: pointer; min-width: 200px; background: #fff; }
+  .ride.active { border-color: #333; box-shadow: 0 0 0 2px #333 inset; }
+  .ride b { font-size: 1.1rem; }
+  .ride small { color: #666; display: block; }
+  .pill { display: inline-block; padding: 0 .45em; border-radius: 999px; font-size: .8rem; margin-right: .3em; color: #fff; }
+  .timeline { display: flex; height: 34px; border-radius: 4px; overflow: hidden; margin: .4rem 0 .2rem; }
+  .cell { flex: 1; cursor: pointer; border-right: 1px solid rgba(255,255,255,.35); }
+  .cell:hover { filter: brightness(.8); }
+  .cell.sel { outline: 2px solid #000; outline-offset: -2px; }
+  .axis { display: flex; justify-content: space-between; color: #888; font-size: .75rem; }
+  .c-rider { background: #e8a317; } .c-driver { background: #d33; } .c-other { background: #7a5cc4; }
+  .c-clear { background: #cfd6dd; } .c-unscreened { background: repeating-linear-gradient(45deg,#eee,#eee 4px,#f8f8f8 4px,#f8f8f8 8px); }
+  .legend span { margin-right: 1rem; font-size: .85rem; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; margin-right: .3em; }
+  .main { display: grid; grid-template-columns: 1fr 1.4fr; gap: 1.2rem; margin-top: 1rem; }
+  .list { max-height: 520px; overflow: auto; border: 1px solid #eee; border-radius: 6px; }
+  .item { padding: .5rem .7rem; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: .9rem; }
+  .item:hover, .item.sel { background: #f5f7fa; }
+  .item .t { font-variant-numeric: tabular-nums; color: #555; margin-right: .4em; }
   video { width: 100%; background: #000; border-radius: 6px; }
-  code { background: #f2f2f2; padding: 0 .3em; border-radius: 3px; }
-  #status { color: #666; font-size: .9rem; }
+  .facts { font-size: .9rem; } .facts dt { color: #666; margin-top: .4rem; } .facts dd { margin: 0; }
+  code { background: #f2f2f2; padding: 0 .3em; border-radius: 3px; font-size: .85em; }
+  .muted { color: #888; }
 </style>
 </head>
 <body>
 <h1>Rider safety agent</h1>
-<p>Hello world from the <code>/app</code> deployment. The clip below is streamed through
-<code>/api/stream</code> (Range pass-through, 206) from the VSS backend.</p>
-<p><b>H3</b>: <code>GOPR0130_chunk_0017_segment_005</code>, yellow taxi crossing in front of the handlebars.</p>
-<video id="v" controls preload="metadata"></video>
-<p id="status"></p>
+<p class="sub">Helmet-cam rides screened by Cosmos3-Reason. Screening flags are <b>candidates</b>, not verdicts: the fault rules decide.</p>
+<div id="banner"></div>
+<div class="rides" id="rides"><span class="muted">Loading rides…</span></div>
+<div id="ridePanel" hidden>
+  <div class="legend">
+    <span><i class="c-driver"></i>driver flag</span><span><i class="c-rider"></i>rider flag</span>
+    <span><i class="c-other"></i>other flag</span><span><i class="c-clear"></i>screened, nothing flagged</span>
+    <span><i class="c-unscreened"></i>not screened yet</span>
+  </div>
+  <div class="timeline" id="timeline"></div>
+  <div class="axis"><span>0:00</span><span id="axisEnd"></span></div>
+  <div class="main">
+    <div>
+      <h3 id="listTitle">Flagged segments</h3>
+      <div class="list" id="list"></div>
+    </div>
+    <div>
+      <video id="v" controls preload="metadata"></video>
+      <dl class="facts" id="facts"><dd class="muted">Pick a segment on the timeline or in the list.</dd></dl>
+    </div>
+  </div>
+</div>
 <script>
-  // Relative to wherever the app is mounted (/app/ via the Ingress), with or without a trailing slash.
-  const base = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
-  const source = 's3://team-1-vss-chunks-segments/segments/20261008_073104_GOPR0130_chunk_0017_segment_005_of_006.mp4';
-  const v = document.getElementById('v');
-  const status = document.getElementById('status');
-  v.src = base + 'api/stream?source=' + encodeURIComponent(source);
-  v.addEventListener('loadedmetadata', () => status.textContent = `Loaded: ${v.duration.toFixed(1)} s. Drag the scrubber to test seeking.`);
-  v.addEventListener('seeked', () => status.textContent = `Seeked to ${v.currentTime.toFixed(1)} s.`);
-  v.addEventListener('error', () => status.textContent = 'Playback error: check /api/stream.');
+const base = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+const api = p => fetch(base + p).then(r => r.ok ? r.json() : Promise.reject(r.status));
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+// Colour by the screening label text, so new labels from the engine still land in a sensible bucket.
+function kind(seg) {
+  if (!seg.screened) return 'unscreened';
+  const l = (seg.label || '').toLowerCase();
+  if (seg.screen === 'H0' || l === 'unspecified' || l === 'none' || !l) return 'clear';
+  if (l.includes('driver')) return 'driver';
+  if (l.includes('rider') || l.includes('red') || l.includes('sidewalk')) return 'rider';
+  return 'other';
+}
+
+let rideData = null, selected = null;
+
+async function loadRides() {
+  const d = await api('api/rides');
+  $('banner').innerHTML = d.partial ? `<p class="banner">Screening data is partial: ${esc(d.partial)}</p>` : '';
+  $('rides').innerHTML = d.rides.map(r => {
+    const flags = Object.entries(r.counts).filter(([k]) => k !== 'H0')
+      .map(([k, n]) => `<span class="pill c-${kind({screened: true, screen: k, label: d.legend[k]})}">${n} ${esc(d.legend[k] || k)}</span>`).join('');
+    return `<div class="ride" data-ride="${esc(r.ride)}"><b>${esc(r.ride)}</b>
+      <small>${mmss(r.duration_sec)} · ${r.segments} segments · ${r.screened} screened</small>
+      <div>${flags || '<span class="muted">no flags yet</span>'}</div></div>`;
+  }).join('');
+  document.querySelectorAll('.ride').forEach(el => el.onclick = () => openRide(el.dataset.ride));
+  const want = new URLSearchParams(location.hash.slice(1)).get('ride') || d.rides.find(r => r.screened)?.ride || d.rides[0]?.ride;
+  if (want) openRide(want);
+}
+
+async function openRide(ride) {
+  rideData = await api('api/rides/' + encodeURIComponent(ride));
+  history.replaceState(null, '', '#ride=' + encodeURIComponent(ride));
+  document.querySelectorAll('.ride').forEach(el => el.classList.toggle('active', el.dataset.ride === ride));
+  $('ridePanel').hidden = false;
+  const segs = rideData.segments;
+  $('timeline').innerHTML = segs.map((s, i) =>
+    `<div class="cell c-${kind(s)}" data-i="${i}" title="${mmss(s.offset_sec)} ${esc(s.label || (s.screened ? '' : 'not screened'))}"></div>`).join('');
+  $('timeline').querySelectorAll('.cell').forEach(el => el.onclick = () => select(+el.dataset.i));
+  const last = segs[segs.length - 1];
+  $('axisEnd').textContent = last ? mmss(last.offset_sec + last.end_sec - last.start_sec) : '';
+  const flagged = segs.map((s, i) => [s, i]).filter(([s]) => !['clear', 'unscreened'].includes(kind(s)));
+  $('listTitle').textContent = `Flagged segments (${flagged.length})`;
+  $('list').innerHTML = flagged.length ? flagged.map(([s, i]) =>
+    `<div class="item" data-i="${i}"><span class="pill c-${kind(s)}">${esc(s.label)}</span><span class="t">${mmss(s.offset_sec)}</span>${esc(s.fact && s.fact !== 'signal' ? s.fact : s.description).slice(0, 110)}…</div>`).join('')
+    : '<div class="item muted">Nothing flagged in this ride yet.</div>';
+  $('list').querySelectorAll('.item[data-i]').forEach(el => el.onclick = () => select(+el.dataset.i));
+  selected = null;
+}
+
+function select(i) {
+  const s = rideData.segments[i];
+  selected = i;
+  document.querySelectorAll('.cell, .item').forEach(el => el.classList.toggle('sel', +el.dataset.i === i));
+  $('v').src = base + 'api/stream?source=' + encodeURIComponent(s.source);
+  $('v').play().catch(() => {});
+  const row = (k, v) => v ? `<dt>${k}</dt><dd>${v}</dd>` : '';
+  $('facts').innerHTML =
+    row('Ride position', `${esc(rideData.ride)} at ${mmss(s.offset_sec)} (chunk ${s.chunk_index}, segment ${s.segment_number})`) +
+    row('Screening', s.screened ? `<span class="pill c-${kind(s)}">${esc(s.label)}</span> <code>${esc(s.screen_id)}</code>` : '<span class="muted">not screened yet</span>') +
+    row('Model fact', s.fact && s.fact !== 'signal' ? esc(s.fact) : '') +
+    row('Signal', s.red ? esc(s.red) : '') +
+    row('Index description', esc(s.description) + '…') +
+    row('Source', `<code>${esc(s.source.split('/').pop())}</code>`);
+}
+
+loadRides().catch(e => $('rides').innerHTML = `<span class="muted">Could not load rides (${esc(e)}).</span>`);
 </script>
 </body>
 </html>

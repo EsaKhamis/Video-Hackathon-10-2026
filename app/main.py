@@ -18,6 +18,11 @@ VSS_URL = os.environ.get("VSS_URL", "http://video-backend-service:8000").rstrip(
 VSS_USERNAME = os.environ.get("VSS_USERNAME", "")
 VSS_PASSWORD = os.environ.get("VSS_PASSWORD", "")
 HERE = Path(__file__).resolve().parent
+# Data lives in its own ConfigMap mounted at /data, re-read on every request, so the engine's output
+# can be swapped with k8s/update-data.sh without touching or restarting the app.
+DATA_DIR = Path(os.environ.get("DATA_DIR", "/data"))
+if not DATA_DIR.is_dir():
+    DATA_DIR = HERE.parent / "data"
 
 ALLOWED_SOURCE_PREFIXES = tuple(
     f"s3://{VSS_USERNAME}-{b}/" for b in ("vss-chunks-segments", "vss-chunks")
@@ -60,6 +65,50 @@ def vss_open(path, params, headers=None, timeout=60):
             raise
 
 
+def read_data(name, default):
+    try:
+        return json.loads((DATA_DIR / name).read_text())
+    except FileNotFoundError:
+        return default
+
+
+def load_rides():
+    """Segments (playable sources) joined with Stage A screening rows on (chunk file, start second)."""
+    screen = read_data("screen.json", {})
+    by_key = {(r["clip"], float(r["start_sec"])): r for r in screen.get("rows", [])}
+    rides = {}
+    for s in read_data("segments.json", []):
+        r = by_key.get((s["clip"], s["start_sec"]))
+        seg = dict(s, screened=r is not None)
+        if r:
+            seg.update(screen=r.get("screen"), label=r.get("label"), fact=r.get("fact"),
+                       red=r.get("red"), screen_id=r.get("id"))
+        rides.setdefault(s["ride"], []).append(seg)
+    return rides, screen
+
+
+def ride_summaries(rides, screen):
+    out = []
+    for ride, segs in sorted(rides.items()):
+        counts = {}
+        for s in segs:
+            if s["screened"]:
+                counts[s["screen"]] = counts.get(s["screen"], 0) + 1
+        out.append({
+            "ride": ride,
+            "segments": len(segs),
+            "screened": sum(s["screened"] for s in segs),
+            "duration_sec": max(s["offset_sec"] + s["end_sec"] - s["start_sec"] for s in segs),
+            "counts": counts,
+        })
+    return {
+        "rides": out,
+        "legend": screen.get("legend", {}),
+        "stage": screen.get("stage"),
+        "partial": screen.get("partial"),
+    }
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
@@ -90,6 +139,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, (HERE / "index.html").read_bytes(), "text/html; charset=utf-8")
         if url.path == "/api/stream":
             return self.stream(qs.get("source", [""])[0])
+        if url.path == "/api/rides":
+            return self._json(200, ride_summaries(*load_rides()))
+        if url.path.startswith("/api/rides/"):
+            rides, screen = load_rides()
+            ride = urllib.parse.unquote(url.path[len("/api/rides/"):])
+            if ride not in rides:
+                return self._json(404, {"error": f"unknown ride {ride}"})
+            return self._json(200, {"ride": ride, "legend": screen.get("legend", {}), "segments": rides[ride]})
         return self._send(404, "not found")
 
     def stream(self, source):
