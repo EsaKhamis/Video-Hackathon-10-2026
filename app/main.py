@@ -1083,6 +1083,8 @@ def yn(value: object) -> str:
 
 def vehicle_phrase(vehicle: dict) -> str:
     kind = vehicle.get("type") or "vehicle"
+    if kind == "person":
+        return "person on foot"
     if kind == "none":
         return "no motor vehicle"
     label = {"suv": "SUV"}.get(kind, kind)
@@ -1144,6 +1146,16 @@ def story_from_facts(item: dict) -> str:
     facts = item.get("facts") or {}
     vehicle = facts.get("vehicle") or {}
     fault = effective_fault(item)
+    checked = item.get("checked") or {}
+    if checked.get("kind") == "person":
+        parts = [checked.get("note") or "A person is close to the bike."]
+        parts.append("Someone checked this clip by eye. It is flagged for review and does not decide who was at fault.")
+        signal = signal_phrase(facts.get("signal_for_rider"))
+        if signal:
+            parts.append(signal)
+        if fault == "unclear":
+            parts.append("You decide whether this becomes a report or stays a private note.")
+        return " ".join(p for p in parts if p)
     place = place_phrase(facts.get("rider_position"))
     who = vehicle_phrase(vehicle)
     action = action_phrase(facts.get("vehicle_action"), vehicle.get("side"))
@@ -1189,6 +1201,8 @@ def story_from_facts(item: dict) -> str:
         parts.append("The boxes and the model disagree, so a person should decide.")
     elif fault == "shared":
         parts.append("Both sides look involved; the reviewer can choose the final call.")
+    if checked.get("note"):
+        parts.append(f"Checked by eye: {checked['note']}")
 
     return " ".join(p for p in parts if p)
 
@@ -1200,6 +1214,12 @@ def rider_reminders(item: dict) -> list[str]:
     signal = facts.get("signal_for_rider")
     pos = facts.get("rider_position")
     action = facts.get("vehicle_action")
+    if (item.get("checked") or {}).get("kind") == "person":
+        return [
+            "Cover the brake when people are in the crosswalk or the lane.",
+            "Give them room, especially if they are looking at a phone.",
+            "Wait until the way ahead is clear before you roll through.",
+        ]
     if rule == 3 or signal == "red":
         return [
             "Stop when the signal facing you is red.",
@@ -1301,7 +1321,7 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
         ("Vehicle action", facts.get("vehicle_action")),
         ("Vehicle entered rider path", yn(facts.get("vehicle_entered_rider_path"))),
         ("Rider moved into vehicle path", yn(facts.get("rider_moved_into_vehicle_path"))),
-        ("Vehicle", f"{vehicle.get('colour', '')} {vehicle.get('type', '')} · {vehicle.get('side', '')}".strip()),
+        ("Vehicle", vehicle_phrase(vehicle) + (f" · {vehicle['side']}" if vehicle.get("side") else "")),
         ("Closest distance", facts.get("closest_distance")),
         ("Peak height", f"{(geom.get('peak_h') or 0) * 100:.0f}% of frame"),
         ("Entered corridor", yn(geom.get("entered_corridor"))),
@@ -1631,7 +1651,9 @@ def lesson_sections(item: dict) -> dict[str, str]:
     pos = facts.get("rider_position")
     signal = facts.get("signal_for_rider")
     why = "A tight gap with traffic leaves little time to brake or change line."
-    if pos == "sidewalk":
+    if (item.get("checked") or {}).get("kind") == "person":
+        why = "People in the roadway or the crosswalk are close to the bike. Give them room and cover the brake."
+    elif pos == "sidewalk":
         why = "People on the sidewalk do not expect a bike, and rejoining the road means a sudden move into traffic."
     elif signal == "red":
         why = "Crossing traffic still has the green. Entering on red puts you in their path."
@@ -1677,6 +1699,16 @@ def evidence_rows(item: dict) -> list[tuple[str, str]]:
     geom = item.get("geometry") or {}
     votes = item.get("votes") or {}
     rows: list[tuple[str, str]] = []
+    checked = item.get("checked") or {}
+    if checked.get("note"):
+        rows.append(("Checked by eye",
+                     f"{checked.get('label')}: {checked['note']} "
+                     "This flags the clip for review. It does not by itself decide who was at fault."))
+    yolo_side = facts.get("yolo_side")
+    if yolo_side and (facts.get("vehicle") or {}).get("side") and yolo_side != facts["vehicle"]["side"]:
+        rows.append(("Which side",
+                     f"The eye check places the vehicle on the {facts['vehicle']['side']}. "
+                     f"The largest measured box is on the {yolo_side}."))
     if geom.get("min_gap_m") is not None:
         rows.append(("Closest gap (YOLO)", f"about {geom['min_gap_m']:.2f} m from the rider's line (estimated from box size)"))
     if geom.get("peak_h"):
@@ -1792,8 +1824,11 @@ def authority_report_page(data: dict, incident_id: str) -> bytes:
         )
     colour = (vehicle.get("colour") or "").strip()
     kind = vehicle.get("type") or "vehicle"
-    kind = {"suv": "SUV"}.get(kind, kind)
-    vehicle_line = f"{colour} {kind}".strip() if colour else f"{kind} (colour: cyclist to confirm)"
+    if kind == "person":
+        vehicle_line = "Person on foot — the eye check did not name a motor vehicle as the close party"
+    else:
+        kind = {"suv": "SUV"}.get(kind, kind)
+        vehicle_line = f"{colour} {kind}".strip() if colour else f"{kind} (colour: cyclist to confirm)"
     plate = review.get("plate") or "— (cyclist to confirm)"
     street = review.get("street") or "— (cyclist to confirm)"
     recorded = review.get("recorded_at") or "unknown — cyclist to confirm"

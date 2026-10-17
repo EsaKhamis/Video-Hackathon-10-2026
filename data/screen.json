@@ -5,17 +5,34 @@
   "legend": {
     "H3": "rider/red",
     "H5": "sidewalk",
-    "H0": "unspecified"
+    "H0": "unspecified",
+    "NM": "near miss, checked by eye"
   },
   "trace": [
     {
       "stage": "A",
       "rows": 465
+    },
+    {
+      "stage": "eye-check",
+      "near_misses": [
+        "N0056",
+        "N0072",
+        "N0074",
+        "N0124",
+        "N0129",
+        "N0228",
+        "N0245",
+        "N0300",
+        "N0301"
+      ],
+      "note": "Nine clips a person checked. Labels say what was close. They are not fault verdicts."
     }
   ],
   "counts": {
-    "H0": 452,
-    "H3": 13
+    "H0": 444,
+    "NM": 9,
+    "H3": 12
   },
   "rows": [
     {
@@ -904,9 +921,9 @@
     },
     {
       "id": "N0056",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "people in the crosswalk",
+      "fact": "Two people are still in the crosswalk as the rider comes up to them. There is more room than in the other three.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GX010001",
@@ -1160,9 +1177,9 @@
     },
     {
       "id": "N0072",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "person in the lane",
+      "fact": "A woman stands in the traffic lane between a black SUV and a taxi, looking at her phone, right in front of the camera.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GX010001",
@@ -1192,9 +1209,9 @@
     },
     {
       "id": "N0074",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "vehicle in the lane",
+      "fact": "A black SUV fills the right side of a narrow lane.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GX010001",
@@ -2014,9 +2031,9 @@
     },
     {
       "id": "N0124",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "people in the crosswalk",
+      "fact": "A crowd walks through the crosswalk. A man in a black hoodie passes directly in front of the wheel.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GX010001",
@@ -2094,9 +2111,9 @@
     },
     {
       "id": "N0129",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "people in the crosswalk",
+      "fact": "People walk across the crosswalk close on the rider's right. A delivery cyclist rides ahead.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GX010001",
@@ -3690,9 +3707,9 @@
     },
     {
       "id": "N0228",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "vehicle in the lane",
+      "fact": "A car passes close on the left while the rider is in the lane.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GOPR0130",
@@ -3964,9 +3981,9 @@
     },
     {
       "id": "N0245",
-      "screen": "H3",
-      "label": "rider/red",
-      "fact": "signal",
+      "screen": "NM",
+      "label": "vehicle in the lane",
+      "fact": "A yellow taxi is inches from the right handlebar.",
       "red": "signal",
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GOPR0130",
@@ -4850,9 +4867,9 @@
     },
     {
       "id": "N0300",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "vehicle in the lane",
+      "fact": "A yellow taxi swings across the lead cyclist. The camera rider is the witness.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GOPR0130",
@@ -4866,9 +4883,9 @@
     },
     {
       "id": "N0301",
-      "screen": "H0",
-      "label": "unspecified",
-      "fact": null,
+      "screen": "NM",
+      "label": "vehicle in the lane",
+      "fact": "A black SUV passes close on the right.",
       "red": null,
       "camera_id": "nyc_bike_gopro-1",
       "ride": "GOPR0130",
