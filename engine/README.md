@@ -1,5 +1,29 @@
 # Engine
 
+## Data flow
+
+Everything lives in `data/`. The app reads only `segments.json`, `screen.json` and `incidents.json`;
+`k8s/update-data.sh` pushes just those three (a ConfigMap holds at most 1 MiB).
+
+| File | Made by | Read by |
+|---|---|---|
+| `segments.json` | `probe/build_segments.py` | app (playable sources), `build_incidents.py` |
+| `screen.json` | Stage A (data-engine) | app (ride timeline) |
+| `unfiltered_flags.json` | Stage A captions before the frame review | reference only |
+| `geometry.json` | Stage B, `engine/detect.py` | `build_incidents.py` |
+| `stage_d.json` | Stage D (data-engine): rider-on-red survivors | `build_incidents.py` |
+| `incidents.json` | `engine/build_incidents.py` | app |
+
+```bash
+python3 engine/detect.py           # Stage B -> data/geometry.json (~2 min)
+python3 engine/build_incidents.py  # -> data/incidents.json
+k8s/update-data.sh                 # live in /app within about a minute
+```
+
+`build_incidents.py` gives Stage D survivors `fault: rider` (rule 3, rider lesson) and the 12 most severe
+Stage B close + encroaching vehicles `fault: unclear` (rule 8). It makes **no driver verdicts**: rule 7 needs
+Stage C facts, and missing facts never produce a driver verdict. Stage C rows should replace the rule 8 ones.
+
 ## Stage B: YOLO geometry (`detect.py`)
 
 Stdlib only. Reads the pipeline's per-frame YOLO boxes for every GoPro segment, tracks vehicles, and

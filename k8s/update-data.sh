@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Push data/*.json (segments.json, screen.json, later incidents.json) to the app's data ConfigMap.
+# Push the files the app reads (data/segments.json, screen.json, incidents.json) to its data ConfigMap.
+# Engine intermediates (geometry.json, stage_d.json, ...) stay in data/ but are not pushed: a ConfigMap
+# holds at most 1 MiB. Rebuild incidents.json first: python3 engine/build_incidents.py
 # The pod sees the new files within about a minute; no redeploy or restart needed.
-#   k8s/update-data.sh                  # all data/*.json
+#   k8s/update-data.sh                  # the files above that exist in data/
 #   k8s/update-data.sh path/screen.json # copy a fresh engine output into data/ first
 set -euo pipefail
 
@@ -20,8 +22,10 @@ mapfile -t TEAM_CONFIGS < <(find /config -maxdepth 1 -type f -name '*.config' | 
 NS=$(grep '^USERNAME=' "${TEAM_CONFIGS[0]}" | cut -d= -f2-)
 export KUBECONFIG="/config/${NS}-k8s.yaml"
 
-mapfile -t FILES < <(find "$DATA_DIR" -maxdepth 1 -type f -name '*.json' | sort)
-(( ${#FILES[@]} > 0 )) || { echo "no data/*.json to push"; exit 1; }
+FILES=(); for f in $KNOWN; do [[ -f "$DATA_DIR/$f" ]] && FILES+=("$DATA_DIR/$f"); done
+(( ${#FILES[@]} > 0 )) || { echo "none of $KNOWN in data/"; exit 1; }
+TOTAL=$(cat "${FILES[@]}" | wc -c)
+(( TOTAL < 1000000 )) || { echo "data is $TOTAL bytes; a ConfigMap holds at most 1 MiB"; exit 1; }
 for f in "${FILES[@]}"; do python3 -m json.tool "$f" >/dev/null || { echo "invalid JSON: $f"; exit 1; }; done
 
 ARGS=(); for f in "${FILES[@]}"; do ARGS+=(--from-file="$f"); done
