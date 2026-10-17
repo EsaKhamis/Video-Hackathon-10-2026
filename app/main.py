@@ -81,6 +81,8 @@ def scene_for_fault(fault: str, item: dict | None = None) -> tuple[str, str]:
         return "taxi", "Driver in a close call"
     if fault == "shared":
         return "street", "A car beside a rider"
+    if fault == "parked":
+        return "cars", "A car parked in the bike lane"
     return "street", "A car beside a rider"
 
 
@@ -118,6 +120,7 @@ FAULT_LABEL = {
     "rider": "Rider",
     "unclear": "Unclear",
     "shared": "Shared",
+    "parked": "Parked car",
 }
 
 PASS_THROUGH_HEADERS = (
@@ -511,7 +514,7 @@ def clock(seconds: float) -> str:
 
 
 def counts(incidents: list[dict]) -> dict[str, int]:
-    out = {"driver": 0, "rider": 0, "unclear": 0}
+    out = {"driver": 0, "rider": 0, "unclear": 0, "parked": 0}
     for item in incidents:
         fault = item.get("fault")
         if fault in out:
@@ -523,6 +526,7 @@ def summary_line(found: dict[str, int]) -> str:
     return (
         f"{found['driver']} driver incident{'s' if found['driver'] != 1 else ''}, "
         f"{found['rider']} rider lesson{'s' if found['rider'] != 1 else ''}"
+        + (f", {found['parked']} parked car{'s' if found['parked'] != 1 else ''} in the bike lane" if found.get("parked") else "")
     )
 
 
@@ -549,6 +553,7 @@ def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True
     --driver: #d23b2f;
     --rider: #e39b12;
     --unclear: #3d6b8a;
+    --parked: #7a4fb0;
     --lane: #7dce6a;
     --sky: #8ecdf2;
     --grass: #8ed36a;
@@ -686,6 +691,7 @@ def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True
   .badge.driver {{ background: var(--driver); }}
   .badge.rider {{ background: var(--rider); }}
   .badge.unclear, .badge.shared {{ background: var(--unclear); }}
+  .badge.parked {{ background: var(--parked); }}
   .when {{ font: 13px/1.3 Sora, sans-serif; color: var(--muted); }}
   .empty {{ color: var(--muted); }}
   .stage {{ display: grid; gap: 16px; margin: 18px 0 40px; }}
@@ -803,6 +809,7 @@ def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True
   .timeline .mark.driver {{ background: var(--driver); }}
   .timeline .mark.rider {{ background: var(--rider); }}
   .timeline .mark.unclear, .timeline .mark.shared {{ background: var(--unclear); }}
+  .timeline .mark.parked {{ background: var(--parked); }}
   @keyframes pulse {{
     0%, 100% {{ transform: scale(1); }}
     50% {{ transform: scale(1.12); }}
@@ -1030,9 +1037,12 @@ def incident_list(data: dict, ride_id: str, tab: str) -> bytes:
     mine = [item for item in data["incidents"] if item["ride"] == ride_id]
     mine.sort(key=lambda item: item.get("severity") or 0, reverse=True)
     found = counts(mine)
-    if tab not in ("reports", "lessons"):
+    if tab not in ("reports", "lessons", "parked"):
         tab = "reports"
-    if tab == "reports":
+    if tab == "parked":
+        shown = [item for item in mine if effective_fault(item) == "parked"]
+        empty = "No parked cars in the bike lane on this ride."
+    elif tab == "reports":
         shown = [item for item in mine if effective_fault(item) in ("driver", "unclear", "shared")]
         empty = "No reports to send on this ride."
     else:
@@ -1068,6 +1078,7 @@ def incident_list(data: dict, ride_id: str, tab: str) -> bytes:
 <nav class="tabs">
   <a class="{'on' if tab == 'reports' else ''}" href="{u('/ride/' + ride_id)}?tab=reports">Reports to send</a>
   <a class="{'on' if tab == 'lessons' else ''}" href="{u('/ride/' + ride_id)}?tab=lessons">Lessons for you</a>
+  <a class="{'on' if tab == 'parked' else ''}" href="{u('/ride/' + ride_id)}?tab=parked">Parked cars</a>
 </nav>
 <main class="list">{listing}</main>"""
     return page(ride_label(ride), body)
@@ -1201,6 +1212,8 @@ def story_from_facts(item: dict) -> str:
         parts.append("The boxes and the model disagree, so a person should decide.")
     elif fault == "shared":
         parts.append("Both sides look involved; the reviewer can choose the final call.")
+    elif fault == "parked":
+        parts.append("A vehicle is stopped in the bike lane. This is a parking report (for example to NYC 311), not a near miss.")
     if checked.get("note"):
         parts.append(f"Checked by eye: {checked['note']}")
 
@@ -1264,6 +1277,12 @@ def audience_copy(fault: str) -> tuple[str, str]:
             "Your private review",
             "Audience: you only. This is a rider lesson about a risk you took. "
             "It stays in this app — there is no send action, and it is never a police report.",
+        )
+    if fault == "parked":
+        return (
+            "Your review — parked in the bike lane",
+            "Audience: you, the cyclist. A vehicle was stopped in the bike lane. If you approve, this becomes a "
+            "parking report you can send to NYC 311. Check the vehicle and any number on it against the clip first.",
         )
     if fault in ("unclear", "shared"):
         return (
@@ -1367,7 +1386,7 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
             return "on"
         return "secondary"
 
-    plate_needed = fault in ("driver", "unclear", "shared")
+    plate_needed = fault in ("driver", "unclear", "shared", "parked")
     plate_label = "Vehicle license plate (optional)"
     plate_hint = (
         "Type the plate if you can read it on the clip (letters and numbers). "
@@ -1459,6 +1478,7 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
     <button type="button" data-fault="rider" class="{'on' if fault == 'rider' else ''}">I was at fault</button>
     <button type="button" data-fault="unclear" class="{'on' if fault == 'unclear' else ''}">Unclear</button>
     <button type="button" data-fault="shared" class="{'on' if fault == 'shared' else ''}">Shared</button>
+    <button type="button" data-fault="parked" class="{'on' if fault == 'parked' else ''}">Parked car</button>
   </nav>
   <label>{esc(plate_label)}
     <span class="hint">{esc(plate_hint)}</span>
@@ -1907,7 +1927,7 @@ def lesson_page(data: dict, incident_id: str) -> bytes:
         return page("Not found", f"<h1>Not found</h1><p><a href='{u('/')}'>Your rides</a></p>")
     sections = lesson_sections(item)
     fault = effective_fault(item)
-    if fault == "driver":
+    if fault in ("driver", "parked"):
         return page(
             "Not a lesson",
             f"<h1>This is a report to review</h1>"

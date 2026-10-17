@@ -178,7 +178,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -263,7 +263,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -2589,7 +2589,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -2625,83 +2625,6 @@
    "document": {
     "kind": "authority_report",
     "title": "White van parked in the bike lane"
-   },
-   "severity": 50,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GOPR0130_chunk_0007_segment_006",
-   "ride": "GOPR0130",
-   "source": "GOPR0130_chunk_0007_segment_006",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072651_GOPR0130_chunk_0007_segment_006_of_006.mp4",
-   "ride_offset_sec": 235,
-   "t_peak": 2.0,
-   "geometry": {
-    "peak_h": 0.735,
-    "side": "right",
-    "bbox": [
-     0.587,
-     0.005,
-     0.998,
-     0.74
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 2.0,
-    "label": "truck"
-   },
-   "evidence_frames": [
-    1.3,
-    1.6,
-    2.0
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "unclear",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "van",
-     "colour": "black",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A black truck is stopped in the bike lane, blocking the path of the cyclists. (stopped in the bike lane in 2 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: black van.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "black",
-    "type": "van",
-    "make": "unknown",
-    "model": "unknown",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GOPR0130_chunk_0007_segment_006"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": null,
-    "driver_visible": false
-   },
-   "model_agreement": false,
-   "document": {
-    "kind": "both",
-    "title": "Black van parked in the bike lane"
    },
    "severity": 50,
    "severity_label": "Med"
@@ -2743,7 +2666,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -2779,83 +2702,6 @@
    "document": {
     "kind": "authority_report",
     "title": "Black BMW X5 SUV parked in the bike lane"
-   },
-   "severity": 50,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GOPR0130_chunk_0010_segment_005",
-   "ride": "GOPR0130",
-   "source": "GOPR0130_chunk_0010_segment_005",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072806_GOPR0130_chunk_0010_segment_005_of_006.mp4",
-   "ride_offset_sec": 320,
-   "t_peak": 4.0,
-   "geometry": {
-    "peak_h": 0.717,
-    "side": "left",
-    "bbox": [
-     0.001,
-     0.104,
-     0.335,
-     0.821
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 4.0,
-    "label": "car"
-   },
-   "evidence_frames": [
-    3.8,
-    4.0,
-    4.2
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "unclear",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "suv",
-     "colour": "black",
-     "side": "left"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A black car is stopped in the bike lane, blocking the cyclist's path. (stopped in the bike lane in 2 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: black SUV.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "black",
-    "type": "suv",
-    "make": "unknown",
-    "model": "unknown",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GOPR0130_chunk_0010_segment_005"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": false,
-    "driver_visible": false
-   },
-   "model_agreement": false,
-   "document": {
-    "kind": "both",
-    "title": "Black SUV parked in the bike lane"
    },
    "severity": 50,
    "severity_label": "Med"
@@ -2897,7 +2743,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -2974,7 +2820,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -3051,7 +2897,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -3128,7 +2974,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -3205,7 +3051,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -3282,7 +3128,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -4583,7 +4429,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -5051,7 +4897,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -6337,7 +6183,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -6414,7 +6260,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -6491,7 +6337,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -6527,83 +6373,6 @@
    "document": {
     "kind": "authority_report",
     "title": "Black SUV parked in the bike lane"
-   },
-   "severity": 50,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GX010001_chunk_0008_segment_003",
-   "ride": "GX010001",
-   "source": "GX010001_chunk_0008_segment_003",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074009_GX010001_chunk_0008_segment_003_of_006.mp4",
-   "ride_offset_sec": 250,
-   "t_peak": 4.4,
-   "geometry": {
-    "peak_h": 0.61,
-    "side": "left",
-    "bbox": [
-     0.001,
-     0.378,
-     0.354,
-     0.988
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 4.4,
-    "label": "car"
-   },
-   "evidence_frames": [
-    4.2,
-    4.4,
-    4.6
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "unclear",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "black",
-     "side": "left"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A black car is stopped in the bike lane, blocking it, and the rider must maneuver around it. (stopped in the bike lane in 2 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: black car.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "black",
-    "type": "car",
-    "make": "unknown",
-    "model": "unknown",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GX010001_chunk_0008_segment_003"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": false,
-    "driver_visible": false
-   },
-   "model_agreement": false,
-   "document": {
-    "kind": "both",
-    "title": "Black car parked in the bike lane"
    },
    "severity": 50,
    "severity_label": "Med"
@@ -6645,7 +6414,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -6722,7 +6491,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -6799,7 +6568,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -7956,7 +7725,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -8035,7 +7804,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -8498,7 +8267,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -8534,162 +8303,6 @@
    "document": {
     "kind": "authority_report",
     "title": "Red car parked in the bike lane"
-   },
-   "severity": 50,
-   "low_light": true,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GX050001_chunk_0001_segment_004",
-   "ride": "GX050001",
-   "source": "GX050001_chunk_0001_segment_004",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074706_GX050001_chunk_0001_segment_004_of_006.mp4",
-   "ride_offset_sec": 45,
-   "t_peak": 4.83,
-   "geometry": {
-    "peak_h": 0.205,
-    "side": "right",
-    "bbox": [
-     0.747,
-     0.251,
-     0.913,
-     0.456
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 4.83,
-    "label": "car"
-   },
-   "evidence_frames": [
-    3.9,
-    4.3,
-    4.8
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "driver",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "yellow",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A yellow car is stopped in the bike lane, blocking the cyclist's path. (stopped in the bike lane in 3 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: yellow Toyota Prius car.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "yellow",
-    "type": "car",
-    "make": "toyota",
-    "model": "prius",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GX050001_chunk_0001_segment_004"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": null,
-    "driver_visible": false
-   },
-   "model_agreement": true,
-   "document": {
-    "kind": "authority_report",
-    "title": "Yellow Toyota Prius car parked in the bike lane"
-   },
-   "severity": 50,
-   "low_light": true,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GX050001_chunk_0013_segment_005",
-   "ride": "GX050001",
-   "source": "GX050001_chunk_0013_segment_005",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_075209_GX050001_chunk_0013_segment_005_of_006.mp4",
-   "ride_offset_sec": 410,
-   "t_peak": 2.9,
-   "geometry": {
-    "peak_h": 0.597,
-    "side": "left",
-    "bbox": [
-     0.0,
-     0.389,
-     0.391,
-     0.986
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 2.9,
-    "label": "car"
-   },
-   "evidence_frames": [
-    2.7,
-    2.9,
-    3.1
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "unclear",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "black",
-     "side": "left"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A black SUV is stopped in the bike lane, blocking the cyclist's path. (stopped in the bike lane in 2 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: black car.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "black",
-    "type": "car",
-    "make": "unknown",
-    "model": "unknown",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GX050001_chunk_0013_segment_005"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": null,
-    "driver_visible": false
-   },
-   "model_agreement": false,
-   "document": {
-    "kind": "both",
-    "title": "Black car parked in the bike lane"
    },
    "severity": 50,
    "low_light": true,
@@ -8732,7 +8345,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",
@@ -8768,318 +8381,6 @@
    "document": {
     "kind": "authority_report",
     "title": "Blue car parked in the bike lane"
-   },
-   "severity": 50,
-   "low_light": true,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GX050001_chunk_0019_segment_005",
-   "ride": "GX050001",
-   "source": "GX050001_chunk_0019_segment_005",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_075441_GX050001_chunk_0019_segment_005_of_006.mp4",
-   "ride_offset_sec": 590,
-   "t_peak": 2.53,
-   "geometry": {
-    "peak_h": 0.354,
-    "side": "left",
-    "bbox": [
-     0.001,
-     0.218,
-     0.258,
-     0.572
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 2.53,
-    "label": "car"
-   },
-   "evidence_frames": [
-    2.3,
-    2.5,
-    3.2
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "driver",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "unknown",
-     "side": "left"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A black car is stopped in the bike lane, blocking the cyclist's path. (stopped in the bike lane in 3 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 4 YOLO crops: car.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "unknown",
-    "type": "car",
-    "make": "unknown",
-    "model": "unknown",
-    "number_seen": "unknown",
-    "crops": 4,
-    "segments": [
-     "GX050001_chunk_0019_segment_005"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": false,
-    "driver_visible": false
-   },
-   "model_agreement": true,
-   "document": {
-    "kind": "authority_report",
-    "title": "Car parked in the bike lane"
-   },
-   "severity": 50,
-   "low_light": true,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GX050001_chunk_0021_segment_001",
-   "ride": "GX050001",
-   "source": "GX050001_chunk_0021_segment_001",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_075532_GX050001_chunk_0021_segment_001_of_006.mp4",
-   "ride_offset_sec": 630,
-   "t_peak": 2.7,
-   "geometry": {
-    "peak_h": 0.636,
-    "side": "right",
-    "bbox": [
-     0.623,
-     0.292,
-     0.999,
-     0.928
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 2.7,
-    "label": "car"
-   },
-   "evidence_frames": [
-    2.4,
-    2.7,
-    2.9
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "unclear",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "black",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A black car is stopped in the bike lane, blocking the cyclist's path. (stopped in the bike lane in 2 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: black car.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "black",
-    "type": "car",
-    "make": "unknown",
-    "model": "unknown",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GX050001_chunk_0021_segment_001"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": false,
-    "driver_visible": false
-   },
-   "model_agreement": false,
-   "document": {
-    "kind": "both",
-    "title": "Black car parked in the bike lane"
-   },
-   "severity": 50,
-   "low_light": true,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GX050001_chunk_0021_segment_006",
-   "ride": "GX050001",
-   "source": "GX050001_chunk_0021_segment_006",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_075532_GX050001_chunk_0021_segment_006_of_006.mp4",
-   "ride_offset_sec": 655,
-   "t_peak": 4.53,
-   "geometry": {
-    "peak_h": 0.331,
-    "side": "right",
-    "bbox": [
-     0.709,
-     0.159,
-     0.999,
-     0.49
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 4.53,
-    "label": "car"
-   },
-   "evidence_frames": [
-    4.3,
-    4.5,
-    4.7
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "unclear",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "silver",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A silver car is parked on the right side of the road, partially obstructing the bike lane as the cyclist approaches the intersection. (stopped in the bike lane in 2 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: silver car.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "silver",
-    "type": "car",
-    "make": "unknown",
-    "model": "unknown",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GX050001_chunk_0021_segment_006"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": false,
-    "driver_visible": false
-   },
-   "model_agreement": false,
-   "document": {
-    "kind": "both",
-    "title": "Silver car parked in the bike lane"
-   },
-   "severity": 50,
-   "low_light": true,
-   "severity_label": "Med"
-  },
-  {
-   "id": "F-GX050001_chunk_0022_segment_004",
-   "ride": "GX050001",
-   "source": "GX050001_chunk_0022_segment_004",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_075557_GX050001_chunk_0022_segment_004_of_006.mp4",
-   "ride_offset_sec": 675,
-   "t_peak": 2.87,
-   "geometry": {
-    "peak_h": 0.49,
-    "side": "right",
-    "bbox": [
-     0.69,
-     0.269,
-     0.999,
-     0.759
-    ],
-    "pan_suspect": false,
-    "entered_corridor": null,
-    "lateral_toward_rider": null,
-    "min_gap_m": null,
-    "approach": null,
-    "t_peak": 2.87,
-    "label": "car"
-   },
-   "evidence_frames": [
-    2.9,
-    3.1,
-    3.3
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "parked_in_bike_lane",
-   "fault": "unclear",
-   "fault_rule": 9,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "bike_lane",
-    "separator": "unknown",
-    "vehicle_action": "stopped_in_lane",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "white",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "Cosmos: A white car is parked in the bike lane, blocking it, while the cyclist moves past it. (stopped in the bike lane in 2 of 3 checks over 1 segment, about 5 s of the ride.) Vehicle from 5 YOLO crops: white Toyota Camry car.",
-    "model_fault": "driver"
-   },
-   "vehicle_id": {
-    "colour": "white",
-    "type": "car",
-    "make": "toyota",
-    "model": "camry",
-    "number_seen": "unknown",
-    "crops": 5,
-    "segments": [
-     "GX050001_chunk_0022_segment_004"
-    ],
-    "duration_sec": 5,
-    "hazard_lights": false,
-    "driver_visible": false
-   },
-   "model_agreement": false,
-   "document": {
-    "kind": "both",
-    "title": "White Toyota Camry car parked in the bike lane"
    },
    "severity": 50,
    "low_light": true,
@@ -9122,7 +8423,7 @@
     "recorded_at": null
    },
    "event_type": "parked_in_bike_lane",
-   "fault": "driver",
+   "fault": "parked",
    "fault_rule": 9,
    "facts": {
     "signal_for_rider": "unknown",

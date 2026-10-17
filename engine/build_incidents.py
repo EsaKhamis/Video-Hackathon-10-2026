@@ -144,10 +144,15 @@ def most(vals):
     return max(set(vals), key=vals.count) if vals else 'unknown'
 
 
+# Stage F incidents dropped after an eye check of the crops: an oncoming taxi, and a crop with no vehicle in it
+STAGE_F_DROP = {'GX050001_chunk_0001_segment_004', 'GX050001_chunk_0019_segment_005'}
+
+
 def stage_f_incidents(by_key):
     """Stage F (engine/bikelane.py): a vehicle stopped in the bike lane, its own event type and rule 9.
     Consecutive segments of the same ride with the same vehicle type are one incident (one parked truck, not 12).
-    Driver only if some segment had all its Cosmos checks say "stopped in a visible bike lane"; else unclear.
+    Its own case, `parked`, not a driver verdict: a parking report, not a near miss. Kept only if some segment
+    had all its Cosmos checks say "stopped in a visible bike lane"; the uncertain ones are dropped for now.
     The ID number read off the vehicle is shown as evidence, never copied into review.plate (the rider types that)."""
     path = os.path.join(DATA, 'stage_f.json')
     if not os.path.exists(path):
@@ -166,7 +171,9 @@ def stage_f_incidents(by_key):
     for g in groups:
         ids = [r.get('vehicle_id') or {} for r in g]
         sure = [r for r in g if r['verdict'] == 'driver' and all(v is True for v in r['votes'])]
-        verdict = 'driver' if sure else 'unclear'
+        if not sure or any(r['id'] in STAGE_F_DROP for r in g):
+            continue
+        verdict = 'parked'
         number = most([v.get('plate') for v in ids])
         # representative segment: one where the number was read, else the biggest vehicle box
         rep = next((r for r, v in zip(g, ids) if number != 'unknown' and v.get('plate') == number), None) or max(
@@ -211,8 +218,8 @@ def stage_f_incidents(by_key):
                            'crops': len(reads), 'segments': [r['id'] for r in g], 'duration_sec': secs,
                            'hazard_lights': rep['facts'].get('hazard_lights'),
                            'driver_visible': rep['facts'].get('driver_visible')},
-            'model_agreement': verdict == 'driver',
-            'document': {'kind': DOC_KIND.get(verdict, 'both'),
+            'model_agreement': True,
+            'document': {'kind': 'authority_report',
                          'title': f"{name[:1].upper() + name[1:]} parked in the bike lane"},
             'severity': min(100, 25 * len(g) + 25), 'low_light': seg['ride'] == 'GX050001' or None,
         })
@@ -223,7 +230,7 @@ def stage_f_incidents(by_key):
     return out
 
 
-DOC_KIND = {'driver': 'authority_report', 'rider': 'rider_lesson'}
+DOC_KIND = {'driver': 'authority_report', 'rider': 'rider_lesson', 'parked': 'authority_report'}
 
 
 def apply_reviews(incidents, heroes):
@@ -454,7 +461,7 @@ def main(out, only):
         r = reviews.get(i['id'])
         if r:
             i['review'].update({k: r[k] for k in ('status', 'plate', 'street', 'fault_override', 'recorded_at') if k in r})
-            if r.get('fault_override') in ('driver', 'rider', 'unclear', 'shared') and r['fault_override'] != i['fault']:
+            if r.get('fault_override') in ('driver', 'rider', 'unclear', 'shared', 'parked') and r['fault_override'] != i['fault']:
                 i['engine'] = {'fault': i['fault'], 'rule': 9}
                 i['fault'], i['fault_rule'] = r['fault_override'], 0
                 i['document']['kind'] = DOC_KIND.get(i['fault'], 'both')
