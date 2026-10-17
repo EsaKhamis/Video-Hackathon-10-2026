@@ -14,10 +14,11 @@ from videoagent.schema import read_events
 from videoagent.search.vast import search_footage
 
 SEVERITY_ICON = {"info": "🔵", "warning": "🟠", "critical": "🔴"}
+INCIDENTS = {"close_pass", "cut_in", "blocked_bike_lane"}
 
-st.set_page_config(page_title="Video Agent", layout="wide")
+st.set_page_config(page_title="Helmet Cam Witness", layout="wide")
 tracing.init()
-st.title("Real-Time Video Agent")
+st.title("Your helmet cam is a witness")
 
 
 def render_feed(container) -> None:
@@ -36,7 +37,7 @@ def render_feed(container) -> None:
                 st.json(e.model_dump(), expanded=False)
 
 
-live, search, ask = st.tabs(["Live", "Search footage", "Ask the agent"])
+search, ask, live = st.tabs(["Search footage", "Ask the agent", "Live replay (local YOLO)"])
 
 with live:
     left, right = st.columns([3, 2])
@@ -67,16 +68,31 @@ with live:
             status.error(str(e))
 
 with search:
-    q = st.text_input("Search past footage", placeholder="worker on scaffold without hard hat")
+    q = st.text_input("Search past footage", placeholder="car passing very close to a cyclist in a bike lane")
     if q:
-        results = search_footage(q)
+        results = search_footage(q, k=10)
         if not results:
             st.caption("No matches.")
         for r in results:
-            st.markdown(f"**{r['clip_id']}** · {r.get('t_start', 0):.0f}–{r.get('t_end', 0):.0f}s")
+            where = " · ".join(str(r[f]) for f in ("location", "camera_id") if r.get(f))
+            score = f" · score {r['score']}" if r.get("score") is not None else ""
+            st.markdown(
+                f"**{r['clip_id']}** · {r.get('t_start', 0):.0f}–{r.get('t_end', 0):.0f}s · {where}{score}"
+            )
             st.write(r.get("description", ""))
-            if r.get("path"):
-                st.video(r["path"])
+            if st.button("Check with Cosmos", key=f"check-{r['clip_id']}"):
+                with st.spinner("Cosmos reasoning..."):
+                    try:
+                        clip = agent.load_clip(r["clip_id"])
+                        event = ask_clip(clip)
+                        st.video(clip.path)
+                        if event.event in INCIDENTS:
+                            agent.send_alert(event)
+                            st.success(f"{event.event} ({event.severity}): {event.reasoning} Added to alert feed.")
+                        else:
+                            st.info(f"{event.event}: {event.reasoning}")
+                    except Exception as e:
+                        st.error(str(e))
 
 with ask:
     if "history" not in st.session_state:

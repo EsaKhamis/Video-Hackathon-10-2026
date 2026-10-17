@@ -2157,29 +2157,34 @@ name = "videoagent"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "lap" },
     { name = "openai" },
     { name = "opencv-python" },
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "streamlit" },
-    { name = "ultralytics" },
     { name = "weave" },
+]
+
+[package.optional-dependencies]
+realtime = [
+    { name = "lap" },
+    { name = "ultralytics" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "lap", specifier = ">=0.5.12" },
+    { name = "lap", marker = "extra == 'realtime'", specifier = ">=0.5.12" },
     { name = "openai", specifier = ">=1.40" },
     { name = "opencv-python", specifier = ">=4.9" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "python-dotenv", specifier = ">=1.0" },
     { name = "requests", specifier = ">=2.31" },
     { name = "streamlit", specifier = ">=1.38" },
-    { name = "ultralytics", specifier = ">=8.3" },
+    { name = "ultralytics", marker = "extra == 'realtime'", specifier = ">=8.3" },
     { name = "weave", specifier = ">=0.51" },
 ]
+provides-extras = ["realtime"]
 
 [[package]]
 name = "watchdog"

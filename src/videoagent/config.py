@@ -15,20 +15,29 @@ def _env(name: str, default: str = "") -> str:
     return os.getenv(name, default).strip()
 
 
+def _wandb_project() -> str:
+    # W&B Inference and Weave both want "team/project"; the VM sets them separately.
+    project = _env("WANDB_PROJECT", "video-agent")
+    team = _env("WANDB_TEAM")
+    return f"{team}/{project}" if team and "/" not in project else project
+
+
 @dataclass(frozen=True)
 class Settings:
     wandb_api_key: str = _env("WANDB_API_KEY")
-    wandb_project: str = _env("WANDB_PROJECT", "video-agent")
+    wandb_project: str = _wandb_project()
     llm_base_url: str = _env("LLM_BASE_URL", "https://api.inference.wandb.ai/v1")
-    llm_model: str = _env("LLM_MODEL", "meta-llama/Llama-3.1-8B-Instruct")
+    llm_model: str = _env("LLM_MODEL", "openai/gpt-oss-120b")
 
     cosmos_base_url: str = _env("COSMOS_BASE_URL")
-    cosmos_api_key: str = _env("COSMOS_API_KEY", "EMPTY")
-    cosmos_model: str = _env("COSMOS_MODEL", "nvidia/Cosmos-Reason2-2B")
-    cosmos_max_frames: int = int(_env("COSMOS_MAX_FRAMES", "8"))
+    cosmos_api_key: str = _env("COSMOS_API_KEY") or _env("GPU_BEARER_TOKEN", "EMPTY")
+    cosmos_model: str = _env("COSMOS_MODEL", "nvidia/cosmos3-nano-reasoner")
+    cosmos_max_frames: int = int(_env("COSMOS_MAX_FRAMES", "5"))
 
-    vast_base_url: str = _env("VAST_BASE_URL")
-    vast_api_key: str = _env("VAST_API_KEY")
+    # VSS retrieval backend; the team VM exports these.
+    vast_base_url: str = _env("VAST_BASE_URL") or _env("INGRESS_URL")
+    vast_username: str = _env("USERNAME")
+    vast_password: str = _env("PASSWORD")
 
     video_source: str = _env("VIDEO_SOURCE", str(DATA / "footage" / "sample.mp4"))
     yolo_model: str = _env("YOLO_MODEL", "yolo11n.pt")

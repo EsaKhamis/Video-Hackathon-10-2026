@@ -19,6 +19,7 @@ class Event(BaseModel):
     t_start: float
     t_end: float
     reasoning: str = ""
+    vehicle: str = ""
     recommended_agent: AgentTool = "none"
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 

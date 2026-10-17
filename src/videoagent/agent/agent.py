@@ -16,9 +16,11 @@ from ..schema import Clip, Event, append_event, read_events
 from ..search.vast import search_footage
 
 SYSTEM = (
-    "You are a video safety agent for a fixed-camera site. "
-    "Use search_footage to find past clips, ask_clip to look closely at one clip, "
-    "send_alert to raise an event in the operator feed, and write_report to summarise incidents. "
+    "You help a cyclist turn their helmet-cam and dashcam footage into incident reports about "
+    "unsafe drivers: close passes, cut-ins and vehicles blocking the bike lane. "
+    "Use search_footage to find candidate clips in the archive, ask_clip to have the vision model "
+    "confirm an incident in one clip, send_alert to add a confirmed incident to the review queue, "
+    "and write_report to draft reports. Never treat an unconfirmed search hit as an incident. "
     "Cite clip_id and timestamps in answers. Be brief."
 )
 
@@ -39,7 +41,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "ask_clip",
-            "description": "Ask the vision model (Cosmos Reason 2) a question about one clip.",
+            "description": "Ask the vision model (Cosmos Reason) whether one clip from search_footage shows an incident.",
             "parameters": {
                 "type": "object",
                 "properties": {"clip_id": {"type": "string"}, "q": {"type": "string"}},
@@ -51,7 +53,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "send_alert",
-            "description": "Push an event to the operator alert feed.",
+            "description": "Add a confirmed incident (the Event JSON returned by ask_clip) to the cyclist's review queue.",
             "parameters": {
                 "type": "object",
                 "properties": {"event": {"type": "object", "description": "Event JSON"}},
@@ -99,7 +101,14 @@ def write_report() -> str:
     resp = _llm().chat.completions.create(
         model=settings.llm_model,
         messages=[
-            {"role": "system", "content": "Write a short incident report in markdown."},
+            {
+                "role": "system",
+                "content": (
+                    "Write a short markdown incident report per event, laid out like a police "
+                    "road-incident submission: date/time, incident type, severity, vehicle "
+                    "description, summary. Leave 'Plate' and 'Street' as blank fields for the cyclist."
+                ),
+            },
             {"role": "user", "content": json.dumps([e.model_dump() for e in events])},
         ],
     )
@@ -119,7 +128,7 @@ def _run_tool(name: str, args: dict) -> str:
 
 
 @weave.op()
-def chat(question: str, max_steps: int = 6) -> str:
+def chat(question: str, max_steps: int = 12) -> str:
     client = _llm()
     messages: list = [
         {"role": "system", "content": SYSTEM},

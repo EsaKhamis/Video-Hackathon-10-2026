@@ -9,29 +9,39 @@ Two lanes feed one agent:
 - **Agent**: an LLM on CoreWeave Forge / W&B Inference with tools `search_footage`, `ask_clip`, `send_alert`, `write_report`. Every step is traced in Weave.
 - **UI**: Streamlit with a live player, alert feed, Cosmos reasoning, search and agent chat.
 
-## Setup
+Use case: **"Your helmet cam is a witness"**. Find close passes, cut-ins and blocked bike lanes
+in cyclists' GoPro/dashcam footage and draft reports the cyclist approves. See [INITIAL_IDEA.md](INITIAL_IDEA.md).
 
-Requires [uv](https://docs.astral.sh/uv/).
+## Setup (team VM)
+
+Requires [uv](https://docs.astral.sh/uv/) (already installed on the VM).
 
 ```bash
 uv sync
-cp .env.example .env   # fill in keys and endpoints
+cp .env.example .env   # set COSMOS_BASE_URL; everything else comes from the VM's environment
 ```
 
-Put footage in `data/footage/` and point `VIDEO_SOURCE` at it.
+The VM already exports the W&B key/project/team, the VSS backend URL and login, and the GPU bearer
+token; `config.py` reads them directly. Search runs against the hosted VSS archive and Cosmos runs
+on the hosted `nvidia/cosmos3-nano-reasoner` NIM (max 5 frames per request).
 
 ## Run
 
 ```bash
-# UI (live player, alerts, search, chat)
+# UI (search + Cosmos check, agent chat, alert feed)
 uv run streamlit run app.py
-
-# Real-time lane headless; --no-cosmos to tune YOLO triggers only, --fast to skip real-time pacing
-uv run scripts/run_realtime.py data/footage/cam1.mp4 --no-cosmos
-
-# Build the local search index from footage (until VAST search is wired up)
-uv run scripts/ingest.py data/footage/*.mp4
 ```
+
+Cursor forwards the port automatically; open the link it offers (or `http://localhost:8501`).
+
+Optional local real-time lane (pulls in PyTorch; the hosted archive already has YOLO detections):
+
+```bash
+uv sync --extra realtime
+uv run scripts/run_realtime.py data/footage/cam1.mp4 --no-cosmos
+```
+
+`probe/` holds the earlier exploration scripts against the same API.
 
 ## Where things live
 
@@ -42,7 +52,7 @@ uv run scripts/ingest.py data/footage/*.mp4
 | `src/videoagent/prompts/cosmos.txt` | Cosmos prompt for the use case; returns the event JSON |
 | `src/videoagent/realtime/pipeline.py` | OpenCV replay, YOLO11 tracking, trigger rule, clip writer |
 | `src/videoagent/reason/cosmos.py` | Cosmos Reason 2 client (OpenAI-compatible endpoint) |
-| `src/videoagent/search/vast.py` | VAST search client, with a local JSON fallback |
+| `src/videoagent/search/vast.py` | VSS retrieval client (login, `/api/v1/search`, clip download), with a local JSON fallback |
 | `src/videoagent/agent/agent.py` | Tool-calling agent loop and tools |
 | `app.py` | Streamlit UI |
 
@@ -50,10 +60,10 @@ Runtime state goes to `data/` (gitignored): flagged clips in `data/clips/`, aler
 
 ## Build-day checklist
 
-- [ ] Fill in `.env`: W&B key, Cosmos endpoint, VAST endpoint
-- [ ] Look at the footage, pick one use case, rewrite both prompts for it
-- [ ] Set `TRIGGER_CLASSES` for the YOLO filter
-- [ ] Match `search/vast.py` to the real VAST search API
+- [x] Fill in `.env`: W&B key, Cosmos endpoint, VAST endpoint
+- [x] Look at the footage, pick one use case, rewrite both prompts for it
+- [x] Match `search/vast.py` to the real VAST search API
+- [ ] Review queue: approve / edit / dismiss incidents, export report
 - [ ] Stop features at 3:30, record demo by 4:00, submit by 4:30
 
 ## Submission

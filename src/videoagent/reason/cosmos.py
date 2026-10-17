@@ -10,6 +10,7 @@ from openai import OpenAI
 
 from ..config import load_prompt, settings
 from ..schema import Clip, Event
+from ..search.vast import fetch_clip
 
 
 def sample_frames(path: str, n: int) -> list[bytes]:
@@ -56,7 +57,10 @@ def _complete(prompt: str, clip_path: str, max_tokens: int = 512) -> str:
 
 
 @weave.op()
-def ask_clip(clip: Clip, question: str = "Is anyone missing a hard hat?") -> Event:
+def ask_clip(
+    clip: Clip, question: str = "Does a vehicle pass close to, cut in front of, or block the cyclist?"
+) -> Event:
+    fetch_clip(clip)
     prompt = load_prompt("cosmos").format(
         yolo_labels=", ".join(clip.yolo_labels) or "none", question=question
     )

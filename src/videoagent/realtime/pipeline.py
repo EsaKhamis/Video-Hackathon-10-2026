@@ -12,7 +12,6 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-from ultralytics import YOLO
 
 from ..config import settings
 from ..schema import Clip
@@ -87,6 +86,8 @@ class ScoreboardTrigger:
 
 class Detector:
     def __init__(self) -> None:
+        from ultralytics import YOLO  # optional extra: uv sync --extra realtime
+
         self.model = YOLO(settings.yolo_model)
         self.names = self.model.names
         self.triggers = set(settings.trigger_classes)

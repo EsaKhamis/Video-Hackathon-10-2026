@@ -9,9 +9,14 @@ dependencies = [
     "python-dotenv>=1.0",
     "requests>=2.31",
     "opencv-python>=4.9",
-    "ultralytics>=8.3",
     "streamlit>=1.38",
     "weave>=0.51",
+]
+
+[project.optional-dependencies]
+# Local YOLO11 tracking for the real-time lane. Pulls in PyTorch; not needed for archive search.
+realtime = [
+    "ultralytics>=8.3",
     "lap>=0.5.12",
 ]
 

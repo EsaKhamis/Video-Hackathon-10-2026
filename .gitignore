@@ -15,3 +15,11 @@ data/index.json
 # YOLO weights and runs
 *.pt
 runs/
+
+# Credentials and probe outputs
+config
+*.config
+.git-credentials
+probe/*.jpg
+probe/dash/
+probe/*.json
