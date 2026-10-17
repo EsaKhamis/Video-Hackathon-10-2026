@@ -25,7 +25,7 @@ STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 # Keep the ConfigMap small and free of local device state / bytecode.
 shopt -s nullglob
-for f in "$APP_DIR"/*.py "$APP_DIR"/*.json "$APP_DIR"/*.html "$APP_DIR"/requirements.txt; do
+for f in "$APP_DIR"/*.py "$APP_DIR"/*.json "$APP_DIR"/*.html "$APP_DIR"/requirements.txt "$APP_DIR"/art-*; do
   case "$(basename "$f")" in
     devices.json|reviews.json) continue ;;
   esac
