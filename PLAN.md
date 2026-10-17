@@ -24,6 +24,34 @@ with who was at fault. They open the top driver close pass, watch the clip with 
 type a plate, click Approve and get a printable authority report. Then they open the taxi crossing,
 where the agent says the rider entered on red, and get a rider lesson instead of a report.
 
+## Status at 14:30 (halfway gate: missed, cut to H1 + H3)
+
+The spine runs on real data and nothing labelled rider / adjacent-lane / separated gets a driver verdict, but the
+engine makes **no automatic driver verdict** on any labelled clip: Cosmos says H1 and H4 stay in their own lane at
+over 2 m, YOLO says about 1 m, so the rules give `unclear`. So the demo is cut to two incidents: **H1 = "unclear,
+you decide"** (the reviewer picks driver and gets the authority report) and **H3 = rider, entered on red**.
+
+| Must | State |
+|---|---|
+| 1. Stage A screening | Done: `data/screen.json`, 465 rows |
+| 2. Stage B geometry | Done: `engine/detect.py` → `data/geometry.json` (96 of 465 flagged) |
+| 3. Stage C confirmation | Done for the **18 labelled clips** only (`engine/confirm.py` → `data/stage_c.json`, ~5 s per clip). Not yet run on the 96 Stage B flags |
+| 4. Stage D rules | Done: `engine/fault.py` v5 (changelog below). `data/stage_d.json` (rider-on-red from Stage A) still used outside the cut |
+| 5. Stage E documents | Report and lesson pages are app templates; **W&B text not wired**. No VastDB `witness-incidents` table; the app reads `data/incidents.json` |
+| 6. Web app | Done: ride list, incident detail with boxes, review, `/report`, `/lesson`, timeline, dummy `/api/submit` |
+| 7. Deployed at `/app` | Done; `data/incidents.json` = H1 + H3 (`build_incidents.py --only H1,H3`), pushed with `k8s/update-data.sh`. Stream returns 206 |
+| 8. Evaluation | `probe/eval_labels.py`: **10/18 agree with labels, 0 wrong driver verdicts**. Not yet on an "About" panel |
+
+Should: dashcam witness, re-ingest of hero chunks: not started (nothing in the repo).
+
+**Next, in order:**
+1. Merge `feature/stage-c-halfway-cut`; before any full redeploy clear the stale `H1` entry in `app/reviews.json`
+   (approved, fault driver) so the demo opens on a pending review.
+2. Rehearse the cut demo on the App button (script below, steps 3–5 rewritten for the cut).
+3. Judges' README + screenshots + 60 s recording (I), by 15:45.
+4. Only if ahead: Stage C on the 96 flagged segments (~2 min) and rebuild without `--only`, keeping only clips
+   where label and verdict agree; accuracy line on an "About" panel.
+
 Order of work: **rider (GoPro) data first**. The **Toronto dashcam witness** feed is the
 first Should item, added once the spine is deployed.
 
@@ -79,11 +107,11 @@ Live check at 11:50: login OK, dashboard `healthy: true`, `pending_index: 0`, 3,
 
 | # | Clip | What happens | Expected fault | Status |
 |---|---|---|---|---|
-| H1 | `GOPR0130_chunk_0026_segment_003` | Black SUV passes close on the right and pulls ahead | Driver (close pass) | Cosmos agrees; **check the signal and rider position by eye before 13:45** |
-| H2 | `GX050001_chunk_0019_segment_001` | White van close in the next lane at dusk, then ahead | Driver, unclear, **or not a near miss** | Cosmos says "safe distance", boxes say 52% of frame height. **Re-label in round 1:** if the van never leaves its lane it's adjacent-lane traffic and gets dropped, and the "unclear, you decide" demo needs a different clip |
-| H3 | `GOPR0130_chunk_0017_segment_005` | Yellow taxi crosses inches in front of the handlebars | **Rider (entered on red)** | Verified by eye (red signal heads, pedestrians crossing) and by Cosmos |
-| H4 | `GOPR0130_chunk_0026_segment_002` | Taxi swings across the path of the **lead** cyclist | Driver, against another rider | The camera rider as a witness for someone else |
-| H5 | `GX010001_chunk_0018_segment_003` | Rider on the sidewalk past pedestrians | Rider (sidewalk) | Cosmos identified it |
+| H1 | `GOPR0130_chunk_0026_segment_003` | Black SUV passes close on the right and pulls ahead | Driver (close pass) | **Engine: unclear (rule 8)**. Stage C: own lane, over 2 m, no signal visible, rider in traffic lane; YOLO: ~0.95 m at 56% height. In the demo as "you decide" |
+| H2 | `GX050001_chunk_0019_segment_001` | White van close in the next lane at dusk, then ahead | Driver, unclear, **or not a near miss** | Labelled adjacent-lane. **Engine: dropped (rule 2, separator)** ✔. Not in the demo |
+| H3 | `GOPR0130_chunk_0017_segment_005` | Yellow taxi crosses inches in front of the handlebars | **Rider (entered on red)** | **Engine: rider (rule 3)** ✔, red in the video and the still. In the demo |
+| H4 | `GOPR0130_chunk_0026_segment_002` | Taxi swings across the path of the **lead** cyclist | Driver, against another rider | **Engine: unclear (rule 8)**; Cosmos says own lane. Cut from the demo |
+| H5 | `GX010001_chunk_0018_segment_003` | Rider on the sidewalk past pedestrians | Rider (sidewalk) | **Engine: rider (rule 4)** ✔. Cut from the demo (could come back as a second lesson) |
 
 ## Scope
 
@@ -402,18 +430,19 @@ If anything blocks for more than 15 minutes, run `/ask-cosmos`, post the note on
    form takes too long. And nobody tells riders about the risks they take themselves."
 2. **How it works (20 s):** "Cosmos Reason watched every one of the 465 clips in about six minutes; YOLO measured how
    close each vehicle got; plain rules decide who was at fault. The models see, the rules decide."
-3. **Walkthrough:** open the App button. Ride GOPR0130 (15 min): safety summary (N driver incidents, M rider lessons),
-   timeline coloured by fault. Open H1 (black SUV close pass): clip with boxes, the facts, click Approve, type the street,
-   open the authority report.
+3. **Walkthrough (cut, 14:30):** open the App button. Ride GOPR0130: two incidents on the timeline. Open H1 (black SUV
+   close pass): clip with boxes. "YOLO says it came within about a metre; Cosmos says it stayed in its lane over 2 m.
+   The models disagree, so the agent doesn't accuse anyone, it asks you." Pick driver at fault, type the street,
+   click Approve, open the authority report. (This replaces step 5.)
 4. **The same agent coaches the rider:** open H3 (taxi crossing). "The agent found a taxi inches from the handlebars, but the
    signal facing the rider was red." Rider at fault, red signal crop as evidence, and a lesson instead of a report.
    "It tells you when it was you, and it never sends that anywhere."
-5. **Unclear means you decide:** an unclear clip (H2 if round 1 keeps it, otherwise the best `unclear` survivor): the
+5. ~~**Unclear means you decide:**~~ covered by H1 in step 3 after the cut. Original: an unclear clip (H2 if round 1 keeps it, otherwise the best `unclear` survivor): the
    boxes say very close, Cosmos says safe distance, so it's marked unclear for the human. Mention that cars simply
    driving in the next lane are filtered out on purpose.
 6. **Witness network (if done):** Toronto dashcam finds a car squeezing a cyclist and crops the plate (`BEVX 388`) to confirm.
    If the re-ingest landed: search VSS for "driver passed dangerously close to the cyclist" and H1 comes up.
-7. **Honest limits** (above), and accuracy on the labelled set.
+7. **Honest limits** (above), and accuracy on the labelled set: 10 of 18 agree, and no false driver verdicts.
 
 Built on: VAST DataEngine + VastDB (index, detections, incidents table), NVIDIA Cosmos3-Reason (screening, fault facts),
 YOLO11 (geometry), Cosmos Embed1 (search), W&B Inference (report and lesson writing), Cursor.
