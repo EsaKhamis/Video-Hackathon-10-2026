@@ -129,8 +129,6 @@ def identify(raw, sid, facts):
            'plate': plate or 'unreadable', 'plate_reads': plates, 'plate_agree': plate_n, 'reads': reads}
     for key in ('type', 'colour', 'make', 'model'):
         out[key] = agree(low(key), need)[0] or 'unknown'
-    if out['make'] == 'unknown':
-        out['model'] = 'unknown'
     if plate:  # the crop where the agreed plate was read: shown first in the review screen
         out['best_crop'] = reads[plates.index(plate)]['crop']
     elif reads:
