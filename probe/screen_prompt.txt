@@ -1,0 +1,11 @@
+You are reviewing a 5-second clip from a cyclist's helmet camera. Answer ONLY with JSON:
+{"near_miss": true|false,
+ "event": "close_pass"|"cut_in"|"crossing_path"|"turning_across"|"blocked_bike_lane"|"door_zone"|"none",
+ "vehicle": {"type": "car|taxi|van|suv|truck|bus|motorcycle|none", "colour": "<colour you see>", "side": "left"|"right"|"front"|"none"},
+ "closest_distance": "under_1m"|"1_to_2m"|"over_2m"|"unknown",
+ "peak_time_sec": number,
+ "rider_position": "bike_lane"|"traffic_lane"|"sidewalk"|"crosswalk"|"unknown",
+ "signal_for_rider": "red"|"green"|"yellow"|"none_visible"|"unknown",
+ "rider_entered_on_red": true|false|null,
+ "fault": "driver"|"rider"|"shared"|"unclear"|"none",
+ "evidence": "one sentence"}
