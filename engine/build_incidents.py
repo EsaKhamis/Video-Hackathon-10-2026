@@ -1,12 +1,16 @@
 """Join engine outputs into the app's data/incidents.json (schema: PLAN.md "Incident schema").
 
   data/stage_d.json   Stage D rider-on-red survivors (frame-reviewed)   -> fault rider, rule 3, rider lesson
-  data/geometry.json  Stage B YOLO geometry for every segment            -> boxes, severity, and
-                      close + encroaching vehicles with no Cosmos facts  -> fault unclear, rule 8
+  data/stage_c.json   Stage C Cosmos facts (engine/confirm.py)          -> driver (rule 7), sidewalk (rule 4),
+                                                                           unclear (rule 8)
+  data/geometry.json  Stage B YOLO geometry for every segment            -> boxes, side, severity
   data/segments.json  playable source + ride offset per segment
 
-No driver verdicts here: PLAN.md rule 7 needs Stage C facts (separator, vehicle path, signal), and missing
-facts never produce a driver verdict. When Stage C lands, its rows replace the rule 8 "unclear" ones.
+Driver (rule 7) needs BOTH models: the YOLO close-pass shape (a vehicle overtaking, not a camera pan) AND
+Cosmos, by majority vote, saying near miss with the vehicle entering the rider's path; no separator, rider
+not on the sidewalk, no red signal in the video or the still, rider did not move into the vehicle's path.
+Any missing piece -> unclear, never driver. Vehicle side comes from YOLO; Cosmos colour is not trusted.
+Without stage_c.json, falls back to Stage B only (unclear, no driver verdicts).
 
   python3 engine/build_incidents.py            # -> data/incidents.json
 """
@@ -15,7 +19,7 @@ import argparse, json, os
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 DATA = os.path.join(ROOT, 'data')
 UNCLEAR_PEAK_H = 0.45      # rule 8: YOLO encroachment with peak >= 45% of frame height
-MAX_UNCLEAR = 12           # keep the review list short: top N by severity
+MAX_UNCLEAR = 10           # keep the review list short: top N by severity
 PLACE = {'road': 'traffic_lane', 'bike_lane': 'bike_lane', 'crosswalk': 'crosswalk', 'sidewalk': 'sidewalk'}
 RIDES = {  # hand-written ride cards, as in app/incidents.stub.json
     'GOPR0130': ('Midday Manhattan ride', 'Busy daytime streets, following another cyclist through heavy traffic',
@@ -33,6 +37,23 @@ def load(name):
 
 def seg_key(source):
     return os.path.basename(source).split('_', 2)[2].rsplit('_of_', 1)[0]
+
+
+def stage_c_verdict(row, c):
+    """PLAN.md rules 4, 7, 8 on Stage C facts + Stage B geometry. Returns driver / sidewalk / unclear / None."""
+    f = c.get('facts') or {}
+    g = row.get('geometry') or {}
+    red = f.get('signal_for_rider') == 'red' or c.get('signal_still') == 'red'
+    near = f.get('near_miss') is True and f.get('vehicle_entered_rider_path') is True
+    votes = c.get('votes') or {}
+    if f.get('rider_position') == 'sidewalk' and votes.get('rider_position', []).count('sidewalk') >= 4:
+        return 'sidewalk'   # one Cosmos call is not enough here: 4 of 5 votes
+    if (row.get('pass') and not g.get('pan_suspect') and near and f.get('separator') != 'yes' and not red
+            and f.get('rider_moved_into_vehicle_path') is not True):
+        return 'driver'
+    if near and f.get('separator') != 'yes':
+        return 'unclear'
+    return None
 
 
 def blank_facts(**kw):
@@ -103,27 +124,67 @@ def main(out):
         incidents.append(inc)
         taken.add(key)
 
+    stage_c_path = os.path.join(DATA, 'stage_c.json')
+    stage_c = {r['id']: r for r in json.load(open(stage_c_path))['rows']
+               if r.get('facts')} if os.path.exists(stage_c_path) else None
     unclear = []
     for key, row in geo.items():
         g = row.get('geometry')
-        if key in taken or not g or not row.get('encroachment') or g['peak_h'] < UNCLEAR_PEAK_H:
-            continue
         seg = by_key.get(key)
-        if not seg:
+        if key in taken or not g or not seg:
+            continue
+        if stage_c is None:
+            verdict, c = ('unclear', None) if row.get('encroachment') and g['peak_h'] >= UNCLEAR_PEAK_H else (None, None)
+        else:
+            c = stage_c.get(key)
+            verdict = stage_c_verdict(row, c) if c else None
+        if not verdict:
             continue
         inc = base(seg, row)
-        side = g['side']
-        event = 'close_pass' if row.get('pass') else 'cut_in' if row.get('cut') else 'close_vehicle'
+        p = row.get('pass')
+        side = p['side'] if verdict == 'driver' else g['side']
+        label = p['label'] if verdict == 'driver' else g['label']
+        f = (c or {}).get('facts') or {}
+        votes = (c or {}).get('votes')
+        if verdict == 'driver':
+            inc['t_peak'] = p['t']
+            inc['evidence_frames'] = frames(p['t'])
+            seen = f"{sum(v is True for v in votes['entered_path'])} of {votes['n']}" if votes else '1 of 1'
+            dist = {'under_1m': 'under 1 m', '1_to_2m': '1 to 2 m', 'over_2m': 'over 2 m'}.get(f.get('closest_distance'), 'an unknown distance')
+            evidence = (f"A {label} on the {side} came within {dist} "
+                        f"and moved into the rider's path (Cosmos, {seen} checks); YOLO shows it overtaking at "
+                        f"{round(p['peak_h'] * 100)}% of frame height.")
+            doc = {'kind': 'authority_report', 'title': f"Close pass by a {label} on the {side}"}
+            event, rule, fault = 'close_pass', 7, 'driver'
+        elif verdict == 'sidewalk':
+            evidence = 'Cosmos sees the rider on the sidewalk. ' + (f.get('evidence') or '')
+            doc = {'kind': 'rider_lesson', 'title': 'Riding on the sidewalk'}
+            event, rule, fault = 'sidewalk', 4, 'rider'
+        else:
+            evidence = (f"Close {label} on the {side} ({round(g['peak_h'] * 100)}% of frame height). "
+                        + (f"Cosmos: {f.get('evidence')}" if f.get('evidence') else 'Not yet checked by Cosmos.')
+                        + ' The two models disagree or a fact is missing, so you decide.')
+            doc = {'kind': 'both', 'title': f"Close {label} on the {side}"}
+            event = 'close_pass' if p else 'cut_in' if row.get('cut') else 'close_vehicle'
+            rule, fault = 8, 'unclear'
         inc.update({
-            'id': 'B-' + key, 'event_type': event, 'fault': 'unclear', 'fault_rule': 8,
-            'facts': blank_facts(vehicle={'type': g['label'], 'colour': 'unknown', 'side': side},
-                                 evidence=f"YOLO: a {g['label']} on the {side} reached {round(g['peak_h'] * 100)}% "
-                                          f"of frame height and closed to about {g['min_gap_m']} m of the rider's "
-                                          f"line. Not yet checked by Cosmos (Stage C)."),
-            'model_agreement': None,
-            'document': {'kind': 'both', 'title': f"Close {g['label']} on the {side}"},
+            'id': ('C-' if c else 'B-') + key, 'event_type': event, 'fault': fault, 'fault_rule': rule,
+            'facts': blank_facts(
+                signal_for_rider=f.get('signal_for_rider', 'unknown'),
+                signal_still=(c or {}).get('signal_still', 'unknown'),
+                rider_position=f.get('rider_position', 'unknown'), separator=f.get('separator', 'unknown'),
+                vehicle_action=f.get('vehicle_action', 'none'),
+                vehicle_entered_rider_path=f.get('vehicle_entered_rider_path'),
+                rider_moved_into_vehicle_path=f.get('rider_moved_into_vehicle_path'),
+                vehicle={'type': label, 'colour': 'cyclist to confirm', 'side': side},
+                closest_distance=f.get('closest_distance', 'unknown'), evidence=evidence,
+                model_fault=f.get('fault')),
+            'model_agreement': (fault == 'driver') if c else None,
+            'document': doc,
         })
-        unclear.append(inc)
+        if votes:
+            inc['votes'] = votes
+        (incidents if fault != 'unclear' else unclear).append(inc)
     unclear.sort(key=lambda i: -i['_raw'])
     incidents += unclear[:MAX_UNCLEAR]
 
@@ -144,8 +205,8 @@ def main(out):
         rides.append({'id': rid, 'title': title, 'situation': situation, 'conditions': conditions,
                       'duration_min': round(dur / 60), 'segments': len(segs)})
 
-    json.dump({'generated_from': 'engine/build_incidents.py: stage_d.json (rider/red, rule 3) + geometry.json '
-                                 '(unclear, rule 8). No driver verdicts until Stage C.',
+    json.dump({'generated_from': 'engine/build_incidents.py: stage_d.json (rider/red, rule 3) + stage_c.json '
+                                 '(Cosmos facts: driver rule 7, sidewalk rule 4, unclear rule 8) + geometry.json.',
                'rides': rides, 'incidents': incidents}, open(out, 'w'), indent=1)
     c = {}
     for i in incidents:

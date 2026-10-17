@@ -12,10 +12,12 @@ Everything lives in `data/`. The app reads only `segments.json`, `screen.json` a
 | `unfiltered_flags.json` | Stage A captions before the frame review | reference only |
 | `geometry.json` | Stage B, `engine/detect.py` | `build_incidents.py` |
 | `stage_d.json` | Stage D (data-engine): rider-on-red survivors | `build_incidents.py` |
+| `stage_c.json` | Stage C, `engine/confirm.py`: Cosmos facts per flagged segment | `build_incidents.py` |
 | `incidents.json` | `engine/build_incidents.py` | app |
 
 ```bash
 python3 engine/detect.py           # Stage B -> data/geometry.json (~2 min)
+python3 engine/confirm.py          # Stage C -> data/stage_c.json (~2.5 min, 102 segments)
 python3 engine/build_incidents.py  # -> data/incidents.json
 k8s/update-data.sh                 # live in /app within about a minute
 ```
@@ -56,3 +58,24 @@ segments flagged overall. Stage B is the high-recall filter: it can't tell adjac
 too much noise. Stage C/D use Cosmos (`separator`, `vehicle_entered_rider_path`) to decide. The one
 missed clip (`GOPR0130_chunk_0006_segment_003`, rider on red) is in Stage A's red-light set, and
 Stage C takes A ∪ B.
+
+## Stage C: Cosmos confirmation (`confirm.py`)
+
+Every Stage B flag plus the labelled clips (102 segments): the clip at 1280 px / 6 fps goes to
+Cosmos3-Reason with the facts schema, plus a full-resolution still 1 s before the peak for the signal.
+
+What we learned on the labelled clips, and why it is built this way:
+
+- **No detector hint.** With the hint Cosmos agreed with it: near miss and driver fault on almost every clip,
+  including adjacent-lane, sidewalk and separated ones. Blind, it rejects H2, H5 and the adjacent-lane passes.
+- **Majority vote.** Cosmos is not deterministic at temperature 0: between runs H4 flipped to unclear (the
+  still read red once) and an adjacent-lane clip flipped to driver. Close-pass candidates and sidewalk calls
+  get 5 calls each; the vote was 5/5 on H1, H4 and the adjacent-lane clips.
+- **Both models for a driver verdict** (rule 7 in `build_incidents.py`): YOLO close-pass shape and Cosmos
+  near miss + vehicle entered the rider's path by vote, no separator, not on the sidewalk, no red signal.
+  Colour and side from Cosmos are unreliable (it called the H4 yellow taxi on the right a black car on the
+  left), so side comes from YOLO and colour is left for the cyclist to confirm.
+
+Result on the 18 labelled clips: H1 and H4 are driver; no adjacent-lane, separated or rider clip gets a
+driver verdict. Overall: 2 driver incidents, 11 sidewalk lessons (4-5 of 5 votes), 10 unclear (top by
+severity), plus the 13 Stage D rider-on-red lessons. Tuned on 18 clips: an honest limit, not a benchmark.

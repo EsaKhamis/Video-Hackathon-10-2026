@@ -1,5 +1,5 @@
 {
- "generated_from": "engine/build_incidents.py: stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8). No driver verdicts until Stage C.",
+ "generated_from": "engine/build_incidents.py: stage_d.json (rider/red, rule 3) + stage_c.json (Cosmos facts: driver rule 7, sidewalk rule 4, unclear rule 8) + geometry.json.",
  "rides": [
   {
    "id": "GOPR0130",
@@ -28,70 +28,7 @@
  ],
  "incidents": [
   {
-   "id": "B-GOPR0130_chunk_0021_segment_004",
-   "ride": "GOPR0130",
-   "source": "GOPR0130_chunk_0021_segment_004",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_073245_GOPR0130_chunk_0021_segment_004_of_006.mp4",
-   "ride_offset_sec": 645,
-   "t_peak": 4.27,
-   "geometry": {
-    "peak_h": 0.988,
-    "side": "right",
-    "bbox": [
-     0.22,
-     0.001,
-     0.997,
-     0.989
-    ],
-    "pan_suspect": false,
-    "entered_corridor": true,
-    "lateral_toward_rider": 1.56,
-    "min_gap_m": 0.0,
-    "approach": 4.22,
-    "t_peak": 4.27,
-    "label": "bus"
-   },
-   "evidence_frames": [
-    3.3,
-    4.3,
-    4.9
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "close_pass",
-   "fault": "unclear",
-   "fault_rule": 8,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "bus",
-     "colour": "unknown",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a bus on the right reached 99% of frame height and closed to about 0.0 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
-   },
-   "model_agreement": null,
-   "document": {
-    "kind": "both",
-    "title": "Close bus on the right"
-   },
-   "severity": 100,
-   "severity_label": "High"
-  },
-  {
-   "id": "B-GOPR0130_chunk_0014_segment_001",
+   "id": "C-GOPR0130_chunk_0014_segment_001",
    "ride": "GOPR0130",
    "source": "GOPR0130_chunk_0014_segment_001",
    "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_001_of_006.mp4",
@@ -131,21 +68,86 @@
    "fault_rule": 8,
    "facts": {
     "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "left"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the left reached 98% of frame height and closed to about 0.25 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the left (98% of frame height). Cosmos: A blue car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "green"
    },
-   "model_agreement": null,
+   "model_agreement": false,
+   "document": {
+    "kind": "both",
+    "title": "Close car on the left"
+   },
+   "severity": 100,
+   "severity_label": "High"
+  },
+  {
+   "id": "C-GOPR0130_chunk_0013_segment_006",
+   "ride": "GOPR0130",
+   "source": "GOPR0130_chunk_0013_segment_006",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072922_GOPR0130_chunk_0013_segment_006_of_006.mp4",
+   "ride_offset_sec": 415,
+   "t_peak": 3.13,
+   "geometry": {
+    "peak_h": 0.97,
+    "side": "left",
+    "bbox": [
+     0.001,
+     0.007,
+     0.288,
+     0.978
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 0.93,
+    "min_gap_m": 0.0,
+    "approach": 1.222,
+    "t_peak": 3.13,
+    "label": "car"
+   },
+   "evidence_frames": [
+    2.1,
+    3.1,
+    3.9
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "cut_in",
+   "fault": "unclear",
+   "fault_rule": 8,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "car",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the left (97% of frame height). Cosmos: A black car overtakes the cyclist from the right, cutting into the lane and passing extremely close, creating a dangerous near-miss situation. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
    "document": {
     "kind": "both",
     "title": "Close car on the left"
@@ -154,7 +156,71 @@
    "severity_label": "High"
   },
   {
-   "id": "B-GOPR0130_chunk_0014_segment_003",
+   "id": "C-GOPR0130_chunk_0005_segment_002",
+   "ride": "GOPR0130",
+   "source": "GOPR0130_chunk_0005_segment_002",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072600_GOPR0130_chunk_0005_segment_002_of_006.mp4",
+   "ride_offset_sec": 155,
+   "t_peak": 3.83,
+   "geometry": {
+    "peak_h": 0.968,
+    "side": "left",
+    "bbox": [
+     0.002,
+     0.002,
+     0.418,
+     0.969
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 2.83,
+    "min_gap_m": 0.0,
+    "approach": 2.558,
+    "t_peak": 3.83,
+    "label": "bus"
+   },
+   "evidence_frames": [
+    2.8,
+    3.8,
+    4.6
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "cut_in",
+   "fault": "unclear",
+   "fault_rule": 8,
+   "facts": {
+    "signal_for_rider": "unknown",
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "bus",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "evidence": "Close bus on the left (97% of frame height). Cosmos: A white truck cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "green"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "both",
+    "title": "Close bus on the left"
+   },
+   "severity": 99,
+   "severity_label": "High"
+  },
+  {
+   "id": "C-GOPR0130_chunk_0014_segment_003",
    "ride": "GOPR0130",
    "source": "GOPR0130_chunk_0014_segment_003",
    "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_003_of_006.mp4",
@@ -193,27 +259,28 @@
    "fault": "unclear",
    "fault_rule": 8,
    "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "left"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the left reached 98% of frame height and closed to about 0.03 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the left (98% of frame height). Cosmos: A black car cuts in front of the cyclist, forcing the rider to swerve sharply to avoid a collision, indicating the driver's failure to maintain safe distance and lane discipline. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "none_visible"
    },
-   "model_agreement": null,
+   "model_agreement": false,
    "document": {
     "kind": "both",
     "title": "Close car on the left"
    },
-   "severity": 96,
+   "severity": 97,
    "severity_label": "High"
   },
   {
@@ -285,7 +352,7 @@
    "severity_label": "High"
   },
   {
-   "id": "B-GOPR0130_chunk_0014_segment_002",
+   "id": "C-GOPR0130_chunk_0014_segment_002",
    "ride": "GOPR0130",
    "source": "GOPR0130_chunk_0014_segment_002",
    "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_002_of_006.mp4",
@@ -324,31 +391,32 @@
    "fault": "unclear",
    "fault_rule": 8,
    "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "left"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the left reached 97% of frame height and closed to about 0.25 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the left (97% of frame height). Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, with the vehicle entering the rider's path without clear indication. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "red"
    },
-   "model_agreement": null,
+   "model_agreement": false,
    "document": {
     "kind": "both",
     "title": "Close car on the left"
    },
-   "severity": 89,
+   "severity": 90,
    "severity_label": "High"
   },
   {
-   "id": "B-GOPR0130_chunk_0005_segment_004",
+   "id": "C-GOPR0130_chunk_0005_segment_004",
    "ride": "GOPR0130",
    "source": "GOPR0130_chunk_0005_segment_004",
    "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072600_GOPR0130_chunk_0005_segment_004_of_006.mp4",
@@ -387,216 +455,28 @@
    "fault": "unclear",
    "fault_rule": 8,
    "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "green",
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "left"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the left reached 78% of frame height and closed to about 0.21 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the left (78% of frame height). Cosmos: A red car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "green"
    },
-   "model_agreement": null,
+   "model_agreement": false,
    "document": {
     "kind": "both",
     "title": "Close car on the left"
    },
-   "severity": 79,
-   "severity_label": "High"
-  },
-  {
-   "id": "B-GOPR0130_chunk_0007_segment_003",
-   "ride": "GOPR0130",
-   "source": "GOPR0130_chunk_0007_segment_003",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_072651_GOPR0130_chunk_0007_segment_003_of_006.mp4",
-   "ride_offset_sec": 220,
-   "t_peak": 0.43,
-   "geometry": {
-    "peak_h": 0.769,
-    "side": "right",
-    "bbox": [
-     0.545,
-     0.0,
-     0.999,
-     0.769
-    ],
-    "pan_suspect": false,
-    "entered_corridor": true,
-    "lateral_toward_rider": 1.23,
-    "min_gap_m": 0.31,
-    "approach": 1.584,
-    "t_peak": 0.43,
-    "label": "truck"
-   },
-   "evidence_frames": [
-    0.0,
-    0.4,
-    1.2
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "close_vehicle",
-   "fault": "unclear",
-   "fault_rule": 8,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "truck",
-     "colour": "unknown",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a truck on the right reached 77% of frame height and closed to about 0.31 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
-   },
-   "model_agreement": null,
-   "document": {
-    "kind": "both",
-    "title": "Close truck on the right"
-   },
-   "severity": 78,
-   "severity_label": "High"
-  },
-  {
-   "id": "B-GOPR0130_chunk_0016_segment_001",
-   "ride": "GOPR0130",
-   "source": "GOPR0130_chunk_0016_segment_001",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_073038_GOPR0130_chunk_0016_segment_001_of_006.mp4",
-   "ride_offset_sec": 480,
-   "t_peak": 4.97,
-   "geometry": {
-    "peak_h": 0.731,
-    "side": "left",
-    "bbox": [
-     0.001,
-     0.253,
-     0.267,
-     0.983
-    ],
-    "pan_suspect": false,
-    "entered_corridor": true,
-    "lateral_toward_rider": 2.36,
-    "min_gap_m": 0.23,
-    "approach": 1.042,
-    "t_peak": 4.97,
-    "label": "bus"
-   },
-   "evidence_frames": [
-    4.0,
-    5.0,
-    4.9
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "close_vehicle",
-   "fault": "unclear",
-   "fault_rule": 8,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "bus",
-     "colour": "unknown",
-     "side": "left"
-    },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a bus on the left reached 73% of frame height and closed to about 0.23 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
-   },
-   "model_agreement": null,
-   "document": {
-    "kind": "both",
-    "title": "Close bus on the left"
-   },
-   "severity": 74,
-   "severity_label": "High"
-  },
-  {
-   "id": "B-GOPR0130_chunk_0018_segment_001",
-   "ride": "GOPR0130",
-   "source": "GOPR0130_chunk_0018_segment_001",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_073129_GOPR0130_chunk_0018_segment_001_of_006.mp4",
-   "ride_offset_sec": 540,
-   "t_peak": 2.87,
-   "geometry": {
-    "peak_h": 0.731,
-    "side": "right",
-    "bbox": [
-     0.613,
-     0.011,
-     0.999,
-     0.742
-    ],
-    "pan_suspect": false,
-    "entered_corridor": true,
-    "lateral_toward_rider": 1.82,
-    "min_gap_m": 0.0,
-    "approach": 0.944,
-    "t_peak": 2.87,
-    "label": "car"
-   },
-   "evidence_frames": [
-    1.9,
-    2.9,
-    3.7
-   ],
-   "review": {
-    "status": "pending",
-    "plate": "",
-    "street": "",
-    "fault_override": null,
-    "recorded_at": null
-   },
-   "event_type": "close_vehicle",
-   "fault": "unclear",
-   "fault_rule": 8,
-   "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
-    "vehicle": {
-     "type": "car",
-     "colour": "unknown",
-     "side": "right"
-    },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the right reached 73% of frame height and closed to about 0.0 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
-   },
-   "model_agreement": null,
-   "document": {
-    "kind": "both",
-    "title": "Close car on the right"
-   },
-   "severity": 72,
+   "severity": 80,
    "severity_label": "High"
   },
   {
@@ -664,8 +544,96 @@
     "rank": 1,
     "still_review": "match"
    },
-   "severity": 71,
+   "severity": 72,
    "severity_label": "High"
+  },
+  {
+   "id": "C-GOPR0130_chunk_0026_segment_003",
+   "ride": "GOPR0130",
+   "source": "GOPR0130_chunk_0026_segment_003",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_073451_GOPR0130_chunk_0026_segment_003_of_006.mp4",
+   "ride_offset_sec": 790,
+   "t_peak": 4.17,
+   "geometry": {
+    "peak_h": 0.725,
+    "side": "left",
+    "bbox": [
+     0.001,
+     0.249,
+     0.313,
+     0.974
+    ],
+    "pan_suspect": false,
+    "entered_corridor": true,
+    "lateral_toward_rider": 1.28,
+    "min_gap_m": 0.28,
+    "approach": 0.726,
+    "t_peak": 4.6,
+    "label": "car"
+   },
+   "evidence_frames": [
+    3.2,
+    4.2,
+    4.9
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "close_pass",
+   "fault": "driver",
+   "fault_rule": 7,
+   "facts": {
+    "signal_for_rider": "unknown",
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "car",
+     "colour": "cyclist to confirm",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "evidence": "A car on the right came within under 1 m and moved into the rider's path (Cosmos, 5 of 5 checks); YOLO shows it overtaking at 56% of frame height.",
+    "model_fault": "driver",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": true,
+   "document": {
+    "kind": "authority_report",
+    "title": "Close pass by a car on the right"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "signal_still": [
+     "none_visible",
+     "green",
+     "none_visible",
+     "green",
+     "none_visible"
+    ]
+   },
+   "severity": 64,
+   "severity_label": "Med"
   },
   {
    "id": "N0209",
@@ -736,6 +704,94 @@
    "severity_label": "Med"
   },
   {
+   "id": "C-GOPR0130_chunk_0026_segment_002",
+   "ride": "GOPR0130",
+   "source": "GOPR0130_chunk_0026_segment_002",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_073451_GOPR0130_chunk_0026_segment_002_of_006.mp4",
+   "ride_offset_sec": 785,
+   "t_peak": 2.7,
+   "geometry": {
+    "peak_h": 0.559,
+    "side": "right",
+    "bbox": [
+     0.686,
+     0.088,
+     0.999,
+     0.647
+    ],
+    "pan_suspect": false,
+    "entered_corridor": true,
+    "lateral_toward_rider": 3.06,
+    "min_gap_m": 0.0,
+    "approach": 0.944,
+    "t_peak": 2.7,
+    "label": "car"
+   },
+   "evidence_frames": [
+    1.7,
+    2.7,
+    3.5
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "close_pass",
+   "fault": "driver",
+   "fault_rule": 7,
+   "facts": {
+    "signal_for_rider": "unknown",
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "car",
+     "colour": "cyclist to confirm",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "evidence": "A car on the right came within under 1 m and moved into the rider's path (Cosmos, 5 of 5 checks); YOLO shows it overtaking at 56% of frame height.",
+    "model_fault": "driver",
+    "signal_still": "green"
+   },
+   "model_agreement": true,
+   "document": {
+    "kind": "authority_report",
+    "title": "Close pass by a car on the right"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "signal_still": [
+     "green",
+     "green",
+     "green",
+     "green",
+     "red"
+    ]
+   },
+   "severity": 55,
+   "severity_label": "Med"
+  },
+  {
    "id": "N0248",
    "ride": "GOPR0130",
    "source": "GOPR0130_chunk_0017_segment_004",
@@ -800,7 +856,7 @@
     "rank": 1,
     "still_review": "match"
    },
-   "severity": 50,
+   "severity": 51,
    "severity_label": "Med"
   },
   {
@@ -868,7 +924,7 @@
     "rank": 2,
     "still_review": "match"
    },
-   "severity": 45,
+   "severity": 46,
    "severity_label": "Med"
   },
   {
@@ -1384,7 +1440,71 @@
    "severity_label": "Low"
   },
   {
-   "id": "B-GX010001_chunk_0018_segment_006",
+   "id": "C-GX010001_chunk_0021_segment_002",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0021_segment_002",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074538_GX010001_chunk_0021_segment_002_of_006.mp4",
+   "ride_offset_sec": 635,
+   "t_peak": 2.87,
+   "geometry": {
+    "peak_h": 0.854,
+    "side": "right",
+    "bbox": [
+     0.788,
+     0.0,
+     0.999,
+     0.854
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 3.29,
+    "min_gap_m": 1.8,
+    "approach": 6.404,
+    "t_peak": 2.87,
+    "label": "truck"
+   },
+   "evidence_frames": [
+    1.9,
+    2.9,
+    3.7
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "cut_in",
+   "fault": "unclear",
+   "fault_rule": 8,
+   "facts": {
+    "signal_for_rider": "unknown",
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "truck",
+     "colour": "cyclist to confirm",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "evidence": "Close truck on the right (85% of frame height). Cosmos: A silver car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "red"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "both",
+    "title": "Close truck on the right"
+   },
+   "severity": 87,
+   "severity_label": "High"
+  },
+  {
+   "id": "C-GX010001_chunk_0018_segment_006",
    "ride": "GX010001",
    "source": "GX010001_chunk_0018_segment_006",
    "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_006_of_006.mp4",
@@ -1419,35 +1539,67 @@
     "fault_override": null,
     "recorded_at": null
    },
-   "event_type": "cut_in",
-   "fault": "unclear",
-   "fault_rule": 8,
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
    "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "left"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the left reached 80% of frame height and closed to about 0.0 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The cyclist is riding on the sidewalk, and a black truck is parked on the street with a physical barrier between them, so no conflict occurs.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
    },
-   "model_agreement": null,
+   "model_agreement": false,
    "document": {
-    "kind": "both",
-    "title": "Close car on the left"
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
    },
-   "severity": 81,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "unknown"
+    ]
+   },
+   "severity": 82,
    "severity_label": "High"
   },
   {
-   "id": "B-GX010001_chunk_0019_segment_004",
+   "id": "C-GX010001_chunk_0019_segment_004",
    "ride": "GX010001",
    "source": "GX010001_chunk_0019_segment_004",
    "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074448_GX010001_chunk_0019_segment_004_of_006.mp4",
@@ -1487,56 +1639,57 @@
    "fault_rule": 8,
    "facts": {
     "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "right"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the right reached 80% of frame height and closed to about 0.0 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the right (80% of frame height). Cosmos: The black SUV cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision, indicating the driver's failure to maintain a safe distance and proper lane discipline. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "none_visible"
    },
-   "model_agreement": null,
+   "model_agreement": false,
    "document": {
     "kind": "both",
     "title": "Close car on the right"
    },
-   "severity": 81,
+   "severity": 82,
    "severity_label": "High"
   },
   {
-   "id": "B-GX050001_chunk_0015_segment_004",
-   "ride": "GX050001",
-   "source": "GX050001_chunk_0015_segment_004",
-   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_075300_GX050001_chunk_0015_segment_004_of_006.mp4",
-   "ride_offset_sec": 465,
-   "t_peak": 2.3,
+   "id": "C-GX010001_chunk_0016_segment_001",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0016_segment_001",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074332_GX010001_chunk_0016_segment_001_of_006.mp4",
+   "ride_offset_sec": 480,
+   "t_peak": 4.73,
    "geometry": {
-    "peak_h": 0.907,
+    "peak_h": 0.734,
     "side": "right",
     "bbox": [
-     0.612,
-     0.069,
-     0.998,
-     0.977
+     0.497,
+     0.246,
+     0.999,
+     0.981
     ],
-    "pan_suspect": false,
-    "entered_corridor": true,
-    "lateral_toward_rider": 4.27,
-    "min_gap_m": 0.07,
-    "approach": 2.282,
-    "t_peak": 2.3,
+    "pan_suspect": true,
+    "entered_corridor": false,
+    "lateral_toward_rider": 0.88,
+    "min_gap_m": 0.0,
+    "approach": 1.163,
+    "t_peak": 4.73,
     "label": "car"
    },
    "evidence_frames": [
-    1.3,
-    2.3,
-    3.1
+    3.7,
+    4.7,
+    4.9
    ],
    "review": {
     "status": "pending",
@@ -1545,36 +1698,511 @@
     "fault_override": null,
     "recorded_at": null
    },
-   "event_type": "close_vehicle",
+   "event_type": "cut_in",
    "fault": "unclear",
    "fault_rule": 8,
    "facts": {
     "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "pulling_out",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "right"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the right reached 91% of frame height and closed to about 0.07 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the right (73% of frame height). Cosmos: The black car pulls out from a parking spot into the bike lane, cutting directly into the cyclist's path without clear indication, forcing the cyclist to maneuver closely to avoid collision. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "red"
    },
-   "model_agreement": null,
+   "model_agreement": false,
    "document": {
     "kind": "both",
     "title": "Close car on the right"
    },
-   "severity": 92,
-   "severity_label": "High",
-   "low_light": true
+   "severity": 75,
+   "severity_label": "High"
   },
   {
-   "id": "B-GX050001_chunk_0001_segment_002",
+   "id": "C-GX010001_chunk_0018_segment_005",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0018_segment_005",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_005_of_006.mp4",
+   "ride_offset_sec": 560,
+   "t_peak": 1.0,
+   "geometry": {
+    "peak_h": 0.61,
+    "side": "right",
+    "bbox": [
+     0.647,
+     0.003,
+     0.998,
+     0.613
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 5.91,
+    "min_gap_m": 0.69,
+    "approach": 5.116,
+    "t_peak": 1.0,
+    "label": "bus"
+   },
+   "evidence_frames": [
+    0.0,
+    1.0,
+    1.8
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "bus",
+     "colour": "cyclist to confirm",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The cyclist is riding on the sidewalk, which is not a designated bike lane, and is passing by pedestrians and a building entrance without any vehicles or traffic signals involved.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     true,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   },
+   "severity": 62,
+   "severity_label": "Med"
+  },
+  {
+   "id": "C-GX010001_chunk_0018_segment_002",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0018_segment_002",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_002_of_006.mp4",
+   "ride_offset_sec": 545,
+   "t_peak": 0.1,
+   "geometry": {
+    "peak_h": 0.675,
+    "side": "left",
+    "bbox": [
+     0.0,
+     0.012,
+     0.327,
+     0.687
+    ],
+    "pan_suspect": false,
+    "entered_corridor": true,
+    "lateral_toward_rider": 2.14,
+    "min_gap_m": 0.0,
+    "approach": 0.731,
+    "t_peak": 0.1,
+    "label": "car"
+   },
+   "evidence_frames": [
+    0.0,
+    0.1,
+    0.9
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "car",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The silver car is parked on the left side of the road, separated from the sidewalk by a curb and metal scaffolding, with no interaction or conflict between the car and the cyclist.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     null,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   },
+   "severity": 60,
+   "severity_label": "Med"
+  },
+  {
+   "id": "C-GX010001_chunk_0019_segment_001",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0019_segment_001",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074448_GX010001_chunk_0019_segment_001_of_006.mp4",
+   "ride_offset_sec": 570,
+   "t_peak": 3.6,
+   "geometry": {
+    "peak_h": 0.523,
+    "side": "left",
+    "bbox": [
+     0.001,
+     0.021,
+     0.543,
+     0.544
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 4.23,
+    "min_gap_m": 0.0,
+    "approach": 1.39,
+    "t_peak": 3.6,
+    "label": "bus"
+   },
+   "evidence_frames": [
+    2.6,
+    3.6,
+    4.4
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "bus",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The black truck is parked on the left side of the road, separated from the sidewalk by a curb and metal posts, with no interaction or conflict between the truck and the cyclist.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   },
+   "severity": 53,
+   "severity_label": "Med"
+  },
+  {
+   "id": "C-GX010001_chunk_0018_segment_004",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0018_segment_004",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_004_of_006.mp4",
+   "ride_offset_sec": 555,
+   "t_peak": 1.47,
+   "geometry": {
+    "peak_h": 0.466,
+    "side": "left",
+    "bbox": [
+     0.0,
+     0.201,
+     0.404,
+     0.667
+    ],
+    "pan_suspect": false,
+    "entered_corridor": true,
+    "lateral_toward_rider": 1.2,
+    "min_gap_m": 0.0,
+    "approach": 0.554,
+    "t_peak": 1.47,
+    "label": "car"
+   },
+   "evidence_frames": [
+    0.5,
+    1.5,
+    2.3
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "car",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The cyclist is on the sidewalk, and the UPS truck is parked on the street, with a clear physical barrier between them, so no conflict occurs.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   },
+   "severity": 37,
+   "severity_label": "Low"
+  },
+  {
+   "id": "C-GX010001_chunk_0018_segment_003",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0018_segment_003",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_003_of_006.mp4",
+   "ride_offset_sec": 550,
+   "t_peak": 4.83,
+   "geometry": {
+    "peak_h": 0.474,
+    "side": "left",
+    "bbox": [
+     0.0,
+     0.364,
+     0.297,
+     0.838
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 6.12,
+    "min_gap_m": 0.0,
+    "approach": 0.445,
+    "t_peak": 4.83,
+    "label": "truck"
+   },
+   "evidence_frames": [
+    3.8,
+    4.8,
+    4.9
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "truck",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The video shows a cyclist stopped on a sidewalk near a building entrance, with no vehicles or immediate interaction occurring that would constitute a near-miss or traffic event.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     null,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   },
+   "severity": 35,
+   "severity_label": "Low"
+  },
+  {
+   "id": "C-GX050001_chunk_0001_segment_002",
    "ride": "GX050001",
    "source": "GX050001_chunk_0001_segment_002",
    "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074706_GX050001_chunk_0001_segment_002_of_006.mp4",
@@ -1613,28 +2241,509 @@
    "fault": "unclear",
    "fault_rule": 8,
    "facts": {
-    "signal_for_rider": "unknown",
-    "rider_position": "unknown",
-    "separator": "unknown",
-    "vehicle_action": "none",
-    "vehicle_entered_rider_path": null,
-    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
     "vehicle": {
      "type": "car",
-     "colour": "unknown",
+     "colour": "cyclist to confirm",
      "side": "right"
     },
-    "closest_distance": "unknown",
-    "evidence": "YOLO: a car on the right reached 85% of frame height and closed to about 0.24 m of the rider's line. Not yet checked by Cosmos (Stage C).",
-    "model_fault": null
+    "closest_distance": "under_1m",
+    "evidence": "Close car on the right (85% of frame height). Cosmos: A red car cuts into the bike lane from the left, forcing the cyclist to swerve sharply to avoid a collision, with no physical barrier separating the two. The two models disagree or a fact is missing, so you decide.",
+    "model_fault": "driver",
+    "signal_still": "green"
    },
-   "model_agreement": null,
+   "model_agreement": false,
    "document": {
     "kind": "both",
     "title": "Close car on the right"
    },
    "severity": 83,
    "severity_label": "High",
+   "low_light": true
+  },
+  {
+   "id": "C-GX050001_chunk_0003_segment_001",
+   "ride": "GX050001",
+   "source": "GX050001_chunk_0003_segment_001",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074756_GX050001_chunk_0003_segment_001_of_006.mp4",
+   "ride_offset_sec": 90,
+   "t_peak": 3.17,
+   "geometry": {
+    "peak_h": 0.307,
+    "side": "left",
+    "bbox": [
+     0.0,
+     0.396,
+     0.221,
+     0.704
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 4.77,
+    "min_gap_m": 2.42,
+    "approach": 2.304,
+    "t_peak": 3.17,
+    "label": "car"
+   },
+   "evidence_frames": [
+    2.2,
+    3.2,
+    4.0
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "car",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The cyclist is stopped on the sidewalk next to a bollard, with a black car parked in the adjacent lane separated by a curb; no interaction or conflict occurs.",
+    "model_fault": "none",
+    "signal_still": "red"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     null,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "unknown",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   },
+   "severity": 31,
+   "severity_label": "Low",
+   "low_light": true
+  },
+  {
+   "id": "C-GX050001_chunk_0004_segment_003",
+   "ride": "GX050001",
+   "source": "GX050001_chunk_0004_segment_003",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074822_GX050001_chunk_0004_segment_003_of_006.mp4",
+   "ride_offset_sec": 130,
+   "t_peak": 4.5,
+   "geometry": {
+    "peak_h": 0.319,
+    "side": "left",
+    "bbox": [
+     0.0,
+     0.674,
+     0.37,
+     0.993
+    ],
+    "pan_suspect": false,
+    "entered_corridor": true,
+    "lateral_toward_rider": 2.68,
+    "min_gap_m": 0.0,
+    "approach": 0.597,
+    "t_peak": 4.5,
+    "label": "motorcycle"
+   },
+   "evidence_frames": [
+    3.5,
+    4.5,
+    4.9
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "motorcycle",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The black car is parked on the right side of the road, separated from the sidewalk by a curb and bollards, with no interaction or conflict between the car and the cyclist.",
+    "model_fault": "none",
+    "signal_still": "red"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   },
+   "severity": 26,
+   "severity_label": "Low",
+   "low_light": true
+  },
+  {
+   "id": "C-GX050001_chunk_0002_segment_003",
+   "ride": "GX050001",
+   "source": "GX050001_chunk_0002_segment_003",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074731_GX050001_chunk_0002_segment_003_of_006.mp4",
+   "ride_offset_sec": 70,
+   "t_peak": 3.37,
+   "geometry": {
+    "peak_h": 0.431,
+    "side": "left",
+    "bbox": [
+     0.0,
+     0.556,
+     0.402,
+     0.986
+    ],
+    "pan_suspect": false,
+    "entered_corridor": true,
+    "lateral_toward_rider": 0.27,
+    "min_gap_m": 0.25,
+    "approach": 0.146,
+    "t_peak": 3.37,
+    "label": "motorcycle"
+   },
+   "evidence_frames": [
+    2.4,
+    3.4,
+    4.2
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "motorcycle",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "evidence": "Cosmos sees the rider on the sidewalk. A black car cuts in front of the cyclist on the sidewalk, creating a dangerous near-miss situation.",
+    "model_fault": "driver",
+    "signal_still": "red"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   },
+   "severity": 25,
+   "severity_label": "Low",
+   "low_light": true
+  },
+  {
+   "id": "C-GX050001_chunk_0011_segment_001",
+   "ride": "GX050001",
+   "source": "GX050001_chunk_0011_segment_001",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_075119_GX050001_chunk_0011_segment_001_of_006.mp4",
+   "ride_offset_sec": 330,
+   "t_peak": 0.93,
+   "geometry": {
+    "peak_h": 0.269,
+    "side": "left",
+    "bbox": [
+     0.225,
+     0.297,
+     0.431,
+     0.566
+    ],
+    "pan_suspect": false,
+    "entered_corridor": true,
+    "lateral_toward_rider": 1.69,
+    "min_gap_m": 0.0,
+    "approach": 0.056,
+    "t_peak": 0.93,
+    "label": "motorcycle"
+   },
+   "evidence_frames": [
+    0.0,
+    0.9,
+    1.7
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "vehicle": {
+     "type": "motorcycle",
+     "colour": "cyclist to confirm",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The video shows a cyclist riding on a sidewalk with no vehicles present, and the scene is clear of any conflict or interaction with other road users.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "unknown"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   },
+   "severity": 14,
+   "severity_label": "Low",
+   "low_light": true
+  },
+  {
+   "id": "C-GX050001_chunk_0003_segment_003",
+   "ride": "GX050001",
+   "source": "GX050001_chunk_0003_segment_003",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074756_GX050001_chunk_0003_segment_003_of_006.mp4",
+   "ride_offset_sec": 100,
+   "t_peak": 4.03,
+   "geometry": {
+    "peak_h": 0.236,
+    "side": "right",
+    "bbox": [
+     0.901,
+     0.117,
+     0.999,
+     0.353
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 4.2,
+    "min_gap_m": 4.37,
+    "approach": 0.087,
+    "t_peak": 4.03,
+    "label": "car"
+   },
+   "evidence_frames": [
+    3.0,
+    4.0,
+    4.8
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "sidewalk",
+   "fault": "rider",
+   "fault_rule": 4,
+   "facts": {
+    "signal_for_rider": "none_visible",
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "vehicle": {
+     "type": "car",
+     "colour": "cyclist to confirm",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "evidence": "Cosmos sees the rider on the sidewalk. The black car is parked on the street with a curb and bollards separating it from the sidewalk where the cyclist is standing, indicating no conflict or near-miss occurred.",
+    "model_fault": "none",
+    "signal_still": "none_visible"
+   },
+   "model_agreement": false,
+   "document": {
+    "kind": "rider_lesson",
+    "title": "Riding on the sidewalk"
+   },
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "red",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   },
+   "severity": 13,
+   "severity_label": "Low",
    "low_light": true
   }
  ]

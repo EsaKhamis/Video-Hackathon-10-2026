@@ -1,0 +1,3374 @@
+{
+ "stage": "C",
+ "model": "nvidia/cosmos3-nano-reasoner",
+ "hinted": false,
+ "count": 102,
+ "errors": 0,
+ "rows": [
+  {
+   "id": "GOPR0130_chunk_0005_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072600_GOPR0130_chunk_0005_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "truck",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white truck cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 7.9
+  },
+  {
+   "id": "GOPR0130_chunk_0005_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072600_GOPR0130_chunk_0005_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "red",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "green",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A red car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 8.1
+  },
+  {
+   "id": "GOPR0130_chunk_0005_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072600_GOPR0130_chunk_0005_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black car is stopped on the left side of the road, and the rider is in the traffic lane, maintaining a safe distance with no interaction."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 7.2
+  },
+  {
+   "id": "GOPR0130_chunk_0006_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072625_GOPR0130_chunk_0006_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "none",
+     "side": "none"
+    },
+    "closest_distance": "unknown",
+    "peak_time_sec": 0.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The rider is seen entering the intersection on a red light, which is a traffic violation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 7.2
+  },
+  {
+   "id": "GOPR0130_chunk_0006_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072625_GOPR0130_chunk_0006_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "bus",
+     "colour": "blue",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The rider proceeds through a red light, violating traffic rules, while a bus is visible on the left side of the road."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 7.2
+  },
+  {
+   "id": "GOPR0130_chunk_0007_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072651_GOPR0130_chunk_0007_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "green",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The white car is parked on the right side of the road and does not interfere with the cyclist's path."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 5.4
+  },
+  {
+   "id": "GOPR0130_chunk_0013_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072922_GOPR0130_chunk_0013_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "dark blue",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "green",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A dark blue car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 6.5
+  },
+  {
+   "id": "GOPR0130_chunk_0013_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072922_GOPR0130_chunk_0013_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "close_pass",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 0.5,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car overtakes the cyclist from the right, cutting into the lane and passing extremely close, creating a dangerous near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.5
+  },
+  {
+   "id": "GOPR0130_chunk_0014_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "blue",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A blue car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 6.5
+  },
+  {
+   "id": "GOPR0130_chunk_0014_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, with the vehicle entering the rider's path without clear indication."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.2
+  },
+  {
+   "id": "GOPR0130_chunk_0014_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in front of the cyclist, forcing the rider to swerve sharply to avoid a collision, indicating the driver's failure to maintain safe distance and lane discipline."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 6.0
+  },
+  {
+   "id": "GOPR0130_chunk_0014_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 1.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black car remains stationary in the lane to the right of the cyclist, maintaining a safe distance without any interaction or risk of collision."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 5.1
+  },
+  {
+   "id": "GOPR0130_chunk_0016_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073038_GOPR0130_chunk_0016_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "yellow",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 0.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A yellow car cuts in front of the cyclist, causing a near-miss as the cyclist is forced to brake suddenly."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.6
+  },
+  {
+   "id": "GOPR0130_chunk_0016_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073038_GOPR0130_chunk_0016_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black car is driving in the adjacent lane, maintaining a safe distance from the cyclist in the bike lane, with no interaction or conflict observed."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.0
+  },
+  {
+   "id": "GOPR0130_chunk_0016_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073038_GOPR0130_chunk_0016_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "bike_lane",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The white car is parked on the right side of the road, separated from the bike lane by a curb and posts, with no interaction or risk of collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 6.1
+  },
+  {
+   "id": "GOPR0130_chunk_0017_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073104_GOPR0130_chunk_0017_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 0.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 4.9
+  },
+  {
+   "id": "GOPR0130_chunk_0017_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073104_GOPR0130_chunk_0017_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 0.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A silver car cuts in front of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.6
+  },
+  {
+   "id": "GOPR0130_chunk_0017_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073104_GOPR0130_chunk_0017_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 1.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black truck is moving parallel to the cyclist in the bike lane, maintaining a safe distance without any conflict or interaction."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 6.1
+  },
+  {
+   "id": "GOPR0130_chunk_0017_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073104_GOPR0130_chunk_0017_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black car cuts in front of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.0
+  },
+  {
+   "id": "GOPR0130_chunk_0018_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073129_GOPR0130_chunk_0018_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black car is driving in the adjacent lane, maintaining a safe distance from the cyclist in the bike lane without any interaction or conflict."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.2
+  },
+  {
+   "id": "GOPR0130_chunk_0018_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073129_GOPR0130_chunk_0018_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "blocked_bike_lane",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "shared",
+    "evidence": "A black car is parked in the bike lane, forcing the cyclist to ride very close to it, creating a near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 4.9
+  },
+  {
+   "id": "GOPR0130_chunk_0019_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073154_GOPR0130_chunk_0019_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black car is parked on the right side of the road, and there is no interaction or conflict between the car and the cyclists."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 4.3
+  },
+  {
+   "id": "GOPR0130_chunk_0019_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073154_GOPR0130_chunk_0019_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A silver car cuts in ahead of the cyclist, forcing the cyclist to swerve sharply to avoid a collision, with the closest distance being under 1 meter."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.0
+  },
+  {
+   "id": "GOPR0130_chunk_0020_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073220_GOPR0130_chunk_0020_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a cyclist walking on a sidewalk with a black UPS truck parked on the street to the right, with no interaction or conflict between them."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 4.8
+  },
+  {
+   "id": "GOPR0130_chunk_0021_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073245_GOPR0130_chunk_0021_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a UPS truck parked on the street with no interaction or movement that would indicate a near-miss or conflict with the cyclist."
+   },
+   "signal_still": "unknown",
+   "raw": null,
+   "sec": 22.6,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     null,
+     false,
+     null,
+     null,
+     null
+    ],
+    "signal_still": [
+     "unknown",
+     "unknown",
+     "unknown",
+     "none_visible",
+     "unknown"
+    ]
+   }
+  },
+  {
+   "id": "GOPR0130_chunk_0021_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073245_GOPR0130_chunk_0021_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a UPS truck parked on the side of the road with no interaction or movement that would indicate a near-miss or conflict with the cyclist."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.5
+  },
+  {
+   "id": "GOPR0130_chunk_0022_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073310_GOPR0130_chunk_0022_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A silver car cuts in front of the cyclist, forcing the cyclist to brake suddenly to avoid a collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 6.3
+  },
+  {
+   "id": "GOPR0130_chunk_0023_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073335_GOPR0130_chunk_0023_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.1,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a busy urban intersection with multiple vehicles and pedestrians, but no specific near-miss or conflict event is evident. The camera captures a general view of traffic and surroundings without clear evidence of a specific incident."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.3
+  },
+  {
+   "id": "GOPR0130_chunk_0023_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073335_GOPR0130_chunk_0023_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white car cuts in ahead of the cyclist, moving into the same lane and passing very close, creating a near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.0
+  },
+  {
+   "id": "GOPR0130_chunk_0023_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073335_GOPR0130_chunk_0023_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.5,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a black car overtaking the cyclist on the left side without any close proximity or conflict."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GOPR0130_chunk_0023_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073335_GOPR0130_chunk_0023_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A silver car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GOPR0130_chunk_0023_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073335_GOPR0130_chunk_0023_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The white truck is parked on the right side of the bike lane, and the cyclist passes very close to it without any interaction or incident."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.5
+  },
+  {
+   "id": "GOPR0130_chunk_0024_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073401_GOPR0130_chunk_0024_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The white truck is parked on the left side of the road and does not enter the rider's path or cause any conflict."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.7
+  },
+  {
+   "id": "GOPR0130_chunk_0024_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073401_GOPR0130_chunk_0024_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "bus",
+     "colour": "blue",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The bus is stopped at a red light in the adjacent lane, and the rider continues straight into the intersection without stopping, violating right-of-way rules."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.4
+  },
+  {
+   "id": "GOPR0130_chunk_0025_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073426_GOPR0130_chunk_0025_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a cyclist riding in a traffic lane with vehicles around, but no specific interaction or incident occurs that would indicate a near-miss or traffic violation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 6.7
+  },
+  {
+   "id": "GOPR0130_chunk_0026_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073451_GOPR0130_chunk_0026_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 25.5,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "signal_still": [
+     "green",
+     "green",
+     "green",
+     "green",
+     "red"
+    ]
+   }
+  },
+  {
+   "id": "GOPR0130_chunk_0026_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073451_GOPR0130_chunk_0026_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 0.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the cyclist to swerve sharply to avoid a collision, indicating the driver's failure to yield."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 23.1,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "signal_still": [
+     "none_visible",
+     "green",
+     "none_visible",
+     "green",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GOPR0130_chunk_0026_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073451_GOPR0130_chunk_0026_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black car is in the adjacent lane and does not interact with the cyclist's path."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.6
+  },
+  {
+   "id": "GOPR0130_chunk_0027_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073517_GOPR0130_chunk_0027_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.7,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The black car is parked on the right side of the road and does not interact with the cyclists or impede their path."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 4.7
+  },
+  {
+   "id": "GOPR0130_chunk_0028_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073542_GOPR0130_chunk_0028_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 0.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car on the right side of the road cuts in ahead of the cyclist, forcing the cyclist to swerve sharply to avoid a collision, indicating the driver's failure to yield."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.2
+  },
+  {
+   "id": "GOPR0130_chunk_0029_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073607_GOPR0130_chunk_0029_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "crossing_path",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "shared",
+    "evidence": "A silver car overtakes the cyclist from the left while the rider is crossing the intersection on a red light, resulting in a close pass with no physical contact but a dangerous situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 6.8
+  },
+  {
+   "id": "GX010001_chunk_0002_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073737_GX010001_chunk_0002_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The video shows a person holding a camera in the foreground, with a USPS truck parked on the right side of the street. The scene is static, and there is no interaction or movement that would indicate a near-miss or traffic incident."
+   },
+   "signal_still": "unknown",
+   "raw": null,
+   "sec": 6.1
+  },
+  {
+   "id": "GX010001_chunk_0003_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073802_GX010001_chunk_0003_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white car cuts into the bike lane from the right, forcing the cyclist to swerve sharply to avoid a collision, with the vehicle entering the rider's path without clear indication."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.0
+  },
+  {
+   "id": "GX010001_chunk_0003_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073802_GX010001_chunk_0003_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "none",
+     "side": "none"
+    },
+    "closest_distance": "unknown",
+    "peak_time_sec": 0,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a cyclist riding on a city street with no vehicles or obstacles in the immediate path, and no interaction with other road users."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GX010001_chunk_0004_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073828_GX010001_chunk_0004_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black car is driving in the adjacent lane, maintaining a safe distance from the cyclist, with no interaction or conflict observed."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 23.9,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX010001_chunk_0006_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073918_GX010001_chunk_0006_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "close_pass",
+    "vehicle": {
+     "type": "suv",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.5,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": true,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "rider",
+    "evidence": "The rider moves into the right lane to pass a black SUV, but the SUV is already stopped in the lane, requiring the rider to maneuver around it carefully."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GX010001_chunk_0007_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073944_GX010001_chunk_0007_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 4.8
+  },
+  {
+   "id": "GX010001_chunk_0007_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_073944_GX010001_chunk_0007_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The white truck is parked on the left side of the road, and the cyclist continues straight in the adjacent lane without any interaction or risk of collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.5
+  },
+  {
+   "id": "GX010001_chunk_0009_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074034_GX010001_chunk_0009_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black SUV cuts in front of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 7.4
+  },
+  {
+   "id": "GX010001_chunk_0011_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074125_GX010001_chunk_0011_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "yellow",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A yellow car cuts in ahead of the cyclist, forcing the cyclist to swerve sharply to avoid a collision, with the vehicle entering the rider's path without clear indication."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 6.6
+  },
+  {
+   "id": "GX010001_chunk_0011_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074125_GX010001_chunk_0011_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "crossing_path",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car overtakes the cyclist from the left, cutting across the lane and coming extremely close, creating a dangerous near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GX010001_chunk_0012_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074151_GX010001_chunk_0012_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "close_pass",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.7,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black SUV overtakes the cyclist from the left, cutting in front of the bike and passing at a very close distance, creating a near-miss situation."
+   },
+   "signal_still": "unknown",
+   "raw": null,
+   "sec": 5.6
+  },
+  {
+   "id": "GX010001_chunk_0012_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074151_GX010001_chunk_0012_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "yes",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The white car is in the adjacent traffic lane separated by a concrete barrier, and there is no interaction or risk of collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.1
+  },
+  {
+   "id": "GX010001_chunk_0013_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074216_GX010001_chunk_0013_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "The black car cuts into the bike lane from the right, forcing the cyclist to swerve sharply to avoid a collision, indicating the driver's failure to yield."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 6.4
+  },
+  {
+   "id": "GX010001_chunk_0014_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074241_GX010001_chunk_0014_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white car cuts in ahead of the cyclist, reducing the distance to under 1 meter and creating a near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 6.2
+  },
+  {
+   "id": "GX010001_chunk_0015_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074307_GX010001_chunk_0015_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "door_zone",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "shared",
+    "evidence": "The black UPS truck is parked in the bike lane, and the rider passes very close to it, creating a near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GX010001_chunk_0015_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074307_GX010001_chunk_0015_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "taxi",
+     "colour": "yellow",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.7,
+    "rider_position": "crosswalk",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A yellow taxi cuts in front of the cyclist, who is stopped at a crosswalk, and passes extremely close, creating a dangerous near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.5
+  },
+  {
+   "id": "GX010001_chunk_0016_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074332_GX010001_chunk_0016_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "pulling_out",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "The black car pulls out from a parking spot into the bike lane, cutting directly into the cyclist's path without clear indication, forcing the cyclist to maneuver closely to avoid collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 4.9
+  },
+  {
+   "id": "GX010001_chunk_0018_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The silver car is parked on the left side of the road, separated from the sidewalk by a curb and metal scaffolding, with no interaction or conflict between the car and the cyclist."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 25.5,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     null,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX010001_chunk_0018_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The video shows a cyclist stopped on a sidewalk near a building entrance, with no vehicles or immediate interaction occurring that would constitute a near-miss or traffic event."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 25.4,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     null,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX010001_chunk_0018_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 4.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The cyclist is on the sidewalk, and the UPS truck is parked on the street, with a clear physical barrier between them, so no conflict occurs."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 28.1,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX010001_chunk_0018_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "none",
+     "side": "none"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The cyclist is riding on the sidewalk, which is not a designated bike lane, and is passing by pedestrians and a building entrance without any vehicles or traffic signals involved."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 27.4,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     true,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX010001_chunk_0018_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074423_GX010001_chunk_0018_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The cyclist is riding on the sidewalk, and a black truck is parked on the street with a physical barrier between them, so no conflict occurs."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 27.3,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "unknown"
+    ]
+   }
+  },
+  {
+   "id": "GX010001_chunk_0019_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074448_GX010001_chunk_0019_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "truck",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black truck is parked on the left side of the road, separated from the sidewalk by a curb and metal posts, with no interaction or conflict between the truck and the cyclist."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 27.4,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX010001_chunk_0019_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074448_GX010001_chunk_0019_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "yellow",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A yellow car cuts in ahead of the cyclist, moving into the bike lane without clear indication, forcing the cyclist to react quickly to avoid a collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 6.1
+  },
+  {
+   "id": "GX010001_chunk_0019_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074448_GX010001_chunk_0019_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "The black SUV cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision, indicating the driver's failure to maintain a safe distance and proper lane discipline."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 6.2
+  },
+  {
+   "id": "GX010001_chunk_0019_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074448_GX010001_chunk_0019_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "taxi",
+     "colour": "yellow",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "The yellow taxi cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision, indicating the driver's failure to yield."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.9
+  },
+  {
+   "id": "GX010001_chunk_0020_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074513_GX010001_chunk_0020_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "truck",
+     "colour": "green",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "The green truck cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 4.9
+  },
+  {
+   "id": "GX010001_chunk_0020_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074513_GX010001_chunk_0020_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "crossing_path",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.7,
+    "rider_position": "crosswalk",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white car overtakes the cyclist while the cyclist is in the crosswalk, cutting across the path without yielding, creating a dangerous situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 7.2
+  },
+  {
+   "id": "GX010001_chunk_0020_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074513_GX010001_chunk_0020_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "overtaking",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white SUV overtakes the cyclist from the left, cutting in front of the bike and passing at a very close distance, creating a near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 7.8
+  },
+  {
+   "id": "GX010001_chunk_0021_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074538_GX010001_chunk_0021_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "close_pass",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white car overtakes the cyclist from the left, passing at a very close distance, requiring the cyclist to move slightly to the right to avoid a collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.7
+  },
+  {
+   "id": "GX010001_chunk_0021_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074538_GX010001_chunk_0021_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A silver car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 6.7
+  },
+  {
+   "id": "GX010001_chunk_0021_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074538_GX010001_chunk_0021_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "silver",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A silver car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GX010001_chunk_0022_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074604_GX010001_chunk_0022_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.7,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, reducing the distance to under 1 meter and creating a near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.9
+  },
+  {
+   "id": "GX050001_chunk_0001_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074706_GX050001_chunk_0001_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "red",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A red car cuts into the bike lane from the left, forcing the cyclist to swerve sharply to avoid a collision, with no physical barrier separating the two."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 5.0
+  },
+  {
+   "id": "GX050001_chunk_0001_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074706_GX050001_chunk_0001_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "yellow",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.1,
+    "rider_position": "bike_lane",
+    "separator": "yes",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The yellow car is stopped on the right side of the road, and the rider is moving in the bike lane with a physical barrier between them, so no conflict occurs."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.7
+  },
+  {
+   "id": "GX050001_chunk_0002_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074731_GX050001_chunk_0002_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in front of the cyclist on the sidewalk, creating a dangerous near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 23.5,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0002_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074731_GX050001_chunk_0002_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "none",
+     "side": "none"
+    },
+    "closest_distance": "unknown",
+    "peak_time_sec": 0.1,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a cyclist walking on a sidewalk near a building entrance, with no vehicles or immediate interaction occurring."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.4
+  },
+  {
+   "id": "GX050001_chunk_0003_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074756_GX050001_chunk_0003_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.0,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The cyclist is stopped on the sidewalk next to a bollard, with a black car parked in the adjacent lane separated by a curb; no interaction or conflict occurs."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 27.4,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     null,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "unknown",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0003_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074756_GX050001_chunk_0003_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black car is parked on the street with a curb and bollards separating it from the sidewalk where the cyclist is standing, indicating no conflict or near-miss occurred."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 24.7,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "none_visible",
+     "red",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0004_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074822_GX050001_chunk_0004_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.1,
+    "rider_position": "sidewalk",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black car is parked on the right side of the road, separated from the sidewalk by a curb and bollards, with no interaction or conflict between the car and the cyclist."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 28.7,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk"
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0005_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_074847_GX050001_chunk_0005_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A white car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, with the closest point of approach being under 1 meter."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.5
+  },
+  {
+   "id": "GX050001_chunk_0011_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075119_GX050001_chunk_0011_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "none",
+     "colour": "none",
+     "side": "none"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "sidewalk",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The video shows a cyclist riding on a sidewalk with no vehicles present, and the scene is clear of any conflict or interaction with other road users."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 29.0,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "rider_position": [
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "sidewalk",
+     "unknown"
+    ],
+    "signal_still": [
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible",
+     "none_visible"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0013_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075209_GX050001_chunk_0013_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "blocked_bike_lane",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "none"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.7,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": true,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The cyclist is riding on a bike lane that is blocked by temporary bollards, forcing them to navigate around obstacles while approaching a red light, which constitutes a blocked bike lane scenario."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 25.4,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     null,
+     null,
+     null,
+     false,
+     null
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0013_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075209_GX050001_chunk_0013_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 6.1
+  },
+  {
+   "id": "GX050001_chunk_0014_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075235_GX050001_chunk_0014_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "suv",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.1,
+    "rider_position": "crosswalk",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black SUV cuts in front of the cyclist, who is stopped at a crosswalk, and passes very close to the rider without yielding, creating a dangerous near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.4
+  },
+  {
+   "id": "GX050001_chunk_0014_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075235_GX050001_chunk_0014_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "turning_across",
+    "vehicle": {
+     "type": "car",
+     "colour": "blue",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "turning_across",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A blue car turns across the intersection, cutting directly in front of the cyclist's path, creating a near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.8
+  },
+  {
+   "id": "GX050001_chunk_0014_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075235_GX050001_chunk_0014_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in front of the cyclist, forcing them to brake suddenly to avoid a collision."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 23.5,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "entered_path": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "signal_still": [
+     "red",
+     "red",
+     "red",
+     "red",
+     "red"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0015_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075300_GX050001_chunk_0015_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "turning_across",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black car overtakes the cyclist while turning across the path, coming very close to the rider."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.7
+  },
+  {
+   "id": "GX050001_chunk_0015_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075300_GX050001_chunk_0015_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "turning_across",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "unknown",
+    "separator": "no",
+    "vehicle_action": "turning_across",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "The white car turns across the intersection, entering the path of the cyclist and coming within a very close distance, indicating a near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.5
+  },
+  {
+   "id": "GX050001_chunk_0015_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075300_GX050001_chunk_0015_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "green",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 1.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": null,
+    "fault": "none",
+    "evidence": "The green car is parked in the adjacent lane, not entering the bike lane, and there is no interaction or conflict between the rider and the vehicle."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 6.9
+  },
+  {
+   "id": "GX050001_chunk_0016_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075325_GX050001_chunk_0016_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "white",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A white car cuts into the bike lane from the left, moving alongside the cyclist at a very close distance, creating a near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 7.2
+  },
+  {
+   "id": "GX050001_chunk_0016_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075325_GX050001_chunk_0016_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 1.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts into the bike lane from the right, moving alongside the cyclist and creating a dangerous situation before the cyclist swerves left to avoid it."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 8.4
+  },
+  {
+   "id": "GX050001_chunk_0016_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075325_GX050001_chunk_0016_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 4.1,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, moving into the bike lane and passing very close, creating a near-miss situation."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 4.7
+  },
+  {
+   "id": "GX050001_chunk_0017_segment_002",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075351_GX050001_chunk_0017_segment_002_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "bike_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts into the bike lane from the left, forcing the cyclist to swerve sharply to avoid a collision, with no physical barrier between them."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.6
+  },
+  {
+   "id": "GX050001_chunk_0017_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075351_GX050001_chunk_0017_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 0.1,
+    "rider_position": "bike_lane",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The black car is parked on the left side of the road, separated from the bike lane by a white line, with no interaction or movement that affects the cyclist."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 7.2
+  },
+  {
+   "id": "GX050001_chunk_0018_segment_004",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075416_GX050001_chunk_0018_segment_004_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision."
+   },
+   "signal_still": "none_visible",
+   "raw": null,
+   "sec": 5.4
+  },
+  {
+   "id": "GX050001_chunk_0018_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075416_GX050001_chunk_0018_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 2.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "unknown",
+    "rider_entered_on_red": null,
+    "fault": "driver",
+    "evidence": "A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to the right to avoid a collision, with the closest distance being under 1 meter."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.7
+  },
+  {
+   "id": "GX050001_chunk_0019_segment_001",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075441_GX050001_chunk_0019_segment_001_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "van",
+     "colour": "white",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 2.1,
+    "rider_position": "bike_lane",
+    "separator": "yes",
+    "vehicle_action": "parallel_in_own_lane",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none_visible",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The white van is driving in the adjacent lane, separated by a white line and bollards, with no interaction or conflict with the cyclist."
+   },
+   "signal_still": "green",
+   "raw": null,
+   "sec": 22.3,
+   "votes": {
+    "n": 5,
+    "near_miss": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "entered_path": [
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "signal_still": [
+     "green",
+     "green",
+     "green",
+     "green",
+     "green"
+    ]
+   }
+  },
+  {
+   "id": "GX050001_chunk_0020_segment_005",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075507_GX050001_chunk_0020_segment_005_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.1,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": false,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "none",
+    "rider_entered_on_red": false,
+    "fault": "none",
+    "evidence": "The cyclist is riding down a narrow street with parked cars on the right side, but there is no interaction or conflict with any vehicle."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.1
+  },
+  {
+   "id": "GX050001_chunk_0020_segment_006",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075507_GX050001_chunk_0020_segment_006_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": false,
+    "event": "none",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "over_2m",
+    "peak_time_sec": 3.6,
+    "rider_position": "traffic_lane",
+    "separator": "no",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": true,
+    "fault": "rider",
+    "evidence": "The rider proceeds straight through a red light while vehicles are stopped ahead, indicating a traffic violation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 4.6
+  },
+  {
+   "id": "GX050001_chunk_0021_segment_003",
+   "source": "s3://team-1-vss-chunks-segments/segments/20261008_075532_GX050001_chunk_0021_segment_003_of_006.mp4",
+   "hinted": false,
+   "facts": {
+    "near_miss": true,
+    "event": "cut_in",
+    "vehicle": {
+     "type": "car",
+     "colour": "black",
+     "side": "left"
+    },
+    "closest_distance": "under_1m",
+    "peak_time_sec": 0.1,
+    "rider_position": "crosswalk",
+    "separator": "no",
+    "vehicle_action": "overtaking",
+    "vehicle_entered_rider_path": true,
+    "rider_moved_into_vehicle_path": false,
+    "signal_for_rider": "red",
+    "rider_entered_on_red": false,
+    "fault": "driver",
+    "evidence": "A black car cuts in front of the cyclist at a crosswalk, coming from the left and moving into the rider's path, creating a near-miss situation."
+   },
+   "signal_still": "red",
+   "raw": null,
+   "sec": 5.4
+  }
+ ]
+}
