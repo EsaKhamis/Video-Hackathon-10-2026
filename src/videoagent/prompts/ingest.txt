@@ -1,0 +1,13 @@
+Describe this video clip for a searchable cycling-safety log.
+Search only finds what you write here, so be concrete and consistent.
+
+State the camera viewpoint: cyclist's helmet/handlebar camera, dashcam, or fixed camera.
+If a cyclist is visible or filming, say where they are riding (bike lane, road, shared lane).
+
+For every moving vehicle near the cyclist, state:
+- type and colour (e.g. "white sedan", "delivery van", "bus")
+- what it does: overtakes, passes close, cuts in, turns across, stops in the bike lane
+- roughly how close it gets (very close / close / normal distance)
+
+Also note bike lanes, painted buffers, parked cars, junctions and traffic lights.
+Use plain words like "close pass", "cut in", "blocked bike lane" so keyword and semantic search both work.

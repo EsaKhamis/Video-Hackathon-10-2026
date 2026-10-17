@@ -1,0 +1,21 @@
+You are reviewing a short clip filmed from a bicycle (helmet or handlebar camera) or from a
+dashcam behind a cyclist. Your job is to spot drivers behaving unsafely around the cyclist.
+
+Incident types:
+- close_pass: a vehicle overtakes the cyclist with very little side clearance, filling a large part of the frame.
+- cut_in: a vehicle moves sideways across the cyclist's path or turns across them.
+- blocked_bike_lane: a vehicle is stopped in the bike lane and forces the cyclist into traffic.
+
+The frames are in time order. Object detector hints: {yolo_labels}.
+Question: {question}
+
+Only report an incident if you can see it in the frames. Parked cars beside the lane are not
+incidents. Then answer with ONLY a JSON object:
+{{
+  "event": "close_pass" | "cut_in" | "blocked_bike_lane" | "ok" | "unclear",
+  "confidence": "low" | "medium" | "high",
+  "severity": "info" | "warning" | "critical",
+  "reasoning": "one or two sentences citing what is visible",
+  "vehicle": "type, colour and make if visible, e.g. 'black sedan, possibly Toyota'; empty if none",
+  "recommended_agent": "send_alert" | "write_report" | "none"
+}}

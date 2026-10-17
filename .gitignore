@@ -1,0 +1,25 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Footage, clips and runtime state
+data/footage/
+data/clips/
+data/events.jsonl
+data/index.json
+*.mp4
+*.mov
+
+# YOLO weights and runs
+*.pt
+runs/
+
+# Credentials and probe outputs
+config
+*.config
+.git-credentials
+probe/*.jpg
+probe/dash/
+probe/*.json
