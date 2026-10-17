@@ -1,11 +1,11 @@
 {
- "generated_from": "engine/build_incidents.py: stage_c.json (Cosmos facts, rules v6) + stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + stage_f.json (parked in bike lane, rule 9) + reviews.json (0 reviews, 0 verdicts changed, rule 0)",
+ "generated_from": "engine/build_incidents.py: stage_c.json (Cosmos facts, rules v6) + stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + stage_f.json (parked in bike lane, rule 9) + reviews.json (1 reviews, 0 verdicts changed, rule 0) + near_misses.json (9 checked, 2 added, not a fault verdict)",
  "evaluation": {
   "rules": "v6",
   "agree": 12,
-  "total": 18,
+  "total": 19,
   "wrong_driver": 0,
-  "reviewed": 0,
+  "reviewed": 1,
   "heroes_ok": 5,
   "heroes": 5
  },
@@ -504,20 +504,21 @@
     "vehicle_entered_rider_path": true,
     "rider_moved_into_vehicle_path": false,
     "vehicle": {
-     "type": "car",
-     "colour": "cyclist to confirm",
-     "side": "left"
+     "type": "taxi",
+     "colour": "yellow",
+     "side": "right"
     },
     "closest_distance": "under_1m",
-    "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 93% of frame height and came within about 0.24 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
+    "evidence": "Checked by eye (N0245): A yellow taxi is inches from the right handlebar. The eye check places the vehicle on the right; the largest measured box is on the left. Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 93% of frame height and came within about 0.24 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
     "still_signal": "red",
-    "still_t": 0.3
+    "still_t": 0.3,
+    "yolo_side": "left"
    },
    "model_agreement": false,
    "document": {
     "kind": "both",
-    "title": "Close car on the left",
+    "title": "Yellow taxi on the right",
     "summary": "The cyclist was travelling in a traffic lane when a car overtook on the left side. The car entered the cyclist's path, coming within about half a metre, as estimated from the video. The traffic signal facing the cyclist was red at the time. No physical separator was present.",
     "what_happened": "A car overtook on the left and cut into your lane, coming very close to you.",
     "why_risky": "Being that close leaves little room to react, especially when the light is red and there is no barrier separating you from the vehicle.",
@@ -558,6 +559,13 @@
      "red",
      "red"
     ]
+   },
+   "checked": {
+    "id": "N0245",
+    "kind": "driver",
+    "label": "vehicle in the lane",
+    "note": "A yellow taxi is inches from the right handlebar.",
+    "liability": false
    },
    "severity": 95,
    "severity_label": "High"
@@ -614,7 +622,7 @@
      "side": "left"
     },
     "closest_distance": "under_1m",
-    "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, indicating the driver's failure to yield. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the left reached 97% of frame height and came within about 0.25 m of the rider's line.",
+    "evidence": "Checked by eye (N0228): A car passes close on the left while the rider is in the lane. Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, indicating the driver's failure to yield. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the left reached 97% of frame height and came within about 0.25 m of the rider's line.",
     "model_fault": "driver",
     "still_signal": "red",
     "still_t": 1.3
@@ -660,6 +668,13 @@
      "red",
      "red"
     ]
+   },
+   "checked": {
+    "id": "N0228",
+    "kind": "driver",
+    "label": "vehicle in the lane",
+    "note": "A car passes close on the left while the rider is in the lane.",
+    "liability": false
    },
    "severity": 89,
    "severity_label": "High"
@@ -2113,12 +2128,12 @@
     "vehicle_entered_rider_path": true,
     "rider_moved_into_vehicle_path": false,
     "vehicle": {
-     "type": "car",
-     "colour": "cyclist to confirm",
+     "type": "taxi",
+     "colour": "yellow",
      "side": "right"
     },
     "closest_distance": "under_1m",
-    "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the right reached 56% of frame height and came within about 0.0 m of the rider's line.",
+    "evidence": "Checked by eye (N0300): A yellow taxi swings across the lead cyclist. The camera rider is the witness. Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the right reached 56% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "driver",
     "still_signal": "green",
     "still_t": 1.7
@@ -2164,6 +2179,13 @@
      "red",
      "green"
     ]
+   },
+   "checked": {
+    "id": "N0300",
+    "kind": "driver",
+    "label": "vehicle in the lane",
+    "note": "A yellow taxi swings across the lead cyclist. The camera rider is the witness.",
+    "liability": false
    },
    "severity": 55,
    "severity_label": "Med"
@@ -2468,12 +2490,12 @@
     "vehicle_entered_rider_path": true,
     "rider_moved_into_vehicle_path": false,
     "vehicle": {
-     "type": "car",
-     "colour": "cyclist to confirm",
+     "type": "suv",
+     "colour": "black",
      "side": "right"
     },
     "closest_distance": "under_1m",
-    "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the right reached 56% of frame height and came within about 0.95 m of the rider's line.",
+    "evidence": "Checked by eye (N0301): A black SUV passes close on the right. Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the right reached 56% of frame height and came within about 0.95 m of the rider's line.",
     "model_fault": "driver",
     "still_signal": "none_visible",
     "still_t": 3.6
@@ -2519,6 +2541,13 @@
      "green",
      "none_visible"
     ]
+   },
+   "checked": {
+    "id": "N0301",
+    "kind": "driver",
+    "label": "vehicle in the lane",
+    "note": "A black SUV passes close on the right.",
+    "liability": false
    },
    "severity": 50,
    "severity_label": "Med"
@@ -5243,6 +5272,76 @@
    "severity_label": "Med"
   },
   {
+   "id": "N0074",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0012_segment_002",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074151_GX010001_chunk_0012_segment_002_of_006.mp4",
+   "ride_offset_sec": 365,
+   "t_peak": 0.57,
+   "geometry": {
+    "peak_h": 0.917,
+    "side": "right",
+    "bbox": [
+     0.498,
+     0.07,
+     0.999,
+     0.987
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 0.0,
+    "min_gap_m": 0.0,
+    "approach": 0.438,
+    "t_peak": 0.57,
+    "label": "car"
+   },
+   "evidence_frames": [
+    0.0,
+    0.6,
+    1.4
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "vehicle_in_lane",
+   "fault": "unclear",
+   "fault_rule": 8,
+   "facts": {
+    "signal_for_rider": "unknown",
+    "rider_position": "unknown",
+    "separator": "unknown",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "vehicle": {
+     "type": "suv",
+     "colour": "black",
+     "side": "right"
+    },
+    "closest_distance": "unknown",
+    "evidence": "Checked by eye (N0074): A black SUV fills the right side of a narrow lane.",
+    "model_fault": null
+   },
+   "model_agreement": null,
+   "document": {
+    "kind": "both",
+    "title": "Black SUV on the right"
+   },
+   "checked": {
+    "id": "N0074",
+    "kind": "driver",
+    "label": "vehicle in the lane",
+    "note": "A black SUV fills the right side of a narrow lane.",
+    "liability": false
+   },
+   "severity": 67,
+   "severity_label": "Med"
+  },
+  {
    "id": "C-GX010001_chunk_0003_segment_004",
    "ride": "GX010001",
    "source": "GX010001_chunk_0003_segment_004",
@@ -6125,23 +6224,23 @@
     "fault_override": null,
     "recorded_at": null
    },
-   "event_type": "cut_in",
+   "event_type": "people_in_crosswalk",
    "fault": "unclear",
    "fault_rule": 8,
    "facts": {
     "signal_for_rider": "red",
     "rider_position": "crosswalk",
     "separator": "no",
-    "vehicle_action": "overtaking",
+    "vehicle_action": "none",
     "vehicle_entered_rider_path": true,
     "rider_moved_into_vehicle_path": false,
     "vehicle": {
-     "type": "car",
-     "colour": "cyclist to confirm",
-     "side": "left"
+     "type": "person",
+     "colour": "",
+     "side": ""
     },
     "closest_distance": "under_1m",
-    "evidence": "Cosmos: A black SUV cuts in front of the cyclist while the cyclist is in the crosswalk, entering the rider's path without yielding. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 51% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
+    "evidence": "Checked by eye (N0056): Two people are still in the crosswalk as the rider comes up to them. There is more room than in the other three. Cosmos: A black SUV cuts in front of the cyclist while the cyclist is in the crosswalk, entering the rider's path without yielding. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 51% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
     "still_signal": "red",
     "still_t": 3.2
@@ -6149,7 +6248,7 @@
    "model_agreement": false,
    "document": {
     "kind": "both",
-    "title": "Close car on the left",
+    "title": "People in the crosswalk",
     "summary": "At a crosswalk the cyclist was travelling when a car approached from the left and overtook, entering the cyclist's path. The traffic signal facing the cyclist was red. The video shows the vehicle coming within about half a metre of the cyclist, an estimated gap of under one metre. No physical separator was present at the location.",
     "what_happened": "You were waiting at a crosswalk on a red signal when a car from the left overtook and moved into your lane, coming very close to you.",
     "why_risky": "The car entered your path with only a very small gap, leaving little room for reaction, and there was no barrier to separate you from the vehicle.",
@@ -6190,6 +6289,13 @@
      "red",
      "red"
     ]
+   },
+   "checked": {
+    "id": "N0056",
+    "kind": "person",
+    "label": "people in the crosswalk",
+    "note": "Two people are still in the crosswalk as the rider comes up to them. There is more room than in the other three.",
+    "liability": false
    },
    "severity": 51,
    "severity_label": "Med"
@@ -6948,23 +7054,23 @@
     "fault_override": null,
     "recorded_at": null
    },
-   "event_type": "crossing_path",
+   "event_type": "person_in_lane",
    "fault": "unclear",
    "fault_rule": 8,
    "facts": {
     "signal_for_rider": "none_visible",
     "rider_position": "traffic_lane",
     "separator": "no",
-    "vehicle_action": "overtaking",
+    "vehicle_action": "none",
     "vehicle_entered_rider_path": true,
     "rider_moved_into_vehicle_path": false,
     "vehicle": {
-     "type": "car",
-     "colour": "cyclist to confirm",
-     "side": "left"
+     "type": "person",
+     "colour": "",
+     "side": ""
     },
     "closest_distance": "under_1m",
-    "evidence": "Cosmos: A black car overtakes the cyclist from the left, and a pedestrian suddenly crosses the road in front of the cyclist, creating a near-miss situation. YOLO: the car on the left reached 61% of frame height and came within about 0.23 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
+    "evidence": "Checked by eye (N0072): A woman stands in the traffic lane between a black SUV and a taxi, looking at her phone, right in front of the camera. Cosmos: A black car overtakes the cyclist from the left, and a pedestrian suddenly crosses the road in front of the cyclist, creating a near-miss situation. YOLO: the car on the left reached 61% of frame height and came within about 0.23 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "shared",
     "still_signal": "none_visible",
     "still_t": 2.2
@@ -6972,7 +7078,7 @@
    "model_agreement": false,
    "document": {
     "kind": "both",
-    "title": "Close car on the left",
+    "title": "Person in the lane",
     "summary": "The cyclist was travelling in the traffic lane when a car approached from the left and began to overtake. The vehicle entered the cyclist's path, creating a gap of under about half a metre, as estimated from the video. No signals were visible from the car and there was no physical separator between the road users. The video shows the cyclist remained in their lane and did not move into the vehicle's path.",
     "what_happened": "You were riding in the traffic lane when a car from the left moved to overtake you, coming very close \u2013 less than half a metre away. The car entered your path while you stayed in your lane and did not change direction.",
     "why_risky": "A vehicle entering your path at such a short distance leaves very little time to react, increasing the chance of a collision, especially without any signals or a physical barrier to separate you.",
@@ -6982,6 +7088,13 @@
    "stage_c": {
     "rules": "v6",
     "hint": ""
+   },
+   "checked": {
+    "id": "N0072",
+    "kind": "person",
+    "label": "person in the lane",
+    "note": "A woman stands in the traffic lane between a black SUV and a taxi, looking at her phone, right in front of the camera.",
+    "liability": false
    },
    "severity": 47,
    "severity_label": "Med"
@@ -7482,33 +7595,31 @@
     "fault_override": null,
     "recorded_at": null
    },
-   "event_type": "cut_in",
-   "fault": "driver",
-   "fault_rule": 7,
+   "event_type": "people_in_crosswalk",
+   "fault": "unclear",
+   "fault_rule": 8,
    "facts": {
     "signal_for_rider": "unknown",
-    "rider_position": "traffic_lane",
+    "rider_position": "crosswalk",
     "separator": "no",
-    "vehicle_action": "overtaking",
+    "vehicle_action": "none",
     "vehicle_entered_rider_path": true,
     "rider_moved_into_vehicle_path": false,
     "vehicle": {
-     "type": "car",
-     "colour": "cyclist to confirm",
-     "side": "left"
+     "type": "person",
+     "colour": "",
+     "side": ""
     },
     "closest_distance": "under_1m",
-    "evidence": "Cosmos: A silver car cuts in front of the cyclist, forcing the cyclist to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the left reached 48% of frame height and came within about 0.0 m of the rider's line.",
+    "evidence": "Checked by eye (N0129): People walk across the crosswalk close on the rider's right. A delivery cyclist rides ahead. Cosmos: A silver car cuts in front of the cyclist, forcing the cyclist to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the left reached 48% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "driver",
     "still_signal": "red",
     "still_t": 0.9
    },
-   "model_agreement": true,
+   "model_agreement": false,
    "document": {
-    "kind": "authority_report",
-    "title": "Driver entered the rider's path",
-    "summary": "The cyclist was riding in the traffic lane when a car overtook from the left and entered the cyclist's path. The vehicle came within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. The cyclist did not move into the vehicle's path and did not swerve or turn.",
-    "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b"
+    "kind": "both",
+    "title": "People in the crosswalk"
    },
    "stage_c": {
     "rules": "v6",
@@ -7544,6 +7655,17 @@
      "red",
      "red"
     ]
+   },
+   "engine": {
+    "fault": "driver",
+    "rule": 7
+   },
+   "checked": {
+    "id": "N0129",
+    "kind": "person",
+    "label": "people in the crosswalk",
+    "note": "People walk across the crosswalk close on the rider's right. A delivery cyclist rides ahead.",
+    "liability": false
    },
    "severity": 30,
    "severity_label": "Low"
@@ -7650,6 +7772,76 @@
     ]
    },
    "severity": 23,
+   "severity_label": "Low"
+  },
+  {
+   "id": "N0124",
+   "ride": "GX010001",
+   "source": "GX010001_chunk_0020_segment_004",
+   "preview_source": "s3://team-1-vss-chunks-segments/segments/20261008_074513_GX010001_chunk_0020_segment_004_of_006.mp4",
+   "ride_offset_sec": 615,
+   "t_peak": 4.97,
+   "geometry": {
+    "peak_h": 0.231,
+    "side": "left",
+    "bbox": [
+     0.0,
+     0.008,
+     0.367,
+     0.239
+    ],
+    "pan_suspect": false,
+    "entered_corridor": false,
+    "lateral_toward_rider": 1.0,
+    "min_gap_m": 0.0,
+    "approach": 0.166,
+    "t_peak": 4.97,
+    "label": "bus"
+   },
+   "evidence_frames": [
+    4.0,
+    5.0,
+    4.9
+   ],
+   "review": {
+    "status": "pending",
+    "plate": "",
+    "street": "",
+    "fault_override": null,
+    "recorded_at": null
+   },
+   "event_type": "people_in_crosswalk",
+   "fault": "unclear",
+   "fault_rule": 8,
+   "facts": {
+    "signal_for_rider": "unknown",
+    "rider_position": "crosswalk",
+    "separator": "unknown",
+    "vehicle_action": "none",
+    "vehicle_entered_rider_path": null,
+    "rider_moved_into_vehicle_path": null,
+    "vehicle": {
+     "type": "person",
+     "colour": "",
+     "side": ""
+    },
+    "closest_distance": "unknown",
+    "evidence": "Checked by eye (N0124): A crowd walks through the crosswalk. A man in a black hoodie passes directly in front of the wheel.",
+    "model_fault": null
+   },
+   "model_agreement": null,
+   "document": {
+    "kind": "both",
+    "title": "People in the crosswalk"
+   },
+   "checked": {
+    "id": "N0124",
+    "kind": "person",
+    "label": "people in the crosswalk",
+    "note": "A crowd walks through the crosswalk. A man in a black hoodie passes directly in front of the wheel.",
+    "liability": false
+   },
+   "severity": 14,
    "severity_label": "Low"
   },
   {
@@ -8121,10 +8313,10 @@
     3.1
    ],
    "review": {
-    "status": "pending",
+    "status": "dismissed",
     "plate": "",
     "street": "",
-    "fault_override": null,
+    "fault_override": "unclear",
     "recorded_at": null
    },
    "event_type": "cut_in",
@@ -9674,5 +9866,9 @@
    "severity_label": "Low",
    "low_light": true
   }
- ]
+ ],
+ "near_misses": {
+  "checked": 9,
+  "added": 2
+ }
 }

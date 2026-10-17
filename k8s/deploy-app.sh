@@ -33,8 +33,10 @@ for f in "$APP_DIR"/*.py "$APP_DIR"/*.json "$APP_DIR"/*.html "$APP_DIR"/requirem
 done
 if [[ -f "$REPO_DIR/data/reviews.json" ]]; then cp "$REPO_DIR/data/reviews.json" "$STAGE/reviews.json"; fi
 
+# Server-side: client-side apply stores the whole ConfigMap in last-applied-configuration,
+# which caps at 256 KiB and rejects the art assets.
 kubectl -n "$NS" create configmap "${APP_NAME}-code" --from-file="$STAGE" \
-  --dry-run=client -o yaml | kubectl apply -f -
+  --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
 "$REPO_DIR/k8s/update-data.sh"
 
 # In-cluster backend: same API as $INGRESS_URL, without the round trip through the Ingress.
