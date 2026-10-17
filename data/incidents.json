@@ -1,11 +1,11 @@
 {
- "generated_from": "engine/build_incidents.py: stage_c.json (Cosmos facts, rules v6) + stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + stage_f.json (parked in bike lane, rule 9) + reviews.json (1 reviews, 0 verdicts changed, rule 0) + near_misses.json (9 checked, 2 added, not a fault verdict)",
+ "generated_from": "engine/build_incidents.py: stage_c.json (Cosmos facts, rules v6) + stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + stage_f.json (parked in bike lane, rule 9) + reviews.json (2 reviews, 0 verdicts changed, rule 0) + near_misses.json (9 checked, 2 added, not a fault verdict)",
  "evaluation": {
   "rules": "v6",
   "agree": 12,
   "total": 19,
   "wrong_driver": 0,
-  "reviewed": 1,
+  "reviewed": 2,
   "heroes_ok": 5,
   "heroes": 5
  },
@@ -66,10 +66,10 @@
     4.9
    ],
    "review": {
-    "status": "pending",
+    "status": "dismissed",
     "plate": "",
     "street": "",
-    "fault_override": null,
+    "fault_override": "unclear",
     "recorded_at": null
    },
    "event_type": "close_pass",
@@ -7815,15 +7815,15 @@
     "rider_moved_into_vehicle_path": null,
     "vehicle": {
      "type": "car",
-     "colour": "white",
+     "colour": "black",
      "side": "right"
     },
     "closest_distance": "unknown",
-    "evidence": "Cosmos: A black car is stopped in the bike lane, blocking the cyclist's path. (stopped in the bike lane in 5 of 6 checks over 2 segments, about 10 s of the ride.) Vehicle from 5 YOLO crops: white car.",
+    "evidence": "Cosmos: A black car is stopped in the bike lane, blocking the cyclist's path. (stopped in the bike lane in 5 of 6 checks over 2 segments, about 10 s of the ride.) Vehicle from 5 YOLO crops: black car.",
     "model_fault": "driver"
    },
    "vehicle_id": {
-    "colour": "white",
+    "colour": "black",
     "type": "car",
     "make": "unknown",
     "model": "unknown",
@@ -7840,7 +7840,7 @@
    "model_agreement": true,
    "document": {
     "kind": "authority_report",
-    "title": "White car parked in the bike lane"
+    "title": "Black car parked in the bike lane"
    },
    "severity": 75,
    "low_light": true,
