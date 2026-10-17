@@ -11,9 +11,12 @@ adjacent-lane passes and still caught H1 and H4. Fault comes from the rules in b
 pair these facts with the Stage B geometry; Cosmos's own `fault` is stored, never used.
 Writes data/stage_c.json. Stdlib + ffmpeg; runs on the VM.
 
-  python3 engine/confirm.py --labels probe/labels.csv     # labelled clips, prints a check table
-  python3 engine/confirm.py                               # every Stage B flag + labelled clips
-  python3 engine/confirm.py --ids GOPR0130_chunk_0026_segment_003 ...
+  python3 engine/confirm.py                               # every Stage B flag + labelled clips (~3 min)
+  python3 engine/confirm.py --only-labels                 # labelled clips, prints a check table
+  python3 engine/confirm.py GOPR0130_chunk_0026_segment_003 ...   # these segments, merged into stage_c.json
+  python3 probe/eval_labels.py                            # score the rules in engine/fault.py against the labels
+
+Rows keep the field names engine/fault.py and probe/eval_labels.py read: facts, still_signal, still_t, hint.
 """
 import argparse, base64, collections, csv, glob, json, os, re, subprocess, sys, tempfile, time, urllib.error, urllib.parse, urllib.request
 from concurrent.futures import ThreadPoolExecutor
@@ -129,7 +132,7 @@ def hint_for(row):
 
 
 def confirm(row, hinted=False, votes=1):
-    out = {'id': row['id'], 'source': row['source']}
+    out = {'id': row['id'], 'source': row['source'], 'still_t': None, 'hint': ''}
     t0 = time.time()
     with tempfile.TemporaryDirectory() as d:
         raw, small, still = (os.path.join(d, n) for n in ('raw.mp4', 'small.mp4', 'still.jpg'))
@@ -139,10 +142,12 @@ def confirm(row, hinted=False, votes=1):
                             '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '28', small], check=True)
             g = row.get('geometry')
             t_still = max(0.0, (g['t_peak'] if g else 2.5) - 1.0)
+            out['still_t'] = round(t_still, 1)
             subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(t_still), '-i', raw, '-frames:v', '1',
                             '-q:v', '3', still], check=True)
             video = base64.b64encode(open(small, 'rb').read()).decode()
             hint = hint_for(row) if hinted else ''
+            out['hint'] = hint.strip()
             texts = [ask([{'type': 'video_url', 'video_url': {'url': 'data:video/mp4;base64,' + video}},
                           {'type': 'text', 'text': INTRO + '\n' + hint + SCHEMA}]) for _ in range(votes)]
             img = base64.b64encode(open(still, 'rb').read()).decode()
@@ -153,14 +158,14 @@ def confirm(row, hinted=False, votes=1):
     parsed = [parse(t) for t in texts]
     facts = majority(parsed)
     words = [signal_word(t) for t in sigs]
-    res = {**out, 'hinted': bool(hint), 'facts': facts,
-           'signal_still': collections.Counter(words).most_common(1)[0][0],
+    res = {**out, 'facts': facts,
+           'still_signal': collections.Counter(words).most_common(1)[0][0],
            'raw': texts[0] if facts is None else None, 'sec': round(time.time() - t0, 1)}
     if votes > 1:
         res['votes'] = {'n': votes, 'near_miss': [p.get('near_miss') if p else None for p in parsed],
                         'entered_path': [p.get('vehicle_entered_rider_path') if p else None for p in parsed],
                         'rider_position': [p.get('rider_position') if p else None for p in parsed],
-                        'signal_still': words}
+                        'still_signal': words}
     return res
 
 
@@ -177,7 +182,7 @@ def check(res, labels):
               f"{str(f.get('event'))[:14]:14} {(str(v.get('colour')) + ' ' + str(v.get('type')) + '/' + str(v.get('side')))[:15]:15} "
               f"{str(f.get('closest_distance'))[:9]:9} {str(f.get('rider_position'))[:12]:12} {str(f.get('separator'))[:4]:4} "
               f"{str(f.get('vehicle_action'))[:20]:20} {str(f.get('vehicle_entered_rider_path'))[:5]:5} "
-              f"{str(f.get('rider_moved_into_vehicle_path'))[:5]:5} {str(f.get('signal_for_rider'))[:5]}/{r['signal_still'][:5]:7} "
+              f"{str(f.get('rider_moved_into_vehicle_path'))[:5]:5} {str(f.get('signal_for_rider'))[:5]}/{r['still_signal'][:5]:7} "
               f"{f.get('fault')}")
 
 
@@ -186,7 +191,7 @@ if __name__ == '__main__':
     ap.add_argument('--geometry', default=os.path.join(ROOT, 'data', 'geometry.json'))
     ap.add_argument('--labels', default=os.path.join(ROOT, 'probe', 'labels.csv'))
     ap.add_argument('--only-labels', action='store_true', help='only the labelled clips')
-    ap.add_argument('--ids', nargs='*')
+    ap.add_argument('keys', nargs='*', help='segment ids; merged into an existing --out')
     ap.add_argument('--out', default=os.path.join(ROOT, 'data', 'stage_c.json'))
     ap.add_argument('--workers', type=int, default=6)
     ap.add_argument('--votes', type=int, default=5, help='Cosmos calls per close-pass candidate (majority vote)')
@@ -196,8 +201,8 @@ if __name__ == '__main__':
     a = ap.parse_args()
     geo = {r['id']: r for r in json.load(open(a.geometry))['rows'] if 'err' not in r}
     labels = {r['segment']: r for r in csv.DictReader(open(a.labels))}
-    if a.ids:
-        want = set(a.ids)
+    if a.keys:
+        want, a.merge = set(a.keys), True
     elif a.only_labels:
         want = set(labels)
     else:
@@ -209,6 +214,12 @@ if __name__ == '__main__':
         # driver candidates (Stage B close-pass shape, not a camera pan) get a majority vote
         res = list(ex.map(lambda r: confirm(r, a.hint, a.votes if a.vote_all or (r.get('pass') and not
                                             (r.get('geometry') or {}).get('pan_suspect')) else 1), rows))
+        # one call says "sidewalk" or "red" too easily: re-ask those with a vote (fault.py rules 3 and 4)
+        again = {r['id'] for r in res if 'votes' not in r and ((r.get('facts') or {}).get('rider_position') == 'sidewalk'
+                                                                or r.get('still_signal') == 'red')}
+        if again and a.votes > 1:
+            redo = {r['id']: r for r in ex.map(lambda r: confirm(r, a.hint, a.votes), [geo[k] for k in sorted(again)])}
+            res = [redo.get(r['id'], r) for r in res]
     if a.merge and os.path.exists(a.out):
         new = {r['id']: r for r in res}
         res = [new.pop(r['id'], r) for r in json.load(open(a.out))['rows']] + list(new.values())
@@ -216,4 +227,4 @@ if __name__ == '__main__':
     json.dump({'stage': 'C', 'model': MODEL, 'hinted': a.hint, 'count': len(res), 'errors': len(errs), 'rows': res},
               open(a.out, 'w'), indent=1)
     print(f'{len(res) - len(errs)}/{len(res)} ok in {round(time.time() - t)} s -> {a.out}')
-    check([r for r in res if r['id'] in labels] if not a.ids else res, labels)
+    check([r for r in res if r['id'] in labels] if not a.keys else [r for r in res if r['id'] in want], labels)
