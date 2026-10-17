@@ -530,15 +530,21 @@ def summary_line(found: dict[str, int]) -> str:
     )
 
 
-def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True) -> bytes:
+def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True, show_brand: bool = True) -> bytes:
     left_tree = art("tree", "Yellow tree", "tree") if show_trees else ""
     right_tree = art("tree-green", "Green tree", "tree") if show_trees else ""
+    brand = '<p class="brand"><span>Cyclist Safety</span></p>' if show_brand else ""
+    mast = (
+        f'<div class="mast">{left_tree}{brand}{right_tree}</div>'
+        if (show_brand or show_trees)
+        else ""
+    )
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{esc(title)} · Witness</title>
+<title>{esc(title)}{" · Cyclist Safety" if title != "Cyclist Safety" else ""}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
@@ -712,6 +718,24 @@ def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True
     background: #5f6b73;
   }}
   .banner img {{ display: block; width: 100%; height: auto; object-fit: fill; }}
+  .banner.hero {{ position: relative; container-type: inline-size; }}
+  .banner.hero .hero-name {{
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 7%;
+    margin: 0;
+    text-align: center;
+    font-size: clamp(3.5rem, 10.5cqi, 5.2rem);
+    line-height: 1.2;
+    pointer-events: none;
+    overflow: visible;
+    white-space: nowrap;
+  }}
+  .banner.hero .hero-name span {{
+    line-height: 1.2;
+    padding-bottom: 0.22em;
+  }}
   .split {{
     display: grid;
     grid-template-columns: 120px 1fr;
@@ -814,7 +838,23 @@ def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True
     0%, 100% {{ transform: scale(1); }}
     50% {{ transform: scale(1.12); }}
   }}
-  .navrow {{ display: flex; justify-content: space-between; gap: 12px; margin: 12px 0 0; font: 13px/1.3 Sora, sans-serif; }}
+  .navrow {{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 12px;
+    margin: 16px 0 4px;
+  }}
+  .navrow a {{
+    flex: 1 1 0;
+    font: 600 18px/1.35 Sora, sans-serif;
+    text-decoration: none;
+    border: 3px solid var(--line);
+    border-radius: 14px;
+    background: #fffdf6;
+    padding: 14px 16px;
+  }}
+  .navrow a:last-child {{ text-align: right; }}
   .segbar {{ display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }}
   .segbar button {{
     font: 500 13px/1 Sora, sans-serif;
@@ -868,11 +908,7 @@ def page(title: str, body: str, extra_head: str = "", *, show_trees: bool = True
 </head>
 <body>
 <div class="shell">
-  <div class="mast">
-    {left_tree}
-    <p class="brand"><span>Witness</span></p>
-    {right_tree}
-  </div>
+  {mast}
   {body}
 </div>
 </body>
@@ -1012,18 +1048,18 @@ def ride_list(data: dict) -> bytes:
               </div>
             </a>"""
         )
-    body = f"""<div class="banner">{art("ground", "Flowers in the grass", "cover")}</div>
+    body = f"""<div class="banner hero">{art("meadow", "A field of flowers under a blue sky", "cover")}<p class="brand hero-name"><span>Cyclist Safety</span></p></div>
 <h1>Your rides</h1>
-<p id="page-audience">Helmet-cam moments worth a second look — reports you may send, and private lessons that stay with you.</p>
-<p class="meta">{esc(summary_line(total))} across these rides · {esc(data_source())}</p>
+<p id="page-audience">Here to keep you safer — we catch the close calls, help you ride better next time, and keep the report until you decide to send it.</p>
+<p class="meta">{esc(summary_line(total))} across these rides</p>
 <div class="toolbar">
   <a class="button" href="{u('/devices')}">Register device</a>
   <a class="button secondary" href="{u('/about')}">About / how it works</a>
 </div>
 <main class="rides">{''.join(cards)}</main>
-{art("meadow", "A field of flowers under a blue sky", "flower-strip")}
+{art("ground", "Flowers in the grass", "flower-strip")}
 <p class="foot">Camera ids label which physical stream filmed each ride. <a href="{u('/devices')}">Why so many ids?</a> · <a href="{u('/timeline')}">How the agent screened every segment</a></p>"""
-    return page("Your rides", body, show_trees=False)
+    return page("Cyclist Safety", body, show_trees=False, show_brand=False)
 
 
 def effective_fault(item: dict) -> str:
