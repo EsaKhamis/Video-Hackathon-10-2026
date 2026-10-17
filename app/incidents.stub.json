@@ -1,0 +1,254 @@
+{
+  "generated_from": "PLAN.md hero clips H1–H5. Stub only; the engine replaces this file.",
+  "rides": [
+    {
+      "id": "GOPR0130",
+      "title": "GOPR0130",
+      "conditions": "Daytime, heavy Manhattan traffic",
+      "duration_min": 15,
+      "segments": 180
+    },
+    {
+      "id": "GX010001",
+      "title": "GX010001",
+      "conditions": "Dusk, bike lanes and delivery trucks",
+      "duration_min": 12,
+      "segments": 142
+    },
+    {
+      "id": "GX050001",
+      "title": "GX050001",
+      "conditions": "Night, green bike lanes, low light",
+      "duration_min": 12,
+      "segments": 143
+    }
+  ],
+  "incidents": [
+    {
+      "id": "H1",
+      "ride": "GOPR0130",
+      "source": "GOPR0130_chunk_0026_segment_003",
+      "ride_offset_sec": 790,
+      "t_peak": 2.4,
+      "event_type": "close_pass",
+      "severity": 86,
+      "severity_label": "High",
+      "fault": "driver",
+      "fault_rule": 7,
+      "facts": {
+        "signal_for_rider": "none_visible",
+        "rider_position": "bike_lane",
+        "separator": "no",
+        "vehicle_action": "overtaking",
+        "vehicle_entered_rider_path": true,
+        "rider_moved_into_vehicle_path": false,
+        "vehicle": {"type": "suv", "colour": "black", "side": "right"},
+        "closest_distance": "under_1m",
+        "evidence": "A black SUV passes close on the right and pulls ahead of the rider.",
+        "model_fault": "driver"
+      },
+      "geometry": {
+        "peak_h": 0.48,
+        "side": "right",
+        "bbox": [0.62, 0.28, 0.98, 0.86],
+        "pan_suspect": false,
+        "entered_corridor": true,
+        "lateral_toward_rider": 0.18
+      },
+      "model_agreement": true,
+      "evidence_frames": [1.4, 2.4, 3.2],
+      "document": {
+        "kind": "authority_report",
+        "title": "Close pass by a black SUV"
+      },
+      "review": {
+        "status": "pending",
+        "plate": "",
+        "street": "",
+        "fault_override": null,
+        "recorded_at": null
+      }
+    },
+    {
+      "id": "H2",
+      "ride": "GX050001",
+      "source": "GX050001_chunk_0019_segment_001",
+      "ride_offset_sec": 570,
+      "t_peak": 1.8,
+      "event_type": "close_pass",
+      "severity": 55,
+      "severity_label": "Med",
+      "fault": "unclear",
+      "fault_rule": 8,
+      "facts": {
+        "signal_for_rider": "unknown",
+        "rider_position": "bike_lane",
+        "separator": "unknown",
+        "vehicle_action": "parallel_in_own_lane",
+        "vehicle_entered_rider_path": null,
+        "rider_moved_into_vehicle_path": false,
+        "vehicle": {"type": "van", "colour": "white", "side": "right"},
+        "closest_distance": "unknown",
+        "evidence": "A white van is close in the next lane at dusk. Boxes say very close; the model says a safe distance.",
+        "model_fault": "none"
+      },
+      "geometry": {
+        "peak_h": 0.52,
+        "side": "right",
+        "bbox": [0.58, 0.22, 0.99, 0.9],
+        "pan_suspect": false,
+        "entered_corridor": false,
+        "lateral_toward_rider": 0.04
+      },
+      "model_agreement": false,
+      "evidence_frames": [1.0, 1.8, 2.6],
+      "low_light": true,
+      "document": {
+        "kind": "both",
+        "title": "White van in the next lane"
+      },
+      "review": {
+        "status": "pending",
+        "plate": "",
+        "street": "",
+        "fault_override": null,
+        "recorded_at": null
+      }
+    },
+    {
+      "id": "H3",
+      "ride": "GOPR0130",
+      "source": "GOPR0130_chunk_0017_segment_005",
+      "ride_offset_sec": 530,
+      "t_peak": 3.1,
+      "event_type": "crossing_path",
+      "severity": 78,
+      "severity_label": "High",
+      "fault": "rider",
+      "fault_rule": 3,
+      "facts": {
+        "signal_for_rider": "red",
+        "rider_position": "crosswalk",
+        "separator": "no",
+        "vehicle_action": "crossing",
+        "vehicle_entered_rider_path": true,
+        "rider_moved_into_vehicle_path": true,
+        "vehicle": {"type": "taxi", "colour": "yellow", "side": "front"},
+        "closest_distance": "under_1m",
+        "evidence": "A yellow taxi crosses inches in front of the handlebars. The signal facing the rider is red.",
+        "model_fault": "rider"
+      },
+      "geometry": {
+        "peak_h": 0.41,
+        "side": "front",
+        "bbox": [0.22, 0.3, 0.8, 0.92],
+        "pan_suspect": false,
+        "entered_corridor": true,
+        "lateral_toward_rider": 0.22
+      },
+      "model_agreement": true,
+      "evidence_frames": [2.2, 3.1, 4.0],
+      "document": {
+        "kind": "rider_lesson",
+        "title": "Entered on red"
+      },
+      "review": {
+        "status": "pending",
+        "plate": "",
+        "street": "",
+        "fault_override": null,
+        "recorded_at": null
+      }
+    },
+    {
+      "id": "H4",
+      "ride": "GOPR0130",
+      "source": "GOPR0130_chunk_0026_segment_002",
+      "ride_offset_sec": 785,
+      "t_peak": 2.0,
+      "event_type": "turning_across",
+      "severity": 64,
+      "severity_label": "Med",
+      "fault": "driver",
+      "fault_rule": 7,
+      "facts": {
+        "signal_for_rider": "green",
+        "rider_position": "bike_lane",
+        "separator": "no",
+        "vehicle_action": "turning_across",
+        "vehicle_entered_rider_path": true,
+        "rider_moved_into_vehicle_path": false,
+        "vehicle": {"type": "taxi", "colour": "yellow", "side": "left"},
+        "closest_distance": "1_to_2m",
+        "evidence": "A taxi swings across the path of the cyclist riding ahead. The camera rider is the witness.",
+        "model_fault": "driver"
+      },
+      "geometry": {
+        "peak_h": 0.36,
+        "side": "left",
+        "bbox": [0.05, 0.34, 0.48, 0.88],
+        "pan_suspect": false,
+        "entered_corridor": true,
+        "lateral_toward_rider": 0.15
+      },
+      "model_agreement": true,
+      "evidence_frames": [1.2, 2.0, 3.0],
+      "document": {
+        "kind": "authority_report",
+        "title": "Taxi swings across the lead rider"
+      },
+      "review": {
+        "status": "pending",
+        "plate": "",
+        "street": "",
+        "fault_override": null,
+        "recorded_at": null
+      }
+    },
+    {
+      "id": "H5",
+      "ride": "GX010001",
+      "source": "GX010001_chunk_0018_segment_003",
+      "ride_offset_sec": 550,
+      "t_peak": 1.5,
+      "event_type": "none",
+      "severity": 36,
+      "severity_label": "Low",
+      "fault": "rider",
+      "fault_rule": 4,
+      "facts": {
+        "signal_for_rider": "none_visible",
+        "rider_position": "sidewalk",
+        "separator": "yes",
+        "vehicle_action": "none",
+        "vehicle_entered_rider_path": false,
+        "rider_moved_into_vehicle_path": false,
+        "vehicle": {"type": "none", "colour": "", "side": "none"},
+        "closest_distance": "over_2m",
+        "evidence": "The rider is on the sidewalk, passing pedestrians.",
+        "model_fault": "rider"
+      },
+      "geometry": {
+        "peak_h": 0.12,
+        "side": "none",
+        "bbox": null,
+        "pan_suspect": false,
+        "entered_corridor": false,
+        "lateral_toward_rider": 0.0
+      },
+      "model_agreement": true,
+      "evidence_frames": [1.5],
+      "document": {
+        "kind": "rider_lesson",
+        "title": "Riding on the sidewalk"
+      },
+      "review": {
+        "status": "pending",
+        "plate": "",
+        "street": "",
+        "fault_override": null,
+        "recorded_at": null
+      }
+    }
+  ]
+}
