@@ -6,6 +6,7 @@
       "title": "Midday Manhattan ride",
       "situation": "Busy daytime streets, following another cyclist through heavy traffic",
       "conditions": "Daytime, heavy Manhattan traffic",
+      "camera_id": "nyc_bike_gopro-1",
       "duration_min": 15,
       "segments": 180
     },
@@ -14,6 +15,7 @@
       "title": "Dusk delivery-truck ride",
       "situation": "Bike lanes at dusk with vans and trucks pulling in and out",
       "conditions": "Dusk, bike lanes and delivery trucks",
+      "camera_id": "nyc_bike_gopro-1",
       "duration_min": 12,
       "segments": 142
     },
@@ -22,6 +24,7 @@
       "title": "Night green-lane ride",
       "situation": "After dark on marked green bike lanes, harder to judge distance",
       "conditions": "Night, green bike lanes, low light",
+      "camera_id": "nyc_bike_gopro-1",
       "duration_min": 12,
       "segments": 143
     }

@@ -26,4 +26,5 @@ probe/*.json
 
 # Local review decisions while iterating on the stub
 app/reviews.json
+app/devices.json
 app/__pycache__/

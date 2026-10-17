@@ -20,9 +20,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 STUB = ROOT / "incidents.stub.json"
+SEGMENTS_FILE = ROOT / "segments.json"
 PORT = int(os.environ.get("PORT", "8090"))
 # In the pod the code is a read-only ConfigMap mount: reviews go to a writable path, seeded from app/reviews.json.
 REVIEWS = Path(os.environ.get("REVIEWS_PATH", str(ROOT / "reviews.json")))
+DEVICES = Path(os.environ.get("DEVICES_PATH", str(ROOT / "devices.json")))
 # Engine output lives in its own ConfigMap at /data (k8s/update-data.sh), re-read on every request.
 DATA_DIR = Path(os.environ.get("DATA_DIR", "/data"))
 if not DATA_DIR.is_dir():
@@ -30,6 +32,7 @@ if not DATA_DIR.is_dir():
 SEGMENT_KEY = re.compile(r"((?:GOPR|GX)\d+_chunk_\d+_segment_\d+)")
 # Public URL prefix when behind Ingress path /app (rewrite strips it before the app sees the path).
 BASE_PATH = os.environ.get("BASE_PATH", "").rstrip("/")
+VASTDB_TABLE = os.environ.get("VASTDB_INCIDENTS_TABLE", "witness-incidents")
 
 
 def u(path: str = "/") -> str:
@@ -226,23 +229,224 @@ def ride_summaries(rides, screen) -> dict:
             "partial": screen.get("partial")}
 
 
+def load_devices() -> dict:
+    if not DEVICES.exists():
+        return {"registered": []}
+    try:
+        data = json.loads(DEVICES.read_text())
+    except json.JSONDecodeError:
+        return {"registered": []}
+    if not isinstance(data.get("registered"), list):
+        data["registered"] = []
+    return data
+
+
+def save_devices(devices: dict) -> None:
+    DEVICES.write_text(json.dumps(devices, indent=2) + "\n")
+
+
+def camera_id_for_ride(ride: dict) -> str:
+    if ride.get("camera_id"):
+        return str(ride["camera_id"])
+    rid = ride.get("id")
+    for seg in load_segments():
+        if seg.get("ride") == rid and seg.get("camera_id"):
+            return str(seg["camera_id"])
+    return "unknown"
+
+
+def cameras_in_data(data: dict) -> list[str]:
+    found: list[str] = []
+    for ride in data.get("rides") or []:
+        cam = camera_id_for_ride(ride)
+        if cam not in found:
+            found.append(cam)
+    for seg in load_segments():
+        cam = seg.get("camera_id")
+        if cam and cam not in found:
+            found.append(str(cam))
+    return found
+
+
+_segments_cache: list[dict] | None = None
+_segments_key: tuple[str, float] | None = None
+_data_source = "stub"
+
+
+def data_source() -> str:
+    return _data_source
+
+
+def _team_config() -> dict[str, str]:
+    cfg: dict[str, str] = {}
+    for key in (
+        "S3_ENDPOINT",
+        "ACCESS_KEY",
+        "SECRET_KEY",
+        "VASTDB_BUCKET",
+        "VDB_SCHEMA",
+        "VDB_ENDPOINT",
+    ):
+        if os.environ.get(key):
+            cfg[key] = os.environ[key]
+    candidates = [Path("/config/team.config")]
+    if Path("/config").is_dir():
+        candidates.extend(sorted(Path("/config").glob("*.config")))
+    for path in candidates:
+        if not path.is_file():
+            continue
+        for line in path.read_text().splitlines():
+            if "=" in line and not line.startswith("#"):
+                k, v = line.strip().split("=", 1)
+                cfg.setdefault(k, v.strip().strip('"').strip("'"))
+        break
+    return cfg
+
+
+def load_from_vastdb() -> dict | None:
+    """Optional: read D's witness-incidents table when vastdb is installed (K8s pod)."""
+    try:
+        import vastdb  # type: ignore
+    except ImportError:
+        return None
+    cfg = _team_config()
+    endpoint = (cfg.get("VDB_ENDPOINT") or cfg.get("S3_ENDPOINT") or "").rstrip("/")
+    if endpoint and not endpoint.startswith(("http://", "https://")):
+        endpoint = "http://" + endpoint
+    bucket = cfg.get("VASTDB_BUCKET") or ""
+    schema = cfg.get("VDB_SCHEMA") or "vss-schema"
+    access = cfg.get("ACCESS_KEY") or ""
+    secret = cfg.get("SECRET_KEY") or ""
+    if not (endpoint and bucket and access and secret):
+        return None
+    try:
+        session = vastdb.connect(endpoint=endpoint, access=access, secret=secret, ssl_verify=False)
+        with session.transaction() as tx:
+            table = tx.bucket(bucket).schema(schema).table(VASTDB_TABLE)
+            cols = [c.name for c in table.columns()]
+            prefer = [c for c in ("payload", "document", "json", "row_json", "data") if c in cols]
+            if prefer:
+                arrow = table.select(columns=prefer).read_all()
+                rows = arrow.to_pylist()
+                incidents = []
+                for row in rows:
+                    raw = row.get(prefer[0])
+                    if isinstance(raw, (bytes, bytearray)):
+                        raw = raw.decode()
+                    if isinstance(raw, str):
+                        raw = json.loads(raw)
+                    if isinstance(raw, dict) and raw.get("id"):
+                        incidents.append(raw)
+                    elif isinstance(raw, dict) and raw.get("incidents"):
+                        return raw
+                if not incidents:
+                    return None
+                rides = {}
+                for item in incidents:
+                    rid = item.get("ride") or "unknown"
+                    rides.setdefault(rid, {"id": rid, "title": rid})
+                return {
+                    "generated_from": f"VastDB {schema}.{VASTDB_TABLE}",
+                    "rides": list(rides.values()),
+                    "incidents": incidents,
+                }
+            # Fallback: whole-row JSON columns unknown — skip rather than guess.
+            return None
+    except Exception as exc:
+        # #region agent log
+        _dbg("H7", "load_from_vastdb", "failed", {"error": type(exc).__name__})
+        # #endregion
+        return None
+
+
+def load_segments() -> list[dict]:
+    global _segments_cache, _segments_key
+    for path in (DATA_DIR / "segments.json", SEGMENTS_FILE):
+        if path.is_file():
+            key = (str(path), path.stat().st_mtime)
+            if _segments_cache is None or _segments_key != key:
+                _segments_cache = json.loads(path.read_text())
+                _segments_key = key
+            return _segments_cache
+    return []
+
+
+def find_segment(source: str) -> dict | None:
+    if not source:
+        return None
+    for seg in load_segments():
+        if seg.get("source") == source:
+            return seg
+    # Match by filename tail when URI prefixes differ slightly.
+    needle = source.rsplit("/", 1)[-1]
+    for seg in load_segments():
+        if (seg.get("source") or "").rsplit("/", 1)[-1] == needle:
+            return seg
+    return None
+
+
+def segment_neighbors(source: str) -> tuple[dict | None, dict | None, dict | None]:
+    """Lead-up / peak / aftermath by ride order (chunk_index, segment_number) — never invent filenames."""
+    peak = find_segment(source)
+    if peak is None:
+        return None, None, None
+    group = [s for s in load_segments() if s.get("ride") == peak.get("ride")]
+    group.sort(
+        key=lambda s: (
+            s.get("offset_sec") if s.get("offset_sec") is not None else 10**9,
+            s.get("chunk_index") or 0,
+            s.get("segment_number") or 0,
+        )
+    )
+    try:
+        idx = next(i for i, s in enumerate(group) if s.get("source") == peak.get("source"))
+    except StopIteration:
+        return None, peak, None
+    prev_seg = group[idx - 1] if idx > 0 else None
+    next_seg = group[idx + 1] if idx + 1 < len(group) else None
+    return prev_seg, peak, next_seg
+
+
 def load_data() -> dict:
-    path = DATA_DIR / "incidents.json"
-    if not path.exists():
-        path = ROOT / "incidents.json"
-    if not path.exists():
-        path = STUB
-    data = json.loads(path.read_text())
+    global _data_source
+    data = None
+    for path in (DATA_DIR / "incidents.json", ROOT / "incidents.json"):
+        if path.is_file():
+            data = json.loads(path.read_text())
+            _data_source = str(path)
+            break
+    if data is None:
+        data = load_from_vastdb()
+        if data is not None:
+            _data_source = f"vastdb:{VASTDB_TABLE}"
+    if data is None:
+        data = json.loads(STUB.read_text())
+        _data_source = "stub"
+    reviews = load_reviews()
     for item in data.get("incidents") or []:
         if not item.get("preview_source"):
             item["preview_source"] = resolve_source(item.get("source", ""))
-    reviews = load_reviews()
-    for item in data.get("incidents") or []:
         override = reviews.get(item["id"])
         if override:
             item["review"] = {**item.get("review", {}), **override}
             if override.get("fault_override"):
                 item["fault"] = override["fault_override"]
+    for ride in data.get("rides") or []:
+        if not ride.get("camera_id"):
+            ride["camera_id"] = camera_id_for_ride(ride)
+    # #region agent log
+    _dbg(
+        "H7",
+        "load_data",
+        "source",
+        {
+            "source": _data_source,
+            "incidents": len(data.get("incidents") or []),
+            "segments": len(load_segments()),
+            "cameras": cameras_in_data(data),
+        },
+    )
+    # #endregion
     return data
 
 
@@ -283,154 +487,291 @@ def page(title: str, body: str, extra_head: str = "") -> bytes:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{esc(title)}</title>
+<title>{esc(title)} · Witness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {{
     color-scheme: light;
-    --ink: #1c1915;
-    --muted: #5c564c;
-    --line: #d9d2c5;
-    --paper: #f6f3ee;
-    --card: #fffdf9;
-    --driver: #8c2f2f;
-    --rider: #8a5a12;
-    --unclear: #3f4a46;
+    --ink: #152018;
+    --muted: #5a6a5f;
+    --line: #c9d4cc;
+    --paper: #eef3ef;
+    --card: rgba(255,255,255,0.78);
+    --driver: #b42318;
+    --rider: #c47a12;
+    --unclear: #3d5248;
+    --lane: #7dd37a;
+    --glow: rgba(196, 122, 18, 0.18);
   }}
   * {{ box-sizing: border-box; }}
   body {{
     margin: 0;
-    background: var(--paper);
+    min-height: 100vh;
     color: var(--ink);
-    font: 16px/1.45 Georgia, "Iowan Old Style", serif;
+    font: 16px/1.5 Sora, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(1200px 520px at 12% -10%, var(--glow), transparent 55%),
+      radial-gradient(900px 480px at 92% 8%, rgba(125, 211, 122, 0.16), transparent 50%),
+      linear-gradient(165deg, #f4f7f4 0%, #e7eee8 42%, #dfe8e2 100%);
+  }}
+  body::before {{
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: repeating-linear-gradient(
+      -12deg,
+      #152018 0 1px,
+      transparent 1px 14px
+    );
   }}
   a {{ color: inherit; }}
-  header, main {{ width: min(960px, calc(100% - 32px)); margin: 0 auto; }}
-  header {{ padding: 28px 0 8px; }}
-  header p, .meta {{ color: var(--muted); }}
-  h1 {{ font-size: 28px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.02em; }}
-  h2 {{ font-size: 18px; font-weight: 600; margin: 0; }}
-  h3 {{ font: 13px/1.2 ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }}
-  .kicker {{
-    font: 12px/1.2 ui-sans-serif, system-ui, sans-serif;
+  .shell {{
+    position: relative;
+    width: min(980px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 28px 0 48px;
+  }}
+  .brand {{
+    font-family: Fraunces, Georgia, serif;
+    font-size: clamp(2.6rem, 7vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    margin: 0 0 18px;
+    animation: rise 0.7s ease both;
+  }}
+  .brand span {{
+    display: inline-block;
+    color: transparent;
+    background: linear-gradient(120deg, var(--ink) 20%, #2f6b3a 55%, var(--rider) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }}
+  .shell > *:not(.brand) {{ animation: rise 0.65s ease both; animation-delay: 0.08s; }}
+  @keyframes rise {{
+    from {{ opacity: 0; transform: translateY(10px); }}
+    to {{ opacity: 1; transform: none; }}
+  }}
+  .meta, header p {{ color: var(--muted); }}
+  h1 {{
+    font-family: Fraunces, Georgia, serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.25rem);
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.03em;
+  }}
+  h2 {{
+    font-family: Fraunces, Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }}
+  h3 {{
+    font: 600 12px/1.2 Sora, sans-serif;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
-    margin: 0 0 8px;
+    margin: 0 0 10px;
   }}
-  .rides, .list {{ display: grid; gap: 12px; margin: 18px 0 40px; }}
+  .kicker {{
+    font: 600 12px/1.2 Sora, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }}
+  .kicker a {{ text-decoration: none; border-bottom: 1px solid transparent; }}
+  .kicker a:hover {{ border-color: var(--ink); }}
+  .rides, .list {{ display: grid; gap: 14px; margin: 22px 0 36px; }}
   .card {{
     display: block;
     background: var(--card);
     border: 1px solid var(--line);
-    padding: 16px 18px;
+    padding: 18px 20px;
     text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }}
-  .card:hover {{ border-color: var(--ink); }}
+  .card:hover {{
+    border-color: #6f8a76;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(21, 32, 24, 0.08);
+  }}
   .row {{ display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }}
-  .summary {{ font-size: 20px; margin: 8px 0 0; }}
+  .summary {{
+    font-family: Fraunces, Georgia, serif;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    margin: 8px 0 0;
+    letter-spacing: -0.02em;
+  }}
   .tabs {{ display: flex; gap: 8px; margin: 18px 0; flex-wrap: wrap; }}
   .tabs a, .tabs button {{
-    font: 14px/1 ui-sans-serif, system-ui, sans-serif;
+    font: 500 14px/1 Sora, sans-serif;
     text-decoration: none;
     border: 1px solid var(--line);
-    padding: 8px 12px;
-    background: transparent;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.55);
     color: inherit;
     cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }}
-  .tabs a.on, .tabs button.on {{ background: var(--ink); color: var(--paper); border-color: var(--ink); }}
+  .tabs a.on, .tabs button.on {{ background: var(--ink); color: #f4f7f4; border-color: var(--ink); }}
   .badge {{
-    font: 12px/1 ui-sans-serif, system-ui, sans-serif;
-    letter-spacing: 0.04em;
+    font: 600 11px/1 Sora, sans-serif;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 4px 7px;
+    padding: 5px 8px;
     color: white;
   }}
   .badge.driver {{ background: var(--driver); }}
   .badge.rider {{ background: var(--rider); }}
   .badge.unclear, .badge.shared {{ background: var(--unclear); }}
-  .when {{ font: 13px/1.3 ui-sans-serif, system-ui, sans-serif; color: var(--muted); }}
+  .when {{ font: 13px/1.3 Sora, sans-serif; color: var(--muted); }}
   .empty {{ color: var(--muted); }}
   .stage {{ display: grid; gap: 16px; margin: 18px 0 40px; }}
   @media (min-width: 860px) {{
     .stage {{ grid-template-columns: 1.4fr 1fr; align-items: start; }}
   }}
-  .panel {{ background: var(--card); border: 1px solid var(--line); padding: 16px; }}
-  .player {{ position: relative; background: #111; aspect-ratio: 16/9; }}
+  .panel {{
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 18px;
+    backdrop-filter: blur(8px);
+  }}
+  .player {{
+    position: relative;
+    background: #0d1410;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+  }}
   .player video, .player canvas {{
     position: absolute; inset: 0; width: 100%; height: 100%;
   }}
   .player canvas {{ pointer-events: none; }}
-  .story {{ margin: 0 0 14px; font-size: 17px; line-height: 1.5; }}
+  .story {{ margin: 0 0 14px; font-size: 17px; line-height: 1.55; }}
   details.tech {{ margin-top: 4px; }}
   details.tech summary {{
-    font: 13px/1.2 ui-sans-serif, system-ui, sans-serif;
-    letter-spacing: 0.04em;
+    font: 600 12px/1.2 Sora, sans-serif;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--muted);
     cursor: pointer;
   }}
-  .facts {{ display: grid; gap: 8px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; margin-top: 10px; }}
+  .facts {{ display: grid; gap: 8px; font: 14px/1.4 Sora, sans-serif; margin-top: 10px; }}
   .facts div {{ display: grid; grid-template-columns: 9.5rem 1fr; gap: 8px; }}
   .facts dt {{ color: var(--muted); }}
   .actions {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }}
   .actions button, .actions a.button {{
-    font: 14px/1 ui-sans-serif, system-ui, sans-serif;
+    font: 500 14px/1 Sora, sans-serif;
     border: 1px solid var(--ink);
     background: transparent;
     color: var(--ink);
-    padding: 10px 12px;
+    padding: 11px 14px;
     cursor: pointer;
     text-decoration: none;
   }}
   .actions button.on, .actions a.button.on {{
     background: var(--ink);
-    color: var(--paper);
+    color: #f4f7f4;
   }}
   .actions button.secondary, .actions a.button.secondary {{
     background: transparent;
     color: var(--ink);
   }}
-  .hint {{ font: 13px/1.4 ui-sans-serif, system-ui, sans-serif; color: var(--muted); margin: 0 0 10px; }}
+  .hint {{ font: 13px/1.45 Sora, sans-serif; color: var(--muted); margin: 0 0 10px; }}
   .audience {{
-    font: 15px/1.45 Georgia, "Iowan Old Style", serif;
+    font: 15px/1.5 Sora, sans-serif;
     margin: 0 0 14px;
     padding: 12px 14px;
-    border: 1px solid var(--line);
-    background: var(--paper);
+    border-left: 3px solid var(--lane);
+    background: rgba(255,255,255,0.5);
   }}
-  label {{ display: grid; gap: 4px; font: 13px/1.3 ui-sans-serif, system-ui, sans-serif; margin-top: 10px; }}
+  label {{ display: grid; gap: 4px; font: 500 13px/1.3 Sora, sans-serif; margin-top: 10px; }}
   input, select {{
-    font: 14px/1.3 ui-sans-serif, system-ui, sans-serif;
-    padding: 8px 10px;
+    font: 14px/1.3 Sora, sans-serif;
+    padding: 10px 12px;
     border: 1px solid var(--line);
-    background: white;
+    background: rgba(255,255,255,0.9);
   }}
-  .status {{ font: 13px/1.3 ui-sans-serif, system-ui, sans-serif; color: var(--muted); margin-top: 10px; }}
-  .agree {{ font: 13px/1.3 ui-sans-serif, system-ui, sans-serif; margin-top: 8px; }}
-  .agree.yes {{ color: #2f5d3a; }}
+  .status {{ font: 13px/1.3 Sora, sans-serif; color: var(--muted); margin-top: 10px; }}
+  .agree {{ font: 13px/1.3 Sora, sans-serif; margin-top: 8px; }}
+  .agree.yes {{ color: #2f6b3a; }}
   .agree.no {{ color: var(--driver); }}
-  .timeline {{ position: relative; height: 28px; margin: 16px 0 6px; }}
+  .timeline {{ position: relative; height: 32px; margin: 18px 0 8px; }}
   .timeline .track {{
-    position: absolute; left: 0; right: 0; top: 12px; height: 4px;
-    background: var(--line);
+    position: absolute; left: 0; right: 0; top: 14px; height: 3px;
+    background: linear-gradient(90deg, #c9d4cc, #9eb5a4);
   }}
   .timeline .mark {{
-    position: absolute; top: 5px; width: 16px; height: 16px; margin-left: -8px;
-    border-radius: 50%; border: 2px solid var(--paper);
+    position: absolute; top: 6px; width: 18px; height: 18px; margin-left: -9px;
+    border-radius: 50%; border: 2px solid #f4f7f4;
+    animation: pulse 1.8s ease-in-out infinite;
   }}
   .timeline .mark.driver {{ background: var(--driver); }}
   .timeline .mark.rider {{ background: var(--rider); }}
   .timeline .mark.unclear, .timeline .mark.shared {{ background: var(--unclear); }}
-  .navrow {{ display: flex; justify-content: space-between; gap: 12px; margin: 12px 0 0; font: 13px/1.3 ui-sans-serif, system-ui, sans-serif; }}
+  @keyframes pulse {{
+    0%, 100% {{ transform: scale(1); }}
+    50% {{ transform: scale(1.12); }}
+  }}
+  .navrow {{ display: flex; justify-content: space-between; gap: 12px; margin: 12px 0 0; font: 13px/1.3 Sora, sans-serif; }}
+  .segbar {{ display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }}
+  .segbar button {{
+    font: 500 13px/1 Sora, sans-serif;
+    border: 1px solid var(--line); background: rgba(255,255,255,0.55); color: var(--ink);
+    padding: 9px 12px; cursor: pointer;
+  }}
+  .segbar button.on {{ border-color: var(--ink); background: var(--ink); color: #f4f7f4; }}
+  .segbar button:disabled {{ opacity: 0.45; cursor: not-allowed; }}
+  .foot {{
+    margin: 0 0 12px;
+    font: 13px/1.4 Sora, sans-serif; color: var(--muted);
+  }}
+  .foot a {{ text-decoration: none; border-bottom: 1px solid var(--line); }}
+  .foot a:hover {{ border-color: var(--ink); }}
+  .toolbar {{ display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 6px; }}
+  .toolbar .button {{
+    font: 500 14px/1 Sora, sans-serif;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: #f4f7f4;
+    padding: 11px 14px;
+    text-decoration: none;
+    display: inline-block;
+  }}
+  .toolbar .button.secondary {{
+    background: rgba(255,255,255,0.55);
+    color: var(--ink);
+  }}
+  .cam {{
+    font: 500 12px/1.3 Sora, sans-serif;
+    color: #3d5248;
+    letter-spacing: 0.01em;
+  }}
+  .device-list {{ list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }}
+  .device-list li {{
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 12px 14px;
+    font: 14px/1.4 Sora, sans-serif;
+  }}
+  .device-list code {{ font-size: 13px; }}
+  #page-audience {{ max-width: 36rem; }}
+  @media (prefers-reduced-motion: reduce) {{
+    .brand, .shell > *:not(.brand), .timeline .mark, .card {{ animation: none; transition: none; }}
+  }}
 </style>
 {extra_head}
 </head>
 <body>
-<header>
-  <p class="kicker">Helmet cam witness</p>
+<div class="shell">
+  <p class="brand"><span>Witness</span></p>
   {body}
-</header>
+</div>
 </body>
 </html>"""
     return html.encode()
@@ -440,27 +781,112 @@ def ride_label(ride: dict) -> str:
     return ride.get("title") or ride.get("id") or "Ride"
 
 
+def about_page(data: dict) -> bytes:
+    found = counts(data.get("incidents") or [])
+    body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
+<h1>About / how it works</h1>
+<p class="summary">A helmet-cam witness that drafts a report when a driver is at fault, and a private lesson when you are.</p>
+<section class="panel" style="margin:18px 0;">
+  <h3>Pipeline</h3>
+  <p>Cosmos3-Reason screens the archive; YOLO measures closeness; plain rules decide fault; W&amp;B writes the report or lesson text. The app only reads the result and lets you review it.</p>
+  <p class="meta">Data source now: <code>{esc(data_source())}</code> · {esc(len(data.get('incidents') or []))} incidents · {esc(len(load_segments()))} segments indexed for lead-up/aftermath.</p>
+  <p class="meta">Ride safety on this load: {esc(summary_line(found))}.</p>
+</section>
+<section class="panel">
+  <h3>What we do not do</h3>
+  <p>Nothing is sent to police or 311 automatically. Lessons never claim a fine or offence. Adjacent-lane traffic is filtered on purpose.</p>
+</section>"""
+    return page("About", body)
+
+
+def devices_page(data: dict) -> bytes:
+    registered = load_devices().get("registered") or []
+    known = cameras_in_data(data)
+    known_rows = "".join(
+        f"<li><code>{esc(cam)}</code> — on your indexed rides"
+        + (" · <b>registered</b>" if cam in registered else "")
+        + "</li>"
+        for cam in known
+    ) or "<li>No camera ids in the current load yet.</li>"
+    reg_rows = "".join(f"<li><code>{esc(cam)}</code></li>" for cam in registered) or (
+        "<li class='empty'>None yet — add your helmet cam or dashcam id below.</li>"
+    )
+    examples = "".join(
+        f"<li><code>{esc(cam)}</code></li>"
+        for cam in ("nyc_bike_gopro-1", "pie_cam-3", "team-dashcam-a")
+        if cam not in known
+    )
+    body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
+<h1>Register device</h1>
+<p id="page-audience">Each camera in the archive has a <b>camera id</b> (the stream label VSS indexed). That is why you see many ids in the lab — every helmet cam, dashcam, and team feed gets its own. Your rides show their camera id in brackets so you know which device filmed them.</p>
+<section class="panel" style="margin:18px 0;">
+  <h3>On your rides now</h3>
+  <ul class="device-list">{known_rows}</ul>
+  {"<p class='hint' style='margin-top:12px'>Other ids you may see in the wider archive (not on this stub load):</p><ul class='device-list'>" + examples + "</ul>" if examples else ""}
+</section>
+<section class="panel">
+  <h3>Your registered devices</h3>
+  <ul class="device-list" id="reg-list">{reg_rows}</ul>
+  <label>Camera id
+    <span class="hint">Paste the stream id for your camera (e.g. nyc_bike_gopro-1). Demo only — stored in this app, not sent to police.</span>
+    <input id="camera-id" placeholder="e.g. nyc_bike_gopro-1" value="">
+  </label>
+  <div class="actions">
+    <button type="button" id="register-btn">Register device</button>
+    <a class="button secondary" href="{u('/')}">Back to rides</a>
+  </div>
+  <p class="status" id="reg-status"></p>
+</section>
+<script>
+const basePath = {json.dumps(BASE_PATH)};
+document.getElementById('register-btn').onclick = async () => {{
+  const camera_id = (document.getElementById('camera-id').value || '').trim();
+  const status = document.getElementById('reg-status');
+  if (!camera_id) {{ status.textContent = 'Enter a camera id first.'; return; }}
+  const res = await fetch(basePath + '/api/devices', {{
+    method: 'POST',
+    headers: {{'Content-Type': 'application/json'}},
+    body: JSON.stringify({{camera_id}}),
+  }});
+  const data = await res.json();
+  if (!res.ok) {{ status.textContent = data.error || 'Register failed'; return; }}
+  status.textContent = 'Registered ' + camera_id + '. It will show on rides that use this id.';
+  const list = document.getElementById('reg-list');
+  list.innerHTML = (data.registered || []).map(c => '<li><code>' + c + '</code></li>').join('') || '<li class="empty">None yet.</li>';
+}};
+</script>"""
+    return page("Register device", body)
+
+
 def ride_list(data: dict) -> bytes:
     incidents = data["incidents"]
     total = counts(incidents)
+    registered = set(load_devices().get("registered") or [])
     cards = []
     for ride in data["rides"]:
         mine = [item for item in incidents if item["ride"] == ride["id"]]
         found = counts(mine)
         unclear = f" · {found['unclear']} to decide" if found["unclear"] else ""
         situation = ride.get("situation") or ride.get("conditions") or ""
+        cam = camera_id_for_ride(ride)
+        reg_mark = " · registered" if cam in registered else ""
         cards.append(
             f"""<a class="card" href="{u('/ride/' + ride['id'])}">
               <div class="row"><h2>{esc(ride_label(ride))}</h2><span class="when">{esc(clock((ride.get('duration_min') or 0) * 60))} ride</span></div>
               <p class="summary">{esc(summary_line(found))}{esc(unclear)}</p>
-              <p class="meta">{esc(situation)}</p>
+              <p class="meta">{esc(situation)} <span class="cam">({esc(cam)}{esc(reg_mark)})</span></p>
             </a>"""
         )
     body = f"""<h1>Your rides</h1>
 <p id="page-audience">For you, the cyclist. Open a ride to review risky moments: reports you may send, and private lessons that never leave this app.</p>
 <p class="meta">{esc(summary_line(total))} across these rides.</p>
+<div class="toolbar">
+  <a class="button" href="{u('/devices')}">Register device</a>
+  <a class="button secondary" href="{u('/about')}">About / how it works</a>
+</div>
 <main class="rides">{''.join(cards)}</main>
-<p class="meta"><a href="{u('/timeline')}">How the agent screened every 5-second segment</a></p>"""
+<p class="meta"><a href="{u('/timeline')}">How the agent screened every 5-second segment</a></p>
+<p class="foot">Camera ids label which physical stream filmed each ride. <a href="{u('/devices')}">Why so many ids?</a></p>"""
     return page("Your rides", body)
 
 
@@ -503,10 +929,11 @@ def incident_list(data: dict, ride_id: str, tab: str) -> bytes:
         )
     listing = "".join(rows) if rows else f'<p class="empty">{empty}</p>'
     situation = ride.get("situation") or ride.get("conditions") or ""
+    cam = camera_id_for_ride(ride)
     body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
 <h1>{esc(ride_label(ride))}</h1>
 <p class="summary">{esc(summary_line(found))}</p>
-<p class="meta">{esc(situation)}</p>
+<p class="meta">{esc(situation)} <span class="cam">({esc(cam)})</span></p>
 {timeline_html(ride, mine)}
 <p id="page-audience" class="hint">Audience: you. <b>Reports to send</b> are for police, 311, or your insurer — only if you approve. <b>Lessons for you</b> stay private.</p>
 <nav class="tabs">
@@ -744,6 +1171,27 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
         if next_item
         else "<span></span>"
     )
+    lead_seg, peak_seg, after_seg = segment_neighbors(source)
+    # #region agent log
+    _dbg(
+        "H8",
+        "incident_detail",
+        "segments",
+        {
+            "id": item.get("id"),
+            "has_peak": peak_seg is not None,
+            "has_lead": lead_seg is not None,
+            "has_after": after_seg is not None,
+            "chunk": (peak_seg or {}).get("chunk_index"),
+            "seg": (peak_seg or {}).get("segment_number"),
+        },
+    )
+    # #endregion
+    lead_src = (lead_seg or {}).get("source") or ""
+    peak_src = (peak_seg or {}).get("source") or source
+    after_src = (after_seg or {}).get("source") or ""
+    lead_disabled = "disabled" if not lead_src else ""
+    after_disabled = "disabled" if not after_src else ""
 
     body = f"""<p class="kicker"><a href="{u('/ride/' + item['ride'])}">Back to {esc(ride_label(ride))}</a></p>
 <h1>{esc(item['document']['title'])}</h1>
@@ -760,6 +1208,12 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
       <video id="v" controls playsinline preload="metadata"></video>
       <canvas id="c"></canvas>
     </div>
+    <div class="segbar" id="segbar">
+      <button type="button" data-role="lead" data-source="{esc(lead_src)}" {lead_disabled}>Lead-up</button>
+      <button type="button" data-role="peak" data-source="{esc(peak_src)}" class="on">Peak</button>
+      <button type="button" data-role="after" data-source="{esc(after_src)}" {after_disabled}>Aftermath</button>
+    </div>
+    <p class="hint">Lead-up and aftermath are the previous/next archive segments for this clip (by ride order), not guessed filenames.</p>
     <p class="status" id="play-status">Loading clip…</p>
   </section>
   <section class="panel">
@@ -803,7 +1257,7 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
 <script>
 const basePath = {json.dumps(BASE_PATH)};
 const incidentId = {json.dumps(item["id"])};
-const source = {json.dumps(source)};
+const peakSource = {json.dumps(peak_src)};
 const bbox = {bbox_json};
 const peak = {json.dumps(item.get("t_peak") or 0)};
 const v = document.getElementById('v');
@@ -811,6 +1265,7 @@ const c = document.getElementById('c');
 const status = document.getElementById('play-status');
 const reviewStatus = document.getElementById('review-status');
 let chosenFault = {json.dumps(fault)};
+let activeRole = 'peak';
 
 function sizeCanvas() {{
   c.width = v.clientWidth * devicePixelRatio;
@@ -823,24 +1278,44 @@ function sizeCanvas() {{
 function draw() {{
   const ctx = c.getContext('2d');
   ctx.clearRect(0, 0, c.width, c.height);
-  if (!bbox) return;
+  if (!bbox || activeRole !== 'peak') return;
   const [x1, y1, x2, y2] = bbox;
   ctx.strokeStyle = '#f2c14e';
   ctx.lineWidth = 3 * devicePixelRatio;
   ctx.strokeRect(x1 * c.width, y1 * c.height, (x2 - x1) * c.width, (y2 - y1) * c.height);
 }}
 
-if (source) {{
-  v.src = basePath + '/api/stream?source=' + encodeURIComponent(source);
-  v.addEventListener('loadedmetadata', () => {{
-    status.textContent = `Loaded ${{v.duration.toFixed(1)}} s. Peak at ${{peak}} s.`;
-    sizeCanvas();
+function loadClip(src, role) {{
+  activeRole = role;
+  document.querySelectorAll('#segbar button').forEach(b => b.classList.toggle('on', b.dataset.role === role));
+  if (!src) {{
+    status.textContent = 'No segment for ' + role + '.';
+    return;
+  }}
+  status.textContent = 'Loading ' + role + '…';
+  v.src = basePath + '/api/stream?source=' + encodeURIComponent(src);
+}}
+
+v.addEventListener('loadedmetadata', () => {{
+  const label = activeRole === 'peak' ? `Peak at ${{peak}} s` : activeRole;
+  status.textContent = `Loaded ${{v.duration.toFixed(1)}} s · ${{label}}`;
+  sizeCanvas();
+  if (activeRole === 'peak') {{
     try {{ v.currentTime = Math.min(peak, Math.max(0, v.duration - 0.1)); }} catch (e) {{}}
+  }}
+}});
+v.addEventListener('seeked', () => {{ sizeCanvas(); status.textContent = `At ${{v.currentTime.toFixed(1)}} s · ${{activeRole}}`; }});
+v.addEventListener('play', sizeCanvas);
+v.addEventListener('error', () => {{ status.textContent = 'Playback error — check /api/stream.'; }});
+window.addEventListener('resize', sizeCanvas);
+document.querySelectorAll('#segbar button').forEach(btn => {{
+  btn.addEventListener('click', () => {{
+    if (btn.disabled) return;
+    loadClip(btn.dataset.source || '', btn.dataset.role);
   }});
-  v.addEventListener('seeked', () => {{ sizeCanvas(); status.textContent = `At ${{v.currentTime.toFixed(1)}} s`; }});
-  v.addEventListener('play', sizeCanvas);
-  v.addEventListener('error', () => {{ status.textContent = 'Playback error — check /api/stream.'; }});
-  window.addEventListener('resize', sizeCanvas);
+}});
+if (peakSource) {{
+  loadClip(peakSource, 'peak');
 }} else {{
   status.textContent = 'No preview_source on this incident yet.';
 }}
@@ -1132,7 +1607,15 @@ class Handler(BaseHTTPRequestHandler):
         path = strip_base(parsed.path.rstrip("/") or "/")
         query = urllib.parse.parse_qs(parsed.query)
         if path == "/health":
-            return self._json(200, {"ok": True})
+            return self._json(
+                200,
+                {
+                    "ok": True,
+                    "data_source": data_source(),
+                    "segments": len(load_segments()),
+                    "base_path": BASE_PATH,
+                },
+            )
         if path == "/api/incidents":
             return self._json(200, load_data())
         if path == "/api/stream":
@@ -1157,7 +1640,7 @@ class Handler(BaseHTTPRequestHandler):
             "H6",
             "Handler.do_GET",
             "route",
-            {"path": path, "base_path": BASE_PATH, "incidents": len(data.get("incidents") or [])},
+            {"path": path, "base_path": BASE_PATH, "incidents": len(data.get("incidents") or []), "data_source": data_source()},
         )
         # #endregion
         if path == "/":
@@ -1173,6 +1656,21 @@ class Handler(BaseHTTPRequestHandler):
                     "base_path": BASE_PATH,
                     "sample_href_ok": (want in body) if want else False,
                     "bare_ride_href": b'href="/ride/' in body,
+                },
+            )
+            # #endregion
+        elif path == "/about":
+            body = about_page(data)
+        elif path == "/devices":
+            body = devices_page(data)
+            # #region agent log
+            _dbg(
+                "H9",
+                "Handler.do_GET:devices",
+                "page",
+                {
+                    "known": cameras_in_data(data),
+                    "registered": load_devices().get("registered") or [],
                 },
             )
             # #endregion
@@ -1239,6 +1737,22 @@ class Handler(BaseHTTPRequestHandler):
             return self.review(payload)
         if path == "/api/submit":
             return self._json(200, {"ok": True, "outbox": "dummy", "received": payload})
+        if path == "/api/devices":
+            camera_id = (payload.get("camera_id") or "").strip()
+            if not camera_id:
+                return self._json(400, {"error": "camera_id required"})
+            if len(camera_id) > 120 or any(ch in camera_id for ch in "<>\"'\\"):
+                return self._json(400, {"error": "invalid camera_id"})
+            devices = load_devices()
+            registered = devices.get("registered") or []
+            if camera_id not in registered:
+                registered.append(camera_id)
+            devices["registered"] = registered
+            save_devices(devices)
+            # #region agent log
+            _dbg("H9", "Handler.do_POST:devices", "registered", {"camera_id": camera_id, "count": len(registered)})
+            # #endregion
+            return self._json(200, {"ok": True, "registered": registered})
         self._json(404, {"error": "not found"})
 
     def review(self, payload: dict) -> None:
