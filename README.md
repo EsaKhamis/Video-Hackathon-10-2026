@@ -111,4 +111,6 @@ separately and can override the fault the rules wrote. Rebuild and publish: see 
 
 ## Team
 
-_names + emails_
+Duncan Alexander
+Esa Khamis
+Olivia Guo
