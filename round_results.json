@@ -1,0 +1,204 @@
+{
+  "rows": [
+    {
+      "id": "N0301",
+      "hero": "H1",
+      "label": "driver",
+      "fault": "driver",
+      "rule": 7,
+      "score": 0.092,
+      "peak_h": 0.56,
+      "lateral_toward_rider": 0.163
+    },
+    {
+      "id": "N0437",
+      "hero": "H2",
+      "label": "adjacent_lane",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0,
+      "peak_h": null,
+      "lateral_toward_rider": null
+    },
+    {
+      "id": "N0249",
+      "hero": "H3",
+      "label": "other_fp",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0,
+      "peak_h": null,
+      "lateral_toward_rider": null
+    },
+    {
+      "id": "N0300",
+      "hero": "H4",
+      "label": "driver",
+      "fault": "driver",
+      "rule": 7,
+      "score": 0.083,
+      "peak_h": 0.56,
+      "lateral_toward_rider": 0.148
+    },
+    {
+      "id": "N0111",
+      "hero": "H5",
+      "label": "rider",
+      "fault": "rider",
+      "rule": 4,
+      "score": 0,
+      "peak_h": null,
+      "lateral_toward_rider": null
+    },
+    {
+      "id": "N0074",
+      "hero": "",
+      "label": "driver",
+      "fault": "driver",
+      "rule": 7,
+      "score": 0.454,
+      "peak_h": 0.92,
+      "lateral_toward_rider": 0.495
+    },
+    {
+      "id": "N0228",
+      "hero": "",
+      "label": "driver",
+      "fault": "driver",
+      "rule": 7,
+      "score": 0.071,
+      "peak_h": 0.33,
+      "lateral_toward_rider": 0.214
+    },
+    {
+      "id": "N0272",
+      "hero": "",
+      "label": "rider",
+      "fault": "rider",
+      "rule": 4,
+      "score": 0.187,
+      "peak_h": 0.99,
+      "lateral_toward_rider": 0.189
+    },
+    {
+      "id": "N0337",
+      "hero": "",
+      "label": "rider",
+      "fault": "rider",
+      "rule": 4,
+      "score": 0.171,
+      "peak_h": 0.31,
+      "lateral_toward_rider": 0.542
+    },
+    {
+      "id": "N0112",
+      "hero": "",
+      "label": "rider",
+      "fault": "rider",
+      "rule": 4,
+      "score": 0.103,
+      "peak_h": 0.47,
+      "lateral_toward_rider": 0.221
+    },
+    {
+      "id": "N0109",
+      "hero": "",
+      "label": "rider",
+      "fault": "rider",
+      "rule": 4,
+      "score": 0.06,
+      "peak_h": 0.58,
+      "lateral_toward_rider": 0.104
+    },
+    {
+      "id": "N0412",
+      "hero": "",
+      "label": "rider_turning",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0.226,
+      "peak_h": 0.33,
+      "lateral_toward_rider": 0.681
+    },
+    {
+      "id": "N0113",
+      "hero": "",
+      "label": "other_fp",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0.185,
+      "peak_h": 0.61,
+      "lateral_toward_rider": 0.304
+    },
+    {
+      "id": "N0425",
+      "hero": "",
+      "label": "rider_turning",
+      "fault": "driver",
+      "rule": 7,
+      "score": 0.18,
+      "peak_h": 0.59,
+      "lateral_toward_rider": 0.307
+    },
+    {
+      "id": "N0416",
+      "hero": "",
+      "label": "adjacent_lane",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0.102,
+      "peak_h": 0.45,
+      "lateral_toward_rider": 0.226
+    },
+    {
+      "id": "N0063",
+      "hero": "",
+      "label": "stationary",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0.064,
+      "peak_h": 0.54,
+      "lateral_toward_rider": 0.119
+    },
+    {
+      "id": "N0056",
+      "hero": "",
+      "label": "other_fp",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0.061,
+      "peak_h": 0.51,
+      "lateral_toward_rider": 0.119
+    },
+    {
+      "id": "N0414",
+      "hero": "",
+      "label": "other_fp",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0.061,
+      "peak_h": 0.37,
+      "lateral_toward_rider": 0.165
+    },
+    {
+      "id": "N0181",
+      "hero": "",
+      "label": "rider",
+      "fault": "drop",
+      "rule": 10,
+      "score": 0,
+      "peak_h": null,
+      "lateral_toward_rider": null
+    },
+    {
+      "id": "N0245",
+      "hero": "",
+      "label": "driver",
+      "fault": "driver",
+      "rule": 7,
+      "score": 0,
+      "peak_h": null,
+      "lateral_toward_rider": null
+    }
+  ]
+}
