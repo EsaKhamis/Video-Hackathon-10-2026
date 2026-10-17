@@ -494,9 +494,12 @@
   "verdict": "rider"
  },
  "GX010001_chunk_0021_segment_003": {
-  "summary": "The cyclist was riding in the traffic lane when a car overtook from the left and entered the cyclist's path. The vehicle came within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. The cyclist did not move into the vehicle's path and did not swerve or turn.",
+  "summary": "A cyclist was travelling through a crosswalk when a person entered the cyclist's path from the left. The video shows the gap between them to be under about half a metre, with the vehicle moving into the cyclist's path. No physical separator was present at the crossing. The signal status facing the cyclist could not be confirmed from the footage.",
+  "what_happened": "You were crossing when someone stepped into your line of travel from the left, coming within less than half a metre of you.",
+  "why_risky": "The very small gap left little room to react, and the lack of a physical separator meant you were sharing the space directly with the pedestrian.",
+  "next_time": "Try to pause at a crossing and check both sides carefully before proceeding, especially where there is no barrier. If you can, position yourself where you have a clear view of anyone approaching from the side, and be ready to stop if someone steps into your path.",
   "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
-  "verdict": "driver"
+  "verdict": "unclear"
  },
  "GX050001_chunk_0004_segment_003": {
   "what_happened": "You were riding on the sidewalk alongside pedestrians when a car was travelling parallel in its own lane on the road. The sidewalk had a physical separator and the car stayed well away from you, with the closest gap being under about half a metre.",
@@ -574,5 +577,21 @@
   "next_time": "Stop before the stop line and wait for the green light. Check the signal carefully before crossing, even if the road looks empty. Keep a clear view of any approaching traffic before you move into the intersection.",
   "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
   "verdict": "rider"
+ },
+ "GX010001_chunk_0012_segment_002": {
+  "summary": "A black SUV was travelling in its lane while the cyclist was riding nearby. The video shows the vehicle and the cyclist passing each other with an estimated gap of under about half a metre. No visible signals or actions from the vehicle were captured. The lighting conditions were normal and no physical separator was evident.",
+  "what_happened": "You rode close to a black SUV that was staying in its lane, with the two of you passing within roughly half a metre of each other.",
+  "why_risky": "Passing so close leaves little room for error, especially if either road user needs to brake or swerve unexpectedly.",
+  "next_time": "Try to maintain a larger buffer, aim for at least a metre of space when overtaking or being overtaken, and stay alert for any sudden movements from vehicles.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0020_segment_004": {
+  "summary": "A cyclist was travelling and entered a crosswalk where a pedestrian was present on the left side. The pedestrian remained stationary and did not move into the cyclist's path. The distance between the cyclist and the pedestrian was estimated from the video to be under about half a metre. No signals or other road users were visible that might have affected the situation.",
+  "what_happened": "You entered a crosswalk while a pedestrian was standing on the left side, and you passed within about half a metre of them.",
+  "why_risky": "Passing so close to a pedestrian can be dangerous because it leaves little room for either party to react if either moves unexpectedly.",
+  "next_time": "Try to give pedestrians a wider berth, especially when you are close to the edge of a crosswalk, and keep an eye out for any sudden movements.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
  }
 }

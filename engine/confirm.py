@@ -24,6 +24,8 @@ from concurrent.futures import ThreadPoolExecutor
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 sys.path.insert(0, os.path.join(ROOT, 'probe'))
 from vss_client import B, tok
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import wb_trace as trace  # noqa: E402
 
 cfg = {}
 for l in open(glob.glob('/config/*.config')[0]):
@@ -59,6 +61,7 @@ SIGNAL = ("What colour is the traffic signal facing the camera's direction of tr
           "Answer with one word: red, green, yellow, none_visible or unknown.")
 
 
+@trace.op(name='cosmos_ask', postprocess_inputs=lambda i: {**i, 'content': trace.strip_media(i['content'])})
 def ask(content, max_tokens=500, tries=3):
     body = {'model': MODEL, 'temperature': 0, 'max_tokens': max_tokens,
             'messages': [{'role': 'user', 'content': content}]}
@@ -131,6 +134,8 @@ def hint_for(row):
                        h=round(g['peak_h'] * 100), after=after) + '\n'
 
 
+@trace.op(name='confirm_segment', call_display_name=lambda c: f"confirm {c.inputs['row'].get('id')}",
+          postprocess_inputs=lambda i: {**i, 'row': {k: i['row'].get(k) for k in ('id', 'source', 'flag_reasons')}})
 def confirm(row, hinted=False, votes=1):
     out = {'id': row['id'], 'source': row['source'], 'still_t': None, 'hint': ''}
     t0 = time.time()
@@ -199,6 +204,7 @@ if __name__ == '__main__':
     ap.add_argument('--merge', action='store_true', help='replace these rows in an existing --out file')
     ap.add_argument('--hint', action='store_true', help='add the Stage B detector hint (biases Cosmos toward yes)')
     a = ap.parse_args()
+    trace.init()
     geo = {r['id']: r for r in json.load(open(a.geometry))['rows'] if 'err' not in r}
     labels = {r['segment']: r for r in csv.DictReader(open(a.labels))}
     if a.keys:

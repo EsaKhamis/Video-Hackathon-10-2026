@@ -1,0 +1,191 @@
+{
+ "rider_incidents": 25,
+ "issues": [
+  {
+   "issue": "entered_on_red",
+   "name": "Entering junctions on red",
+   "count": 14,
+   "share": 0.56,
+   "rides": {
+    "GOPR0130": 14
+   },
+   "severity_avg": 33,
+   "severity_max": 73,
+   "confirmed_by_you": 0,
+   "context": {
+    "where_you_were": {
+     "bike_lane": 5,
+     "traffic_lane": 7,
+     "crosswalk": 2
+    },
+    "signal": {
+     "red": 13,
+     "yellow": 1
+    },
+    "vehicle_nearby": 4,
+    "vehicle_types": {
+     "bus": 1,
+     "car": 3
+    },
+    "vehicle_within_1m": 2,
+    "low_light": 0
+   },
+   "examples": [
+    {
+     "id": "C-GOPR0130_chunk_0024_segment_006",
+     "ride": "GOPR0130",
+     "severity": 73,
+     "at": "12:25"
+    },
+    {
+     "id": "N0207",
+     "ride": "GOPR0130",
+     "severity": 71,
+     "at": "5:20"
+    },
+    {
+     "id": "N0209",
+     "ride": "GOPR0130",
+     "severity": 62,
+     "at": "5:30"
+    }
+   ],
+   "coach": {
+    "headline": "You\u2019re often entering junctions on red",
+    "pattern": "It tends to happen when you\u2019re either in the bike lane or the traffic lane and you reach the stop line before the signal turns green. You usually move forward while the light is still red, sometimes even when a vehicle is close by or a bus is travelling straight through.",
+    "why_it_matters": "Going into the junction on red puts you into the path of traffic that has the right of way, raising the chance of a close\u2011call or collision.",
+    "drills": [
+     "Pause at every stop line and look for the green light before you move.",
+     "Use the road markings as a visual cue to stay back until the signal changes.",
+     "Practice checking all directions for traffic, even when you\u2019re in a bike lane, before you cross."
+    ],
+    "cue": "Wait for green before crossing",
+    "checks": "passed"
+   }
+  },
+  {
+   "issue": "sidewalk",
+   "name": "Riding on the sidewalk",
+   "count": 10,
+   "share": 0.4,
+   "rides": {
+    "GX010001": 5,
+    "GX050001": 5
+   },
+   "severity_avg": 34,
+   "severity_max": 62,
+   "confirmed_by_you": 0,
+   "context": {
+    "where_you_were": {
+     "sidewalk": 10
+    },
+    "signal": {
+     "none_visible": 10
+    },
+    "vehicle_nearby": 10,
+    "vehicle_types": {
+     "bus": 1,
+     "car": 7,
+     "motorcycle": 2
+    },
+    "vehicle_within_1m": 1,
+    "low_light": 5
+   },
+   "examples": [
+    {
+     "id": "C-GX010001_chunk_0018_segment_005",
+     "ride": "GX010001",
+     "severity": 62,
+     "at": "9:20"
+    },
+    {
+     "id": "C-GX010001_chunk_0018_segment_002",
+     "ride": "GX010001",
+     "severity": 59,
+     "at": "9:05"
+    },
+    {
+     "id": "C-GX010001_chunk_0019_segment_001",
+     "ride": "GX010001",
+     "severity": 41,
+     "at": "9:30"
+    }
+   ],
+   "coach": {
+    "headline": "You often ride on the sidewalk",
+    "pattern": "Most of the times you end up on the sidewalk when there is no visible traffic signal and you are close to pedestrians. It tends to happen in low\u2011light conditions and when a bus or car is about to enter the area you are using.",
+    "why_it_matters": "Being on the sidewalk puts you near walkers and can make drivers less likely to see you, raising the chance of a collision.",
+    "drills": [
+     "Before you start a stretch, check that the road or cycle lane is clear and choose that instead of the pavement.",
+     "When you must use the pavement, stay close to the edge, keep a safe gap from pedestrians and scan ahead for any vehicles about to turn or enter.",
+     "In dim conditions, switch on a bright front light and wear reflective gear, then pause at any junction to confirm the road is safe before moving back."
+    ],
+    "cue": "Road first, pavement last",
+    "checks": "passed"
+   }
+  },
+  {
+   "issue": "changed_line",
+   "name": "Changing line into traffic",
+   "count": 1,
+   "share": 0.04,
+   "rides": {
+    "GX010001": 1
+   },
+   "severity_avg": 37,
+   "severity_max": 37,
+   "confirmed_by_you": 0,
+   "context": {
+    "where_you_were": {
+     "traffic_lane": 1
+    },
+    "signal": {
+     "unknown": 1
+    },
+    "vehicle_nearby": 1,
+    "vehicle_types": {
+     "truck": 1
+    },
+    "vehicle_within_1m": 1,
+    "low_light": 0
+   },
+   "examples": [
+    {
+     "id": "C-GX010001_chunk_0021_segment_001",
+     "ride": "GX010001",
+     "severity": 37,
+     "at": "10:30"
+    }
+   ],
+   "coach": {
+    "headline": "Watch your line changes",
+    "pattern": "You were in the traffic lane and shifted sideways just as a large vehicle was overtaking you on the right, closing to about half a metre. The move placed you directly in the truck\u2019s path, leaving very little clearance.",
+    "why_it_matters": "Changing line into traffic can dramatically cut the safe distance between you and a fast\u2011moving vehicle, raising the risk of a serious collision.",
+    "drills": [
+     "Stay in your lane until you clearly see a safe gap ahead.",
+     "Scan behind and to the side before moving sideways.",
+     "Signal early and only shift when the gap is comfortably wide."
+    ],
+    "cue": "Check gap before shifting",
+    "checks": "passed"
+   }
+  }
+ ],
+ "unclear_to_review": 43,
+ "rides": [
+  "GOPR0130",
+  "GX010001",
+  "GX050001"
+ ],
+ "overview": {
+  "summary": "You\u2019re making good progress, but there are a few habits that could be safer. Most of your rides show you\u2019re often entering junctions on red and riding on the pavement, which can put you at risk. A few small adjustments will help you feel more confident and stay safer on the road.",
+  "priorities": [
+   "Wait for the signal facing you to turn green before crossing any junction",
+   "Stay on the road rather than the sidewalk whenever possible",
+   "Check the gap carefully before changing your line into traffic"
+  ],
+  "encouragement": "Keep up the effort \u2013 each improvement makes a big difference.",
+  "checks": "passed"
+ },
+ "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b"
+}
