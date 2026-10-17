@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rider safety agent</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  video { width: 100%; background: #000; border-radius: 6px; }
+  code { background: #f2f2f2; padding: 0 .3em; border-radius: 3px; }
+  #status { color: #666; font-size: .9rem; }
+</style>
+</head>
+<body>
+<h1>Rider safety agent</h1>
+<p>Hello world from the <code>/app</code> deployment. The clip below is streamed through
+<code>/api/stream</code> (Range pass-through, 206) from the VSS backend.</p>
+<p><b>H3</b>: <code>GOPR0130_chunk_0017_segment_005</code>, yellow taxi crossing in front of the handlebars.</p>
+<video id="v" controls preload="metadata"></video>
+<p id="status"></p>
+<script>
+  // Relative to wherever the app is mounted (/app/ via the Ingress), with or without a trailing slash.
+  const base = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+  const source = 's3://team-1-vss-chunks-segments/segments/20261008_073104_GOPR0130_chunk_0017_segment_005_of_006.mp4';
+  const v = document.getElementById('v');
+  const status = document.getElementById('status');
+  v.src = base + 'api/stream?source=' + encodeURIComponent(source);
+  v.addEventListener('loadedmetadata', () => status.textContent = `Loaded: ${v.duration.toFixed(1)} s. Drag the scrubber to test seeking.`);
+  v.addEventListener('seeked', () => status.textContent = `Seeked to ${v.currentTime.toFixed(1)} s.`);
+  v.addEventListener('error', () => status.textContent = 'Playback error: check /api/stream.');
+</script>
+</body>
+</html>
