@@ -50,6 +50,16 @@ FAULT_LABEL = {
     "shared": "Shared",
 }
 
+RULE_TEXT = {
+    3: "Rule 3: the signal facing the rider was red",
+    4: "Rule 4: the rider was on the sidewalk",
+    5: "Rule 5: the rider changed line into the vehicle's path",
+    6: "Rule 6: the rider was riding in the door zone",
+    7: "Rule 7: the vehicle moved into the rider's path, with nothing pointing to the rider",
+    8: "Rule 8: the boxes and the model disagree about how close it was",
+    9: "Rule 9: no signal visible on a crossing or turn, so the rider decides",
+}
+
 _token = None
 _token_lock = threading.Lock()
 
@@ -164,6 +174,13 @@ def esc(value: object) -> str:
         .replace(">", "&gt;")
         .replace('"', "&quot;")
     )
+
+
+def plain(value: object) -> str:
+    """Engine enum values for people: none_visible -> none visible, True -> yes."""
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    return str(value).replace("_", " ")
 
 
 def clock(seconds: float) -> str:
@@ -376,19 +393,23 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
         f'src="{BASE}api/stream?source={esc(urllib.parse.quote(src, safe=""))}#t={start:.1f}"></video>'
         if src else '<p class="empty">Clip not found in the segment index.</p>'
     )
+    side = vehicle.get("side")
+    where = {"front": "in front", "none": None}.get(side, side and f"on the {side}")
+    kind = {"suv": "SUV"}.get(vehicle.get("type"), vehicle.get("type"))
+    rule = item.get("fault_rule")
     rows = [
         ("Signal facing rider", facts.get("signal_for_rider")),
         ("Rider position", facts.get("rider_position")),
-        ("Separator", facts.get("separator")),
-        ("Vehicle", " ".join(str(v) for v in (vehicle.get("colour"), vehicle.get("type"), vehicle.get("side") and f"on the {vehicle['side']}") if v)),
+        ("Physical separator", facts.get("separator")),
+        ("Vehicle", " ".join(str(v) for v in (vehicle.get("colour"), kind, where) if v)),
         ("Vehicle action", facts.get("vehicle_action")),
         ("Vehicle entered rider's path", facts.get("vehicle_entered_rider_path")),
         ("Rider moved into vehicle's path", facts.get("rider_moved_into_vehicle_path")),
-        ("Closest distance", facts.get("closest_distance")),
-        ("Cosmos's own fault call", facts.get("model_fault")),
-        ("Rule that decided", item.get("fault_rule")),
+        ("Closest distance", {"under_1m": "under 1 m", "1_to_2m": "1 to 2 m", "over_2m": "over 2 m"}.get(facts.get("closest_distance"), facts.get("closest_distance"))),
+        ("Cosmos's own fault call (shown, not used)", facts.get("model_fault")),
+        ("Why this verdict", RULE_TEXT.get(rule, rule and f"Rule {rule}")),
     ]
-    fact_list = "".join(f"<dt>{esc(k)}</dt><dd>{esc(v)}</dd>" for k, v in rows if v not in (None, ""))
+    fact_list = "".join(f"<dt>{esc(k)}</dt><dd>{esc(plain(v))}</dd>" for k, v in rows if v not in (None, ""))
     body = f"""<p class="kicker"><a href="{BASE}ride/{esc(item['ride'])}">Back to {esc(item['ride'])}</a></p>
 <h1>{esc(item['document']['title'])}</h1>
 <p><span class="badge {esc(fault)}">{esc(FAULT_LABEL.get(fault, fault))}</span></p>

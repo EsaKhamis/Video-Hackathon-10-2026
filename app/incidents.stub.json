@@ -37,14 +37,14 @@
       "fault_rule": 7,
       "facts": {
         "signal_for_rider": "none_visible",
-        "rider_position": "bike_lane",
+        "rider_position": "traffic_lane",
         "separator": "no",
         "vehicle_action": "overtaking",
         "vehicle_entered_rider_path": true,
         "rider_moved_into_vehicle_path": false,
         "vehicle": {"type": "suv", "colour": "black", "side": "right"},
         "closest_distance": "under_1m",
-        "evidence": "A black SUV passes close on the right and pulls ahead of the rider.",
+        "evidence": "Just after crossing an intersection, a black SUV comes up close on the right and pulls ahead of the rider.",
         "model_fault": "driver"
       },
       "geometry": {
