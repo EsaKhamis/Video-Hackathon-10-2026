@@ -35,7 +35,8 @@
 </style>
 </head>
 <body>
-<h1>Rider safety agent</h1>
+<p class="sub"><a href="__BASE__">← All rides</a></p>
+<h1>Screening timeline</h1>
 <p class="sub">Helmet-cam rides screened by Cosmos3-Reason. Screening flags are <b>candidates</b>, not verdicts: the fault rules decide.</p>
 <div id="banner"></div>
 <div class="rides" id="rides"><span class="muted">Loading rides…</span></div>
@@ -59,7 +60,7 @@
   </div>
 </div>
 <script>
-const base = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+const base = '__BASE__';
 const api = p => fetch(base + p).then(r => r.ok ? r.json() : Promise.reject(r.status));
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

@@ -51,6 +51,7 @@ spec:
         - containerPort: ${APP_PORT}
         env:
         - {name: PORT, value: "${APP_PORT}"}
+        - {name: BASE_PATH, value: "/app"}
         - {name: PYTHONUNBUFFERED, value: "1"}
         - name: VSS_URL
           valueFrom: {secretKeyRef: {name: ${APP_NAME}-vss-creds, key: VSS_URL}}
