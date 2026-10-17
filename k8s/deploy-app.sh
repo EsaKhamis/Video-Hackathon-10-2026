@@ -18,7 +18,19 @@ NS="$TEAM_USER"
 APP_HOST="video-lab-team-${TEAM_USER#team-}.cosmos.vastdata.com"
 export KUBECONFIG="/config/${NS}-k8s.yaml"
 
-kubectl -n "$NS" create configmap "${APP_NAME}-code" --from-file="$APP_DIR" \
+STAGE="$(mktemp -d)"
+trap 'rm -rf "$STAGE"' EXIT
+# Keep the ConfigMap small and free of local review state / bytecode.
+shopt -s nullglob
+for f in "$APP_DIR"/*.py "$APP_DIR"/*.json "$APP_DIR"/requirements.txt; do
+  base="$(basename "$f")"
+    case "$base" in
+    reviews.json|devices.json) continue ;;
+  esac
+  cp "$f" "$STAGE/"
+done
+
+kubectl -n "$NS" create configmap "${APP_NAME}-code" --from-file="$STAGE" \
   --dry-run=client -o yaml | kubectl apply -f -
 "$REPO_DIR/k8s/update-data.sh"
 
@@ -28,6 +40,14 @@ kubectl -n "$NS" create secret generic "${APP_NAME}-vss-creds" \
   --from-literal=VSS_USERNAME="$TEAM_USER" \
   --from-literal=VSS_PASSWORD="$TEAM_PASS" \
   --dry-run=client -o yaml | kubectl apply -f -
+
+# Optional mounts: D's segment index + team.config for VastDB reads when present.
+EXTRA_MOUNTS=""
+EXTRA_VOLUMES=""
+if kubectl -n "$NS" get secret witness-config >/dev/null 2>&1; then
+  EXTRA_MOUNTS+=$'\n        - {name: team-config, mountPath: /config, readOnly: true}'
+  EXTRA_VOLUMES+=$'\n      - {name: team-config, secret: {secretName: witness-config, optional: true}}'
+fi
 
 kubectl -n "$NS" apply -f - <<EOF
 apiVersion: apps/v1
@@ -52,7 +72,9 @@ spec:
         env:
         - {name: PORT, value: "${APP_PORT}"}
         - {name: BASE_PATH, value: "/app"}
+        - {name: DATA_DIR, value: "/data"}
         - {name: REVIEWS_PATH, value: "/tmp/reviews.json"}
+        - {name: DEVICES_PATH, value: "/tmp/devices.json"}
         - {name: PYTHONUNBUFFERED, value: "1"}
         - name: VSS_URL
           valueFrom: {secretKeyRef: {name: ${APP_NAME}-vss-creds, key: VSS_URL}}
@@ -62,23 +84,22 @@ spec:
           valueFrom: {secretKeyRef: {name: ${APP_NAME}-vss-creds, key: VSS_PASSWORD}}
         volumeMounts:
         - {name: code, mountPath: /code}
-        - {name: data, mountPath: /data}
+        - {name: data, mountPath: /data}${EXTRA_MOUNTS}
         workingDir: /code
         command: ["bash", "-c"]
         args:
         - |
           set -euo pipefail
-          if [ -f requirements.txt ]; then pip install --no-cache-dir -q -r requirements.txt; fi
+          if [ -f requirements.txt ]; then pip install --no-cache-dir -q -r requirements.txt || true; fi
           exec python main.py
         readinessProbe:
           httpGet: {path: /health, port: ${APP_PORT}}
-          initialDelaySeconds: 5
+          initialDelaySeconds: 20
           periodSeconds: 10
+          failureThreshold: 18
       volumes:
-      - name: code
-        configMap: {name: ${APP_NAME}-code}
-      - name: data
-        configMap: {name: ${APP_NAME}-data, optional: true}
+      - {name: code, configMap: {name: ${APP_NAME}-code}}
+      - {name: data, configMap: {name: ${APP_NAME}-data, optional: true}}${EXTRA_VOLUMES}
 ---
 apiVersion: v1
 kind: Service
@@ -106,7 +127,7 @@ spec:
   - host: ${APP_HOST}
     http:
       paths:
-      - path: /app(/|$)(.*)
+      - path: /app(/|\$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
@@ -115,7 +136,8 @@ spec:
 EOF
 
 kubectl -n "$NS" rollout restart deploy/"$APP_NAME"
-kubectl -n "$NS" rollout status deploy/"$APP_NAME" --timeout=180s
+kubectl -n "$NS" rollout status deploy/"$APP_NAME" --timeout=300s
 kubectl -n "$NS" get pods,svc,ingress -l app="$APP_NAME"
 echo "health: $(curl -sS "http://${APP_HOST}/app/health")"
 echo "Open https://workshop.thecosmoslabs.com and click App."
+echo "Public: https://team-1-app.thecosmoslabs.com/app/"
