@@ -1,5 +1,5 @@
 {
- "generated_from": "engine/build_incidents.py: stage_c.json (Cosmos facts, rules v6) + stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + reviews.json (0 reviews, 0 verdicts changed, rule 0)",
+ "generated_from": "engine/build_incidents.py: stage_c.json (Cosmos facts, rules v6) + stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + stage_f.json (parked in bike lane, rule 9) + reviews.json (0 reviews, 0 verdicts changed, rule 0)",
  "evaluation": {
   "rules": "v6",
   "agree": 12,

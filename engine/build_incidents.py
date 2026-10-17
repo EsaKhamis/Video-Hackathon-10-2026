@@ -21,6 +21,9 @@ import report
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'probe'))
 from eval_labels import evaluate, load_reviews, review_segment  # noqa: E402
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'probe'))
+from eval_labels import evaluate  # noqa: E402
+
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 DATA = os.path.join(ROOT, 'data')
 UNCLEAR_PEAK_H = 0.45      # rule 8: YOLO encroachment with peak >= 45% of frame height
@@ -352,6 +355,7 @@ def main(out, only):
 
     json.dump({'generated_from': f'engine/build_incidents.py: stage_c.json (Cosmos facts, rules {fault.VERSION}) + '
                                  'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + '
+                                 'stage_f.json (parked in bike lane, rule 9) + '
                                  f'reviews.json ({reviewed} reviews, {overridden} verdicts changed, rule 0)'
                                  + (f"; only {','.join(sorted(only))}" if only else ''),
                'evaluation': {k: v for k, v in evaluate().items() if k != 'rows'},
