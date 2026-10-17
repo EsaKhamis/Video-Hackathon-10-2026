@@ -790,7 +790,8 @@ def ride_label(ride: dict) -> str:
 def accuracy_html(ev: dict | None) -> str:
     if not ev or not ev.get("total"):
         return ""
-    return (f'<p><strong>On our hand-labelled clips:</strong> the engine agrees with the label on '
+    reviewed = f' ({esc(ev["reviewed"])} labelled by your reviews here)' if ev.get("reviewed") else ""
+    return (f'<p><strong>On clips we checked by eye{reviewed}:</strong> the rules agree with the label on '
             f'{esc(ev["agree"])} of {esc(ev["total"])}, including {esc(ev.get("heroes_ok"))} of {esc(ev.get("heroes"))} '
             f'hero clips, and gave <strong>{esc(ev["wrong_driver"])}</strong> driver verdicts to clips where the driver '
             f'was not at fault (rules {esc(ev.get("rules"))}). A small set checked by eye, not a benchmark.</p>')
@@ -1203,7 +1204,9 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
     if fault != "rider":
         fact_rows.extend(
             [
-                ("Rule", f"#{item.get('fault_rule')} → {FAULT_LABEL.get(rule_fault, rule_fault)}"),
+                ("Rule", f"your review → {FAULT_LABEL.get(rule_fault, rule_fault)} (rules said "
+                         f"{FAULT_LABEL.get((item.get('engine') or {}).get('fault'), '?')})"
+                 if item.get("fault_rule") == 0 else f"#{item.get('fault_rule')} → {FAULT_LABEL.get(rule_fault, rule_fault)}"),
                 ("Model fault", FAULT_LABEL.get(model_fault, model_fault)),
             ]
         )
@@ -1534,6 +1537,7 @@ def report_summary(item: dict) -> str:
 
 
 RULE_TEXT = {
+    0: "Your review in this app; it replaces the rules' verdict when the engine rebuilds.",
     3: "The signal facing the rider was red as they entered.",
     4: "The rider was on the sidewalk.",
     5: "The rider changed line into the vehicle's path.",
@@ -1580,7 +1584,11 @@ def evidence_rows(item: dict) -> list[tuple[str, str]]:
     if item.get("low_light"):
         rows.append(("Light", "low light: distances and colours are less reliable"))
     rule = item.get("fault_rule")
-    if rule in RULE_TEXT:
+    if rule == 0:
+        engine = item.get("engine") or {}
+        rows.append(("Decided by your review", f"the rules said {FAULT_LABEL.get(engine.get('fault'), engine.get('fault'))}"
+                     f" (rule {engine.get('rule')})"))
+    elif rule in RULE_TEXT:
         rows.append((f"Decided by rule {rule}", RULE_TEXT[rule]))
     return rows
 
