@@ -1,5 +1,13 @@
 {
  "generated_from": "engine/build_incidents.py: stage_c.json (Cosmos facts, rules v6) + stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8)",
+ "evaluation": {
+  "rules": "v6",
+  "agree": 12,
+  "total": 18,
+  "wrong_driver": 0,
+  "heroes_ok": 5,
+  "heroes": 5
+ },
  "rides": [
   {
    "id": "GOPR0130",
@@ -81,7 +89,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The video shows a cyclist passing by a UPS truck parked on the street, with no interaction or conflict between the cyclist and the vehicle. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the bus on the right reached 99% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 3.3
    },
    "model_agreement": false,
    "document": {
@@ -180,7 +189,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A white truck cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. YOLO: the bus on the left reached 97% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "green"
+    "still_signal": "green",
+    "still_t": 2.8
    },
    "model_agreement": false,
    "document": {
@@ -248,7 +258,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, indicating the driver's failure to yield. YOLO: the car on the left reached 98% of frame height and came within about 0.03 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.3
    },
    "model_agreement": false,
    "document": {
@@ -316,7 +327,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 93% of frame height and came within about 0.24 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 0.3
    },
    "model_agreement": false,
    "document": {
@@ -415,7 +427,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, indicating the driver's failure to yield. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the left reached 97% of frame height and came within about 0.25 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.3
    },
    "model_agreement": true,
    "document": {
@@ -514,7 +527,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A red car cuts in ahead of the cyclist, forcing the rider to maneuver closely to avoid a collision. YOLO: the car on the left reached 78% of frame height and came within about 0.21 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "green"
+    "still_signal": "green",
+    "still_t": 4.0
    },
    "model_agreement": false,
    "document": {
@@ -582,7 +596,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A blue car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. YOLO: the car on the right reached 73% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "green"
+    "still_signal": "green",
+    "still_t": 3.1
    },
    "model_agreement": false,
    "document": {
@@ -650,7 +665,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A yellow car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the bus on the left reached 73% of frame height and came within about 0.23 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 4.0
    },
    "model_agreement": true,
    "document": {
@@ -749,7 +765,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The bus is stopped in the adjacent lane, and the rider is in the bike lane, with no interaction or conflict between them. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the bus on the left reached 72% of frame height and came within about 0.0 m of the rider's line. Signal facing the rider: red in the video and in the still at 0.0 s.",
     "model_fault": "none",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 0.0
    },
    "model_agreement": false,
    "document": {
@@ -848,7 +865,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car pulls out from the right side into the bike lane, cutting in front of the cyclist and creating a near-miss situation. YOLO: the car on the right reached 73% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.9
    },
    "model_agreement": false,
    "document": {
@@ -984,7 +1002,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts into the bike lane from the right, forcing the cyclist to swerve to avoid a collision. YOLO: the car on the right reached 73% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.4
    },
    "model_agreement": false,
    "document": {
@@ -1052,7 +1071,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car on the right is stopped with its taillights on, and the cyclist continues straight without any interaction or risk of collision. YOLO: the car on the left reached 71% of frame height and came within about 0.42 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 3.9
    },
    "model_agreement": false,
    "document": {
@@ -1120,7 +1140,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: The black car overtakes the cyclist on the right, and the closest distance is under 1m, indicating a near miss. YOLO: the car on the right reached 71% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.1
    },
    "model_agreement": false,
    "document": {
@@ -1188,7 +1209,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, indicating the driver's failure to yield. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the truck on the right reached 76% of frame height and came within about 0.35 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.2
    },
    "model_agreement": true,
    "document": {
@@ -1287,7 +1309,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is stopped in the lane to the right of the cyclists, but it does not enter the rider's path, and there is no interaction or conflict between the vehicles and the cyclists. YOLO: the car on the right reached 76% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "green"
+    "still_signal": "green",
+    "still_t": 0.5
    },
    "model_agreement": false,
    "document": {
@@ -1355,7 +1378,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The white truck is parked on the left side of the road and does not enter the rider's path, maintaining a safe distance throughout the clip. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the left reached 61% of frame height and came within about 0.19 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.9
    },
    "model_agreement": false,
    "document": {
@@ -1522,7 +1546,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The white truck is parked on the left side of the road and does not enter the bike lane or interfere with the cyclist's path. YOLO: the car on the left reached 66% of frame height and came within about 0.48 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.8
    },
    "model_agreement": false,
    "document": {
@@ -1590,7 +1615,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is driving in the adjacent lane, maintaining a safe distance from the cyclist, with no interaction or conflict observed. YOLO: the car on the right reached 69% of frame height and came within about 0.42 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.7
    },
    "model_agreement": false,
    "document": {
@@ -1658,7 +1684,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A silver car overtakes the cyclist from the left, cutting into the rider's path while the traffic light is red, creating a dangerous close pass. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 62% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 0.0
    },
    "model_agreement": false,
    "document": {
@@ -1757,7 +1784,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A silver car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, with the closest point of approach being under 1 meter. YOLO: the car on the left reached 74% of frame height and came within about 0.49 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.6
    },
    "model_agreement": false,
    "document": {
@@ -1825,7 +1853,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the right reached 56% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "green"
+    "still_signal": "green",
+    "still_t": 1.7
    },
    "model_agreement": true,
    "document": {
@@ -1924,7 +1953,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black truck is stopped on the right side of the road, and the cyclist maintains a safe distance in the bike lane without any interaction or conflict. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the right reached 50% of frame height and came within about 0.36 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.6
    },
    "model_agreement": false,
    "document": {
@@ -2023,7 +2053,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is parked on the right side of the road, and the cyclist maintains a safe distance while riding in the bike lane. YOLO: the truck on the right reached 65% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "unknown"
+    "still_signal": "unknown",
+    "still_t": 3.3
    },
    "model_agreement": false,
    "document": {
@@ -2091,7 +2122,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A silver car cuts in ahead of the cyclist, forcing the cyclist to swerve sharply to the right to avoid a collision, with the closest distance being under 1 meter. YOLO: the truck on the left reached 78% of frame height and came within about 0.52 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.5
    },
    "model_agreement": false,
    "document": {
@@ -2159,7 +2191,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the right reached 56% of frame height and came within about 0.95 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 3.6
    },
    "model_agreement": true,
    "document": {
@@ -2258,7 +2291,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is driving in the adjacent lane parallel to the bike lane, maintaining a safe distance without any interaction or conflict with the cyclist. YOLO: the car on the right reached 61% of frame height and came within about 0.16 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.8
    },
    "model_agreement": false,
    "document": {
@@ -2326,7 +2360,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: The blue SUV cuts in ahead of the cyclist, forcing the rider to brake sharply to avoid a collision, indicating the driver's failure to yield. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the left reached 68% of frame height and came within about 0.17 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.6
    },
    "model_agreement": true,
    "document": {
@@ -2493,7 +2528,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A white car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision. YOLO: the car on the left reached 57% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 3.0
    },
    "model_agreement": false,
    "document": {
@@ -2629,7 +2665,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist in the bike lane, forcing the cyclist to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 53% of frame height and came within about 0.0 m of the rider's line. Signal facing the rider: red in the video and in the still at 3.6 s.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.6
    },
    "model_agreement": false,
    "document": {
@@ -2864,7 +2901,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the truck on the right reached 51% of frame height and came within about 0.14 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.8
    },
    "model_agreement": true,
    "document": {
@@ -2963,7 +3001,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The rider proceeds through a red light, violating traffic rules, while a blue bus is stopped in the adjacent lane. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the left reached 40% of frame height and came within about 1.01 m of the rider's line. Signal facing the rider: red in the video and in the still at 4.0 s.",
     "model_fault": "rider",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 4.0
    },
    "model_agreement": true,
    "document": {
@@ -3062,7 +3101,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A silver car overtakes the cyclist from the left, cutting into the same lane and passing very close, while the rider proceeds through a red light, creating a dangerous near-miss situation. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 28% of frame height and came within about 0.0 m of the rider's line. Signal facing the rider: red in the video and in the still at 2.9 s.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 2.9
    },
    "model_agreement": false,
    "document": {
@@ -3213,7 +3253,8 @@
     "closest_distance": "unknown",
     "evidence": "Cosmos: The rider is seen entering the intersection on a red light, which is a traffic violation. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) Signal facing the rider: red in the video and in the still at 1.5 s.",
     "model_fault": "rider",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.5
    },
    "model_agreement": true,
    "document": {
@@ -3416,7 +3457,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A silver car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the truck on the right reached 85% of frame height and came within about 1.8 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.9
    },
    "model_agreement": false,
    "document": {
@@ -3515,7 +3557,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black SUV cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. YOLO: the car on the right reached 80% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 0.8
    },
    "model_agreement": false,
    "document": {
@@ -3583,7 +3626,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A gray SUV cuts in ahead of the cyclist, moving into the bike lane and forcing the cyclist to slow down to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the truck on the right reached 99% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.2
    },
    "model_agreement": false,
    "document": {
@@ -3682,7 +3726,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts into the bike lane from the left, forcing the cyclist to swerve sharply to avoid a collision, with the vehicle entering the rider's path at a very close distance. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 76% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.7
    },
    "model_agreement": false,
    "document": {
@@ -3781,7 +3826,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: The green truck moves into the bike lane and passes the cyclist at a very close distance, creating a dangerous situation. YOLO: the bus on the right reached 99% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.8
    },
    "model_agreement": false,
    "document": {
@@ -3849,7 +3895,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: The black car cuts into the lane ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 71% of frame height and came within about 0.28 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.9
    },
    "model_agreement": false,
    "document": {
@@ -3948,7 +3995,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A white car cuts into the bike lane from the right, forcing the cyclist to swerve sharply to avoid a collision, with no clear separation between the two paths. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 67% of frame height and came within about 0.24 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 2.8
    },
    "model_agreement": true,
    "document": {
@@ -4047,7 +4095,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the truck on the right reached 78% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 0.9
    },
    "model_agreement": false,
    "document": {
@@ -4146,7 +4195,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is driving in the adjacent bus lane, maintaining a safe distance from the cyclist in the bike lane without any conflict or near-miss. (near miss in 1 of 5 Cosmos checks, vehicle entered the rider's path in 1 of 5.) YOLO: the car on the left reached 61% of frame height and came within about 0.83 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.4
    },
    "model_agreement": false,
    "document": {
@@ -4245,7 +4295,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A white car cuts in ahead of the cyclist, reducing the distance to under 1 meter and creating a near-miss situation. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 69% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.9
    },
    "model_agreement": false,
    "document": {
@@ -4344,7 +4395,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: A black car cuts in front of the cyclist on the sidewalk, causing a near-miss as the cyclist is stopped and the car moves past without yielding. (near miss in 2 of 5 Cosmos checks, vehicle entered the rider's path in 2 of 5.) YOLO: the bus on the right reached 61% of frame height and came within about 0.69 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 0.0
    },
    "model_agreement": false,
    "document": {
@@ -4443,7 +4495,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The cyclist is riding down a narrow street with parked USPS trucks on both sides, but there is no interaction or conflict with any vehicle. YOLO: the truck on the right reached 83% of frame height and came within about 0.41 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "unknown"
+    "still_signal": "unknown",
+    "still_t": 3.3
    },
    "model_agreement": false,
    "document": {
@@ -4511,7 +4564,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car overtakes the cyclist from the left, cutting in front of the bike and passing at a very close distance, creating a near-miss situation. YOLO: the car on the left reached 67% of frame height and came within about 0.39 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "yellow"
+    "still_signal": "yellow",
+    "still_t": 2.9
    },
    "model_agreement": false,
    "document": {
@@ -4579,7 +4633,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The cyclist is riding on the sidewalk, and a silver car is parked on the street with a metal barrier separating the sidewalk from the road, so no conflict occurs. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the left reached 68% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 0.0
    },
    "model_agreement": false,
    "document": {
@@ -4678,7 +4733,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: The black car cuts into the bike lane from the right, forcing the cyclist to swerve sharply to avoid a collision, indicating the driver's failure to yield. YOLO: the car on the right reached 59% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.9
    },
    "model_agreement": false,
    "document": {
@@ -4746,7 +4802,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black SUV cuts in front of the cyclist while the cyclist is in the crosswalk, entering the rider's path without yielding. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 51% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.2
    },
    "model_agreement": false,
    "document": {
@@ -4845,7 +4902,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the cyclist to brake suddenly to avoid a collision. YOLO: the car on the left reached 48% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.6
    },
    "model_agreement": false,
    "document": {
@@ -4913,7 +4971,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A white SUV cuts in front of the cyclist, forcing them to brake suddenly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 57% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.5
    },
    "model_agreement": false,
    "document": {
@@ -5012,7 +5071,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car overtakes the cyclist from the left, and a pedestrian suddenly crosses the road in front of the cyclist, creating a near-miss situation. YOLO: the car on the left reached 61% of frame height and came within about 0.23 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "shared",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.2
    },
    "model_agreement": false,
    "document": {
@@ -5080,7 +5140,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The cyclist is on the sidewalk, separated from the black UPS truck by a metal barricade, with no interaction or conflict between them. (near miss in 1 of 5 Cosmos checks, vehicle entered the rider's path in 1 of 5.) YOLO: the car on the right reached 40% of frame height and came within about 1.58 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.6
    },
    "model_agreement": false,
    "document": {
@@ -5179,7 +5240,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A yellow taxi cuts in front of the cyclist, who is stopped at a crosswalk, and passes extremely close, creating a near-miss situation. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 50% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 2.4
    },
    "model_agreement": false,
    "document": {
@@ -5278,7 +5340,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The cyclist is on the sidewalk, and the UPS truck is parked on the street, with a clear physical barrier between them, so no conflict occurs. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the left reached 47% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 0.5
    },
    "model_agreement": false,
    "document": {
@@ -5377,7 +5440,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: The white car is moving in the adjacent lane, and the rider moves into its path, resulting in a close pass. YOLO: the truck on the right reached 37% of frame height and came within about 0.06 m of the rider's line.",
     "model_fault": "rider",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 3.8
    },
    "model_agreement": true,
    "document": {
@@ -5445,7 +5509,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: The yellow taxi cuts in ahead of the cyclist, forcing the rider to brake sharply to avoid a collision, indicating the driver's failure to yield. YOLO: the truck on the left reached 63% of frame height and came within about 0.16 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 2.0
    },
    "model_agreement": false,
    "document": {
@@ -5513,7 +5578,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A silver car cuts in front of the cyclist, forcing the cyclist to brake suddenly to avoid a collision. (near miss in 4 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the left reached 48% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 0.9
    },
    "model_agreement": true,
    "document": {
@@ -5612,7 +5678,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black UPS truck is parked on the street with a physical barrier between it and the sidewalk where the cyclist is riding, so no conflict occurs. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the right reached 40% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 3.8
    },
    "model_agreement": false,
    "document": {
@@ -5711,7 +5778,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A red car cuts into the bike lane from the left, forcing the cyclist to swerve sharply to avoid a collision, with no physical barrier separating the two. YOLO: the car on the right reached 85% of frame height and came within about 0.24 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "green"
+    "still_signal": "green",
+    "still_t": 2.4
    },
    "model_agreement": false,
    "document": {
@@ -5780,7 +5848,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, with the vehicle entering the rider's path without clear indication. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 67% of frame height and came within about 0.39 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.5
    },
    "model_agreement": true,
    "document": {
@@ -5880,7 +5949,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A white car cuts into the bike lane from the left, forcing the cyclist to swerve sharply to avoid a collision, with the closest point of approach being under 1 meter. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the left reached 64% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 2.0
    },
    "model_agreement": true,
    "document": {
@@ -5980,7 +6050,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A white car cuts into the bike lane from the right, moving alongside the cyclist at a very close distance, creating a near-miss situation. YOLO: the car on the right reached 55% of frame height and came within about 0.0 m of the rider's line. Cosmos put the closest distance at under 1 m; the two disagree, so you decide.",
     "model_fault": "driver",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 1.3
    },
    "model_agreement": false,
    "document": {
@@ -6049,7 +6120,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts into the bike lane from the left, forcing the cyclist to swerve sharply to avoid a collision, with no physical barrier between them. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 4 of 5.) YOLO: the car on the right reached 69% of frame height and came within about 0.27 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.2
    },
    "model_agreement": true,
    "document": {
@@ -6149,7 +6221,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is parked on the left side of the road, and there is no interaction or movement that affects the cyclist's path. YOLO: the car on the left reached 57% of frame height and came within about 0.29 m of the rider's line. Cosmos put the closest distance at over 2 m; the two disagree, so you decide.",
     "model_fault": "none",
-    "still_signal": "unknown"
+    "still_signal": "unknown",
+    "still_t": 3.0
    },
    "model_agreement": false,
    "document": {
@@ -6218,7 +6291,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in ahead of the cyclist, forcing the rider to swerve sharply to avoid a collision, with the vehicle entering the rider's path at a very close distance. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the car on the right reached 34% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 1.0
    },
    "model_agreement": true,
    "document": {
@@ -6318,7 +6392,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is driving parallel to the cyclist in the bike lane, separated by a curb and bollards, with no interaction or conflict observed. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the left reached 31% of frame height and came within about 2.42 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 2.2
    },
    "model_agreement": false,
    "document": {
@@ -6418,7 +6493,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is parked on the right side of the road, separated from the sidewalk by a curb and bollards, with no interaction or conflict occurring between the parked vehicle and the cyclist. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the right reached 29% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 3.5
    },
    "model_agreement": false,
    "document": {
@@ -6518,7 +6594,8 @@
     "closest_distance": "under_1m",
     "evidence": "Cosmos: A black car cuts in front of the cyclist on the sidewalk, forcing the cyclist to stop abruptly to avoid a collision. (near miss in 5 of 5 Cosmos checks, vehicle entered the rider's path in 5 of 5.) YOLO: the motorcycle on the left reached 43% of frame height and came within about 0.25 m of the rider's line.",
     "model_fault": "driver",
-    "still_signal": "red"
+    "still_signal": "red",
+    "still_t": 2.4
    },
    "model_agreement": false,
    "document": {
@@ -6618,7 +6695,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The black car is driving on the road while the cyclist is on the sidewalk, separated by a curb and bollards, with no interaction or conflict between them. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the car on the right reached 23% of frame height and came within about 0.13 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 3.0
    },
    "model_agreement": false,
    "document": {
@@ -6718,7 +6796,8 @@
     "closest_distance": "over_2m",
     "evidence": "Cosmos: The video shows a cyclist riding on a sidewalk with no vehicles or traffic signals present, and no interaction with other road users. (near miss in 0 of 5 Cosmos checks, vehicle entered the rider's path in 0 of 5.) YOLO: the motorcycle on the left reached 27% of frame height and came within about 0.0 m of the rider's line.",
     "model_fault": "none",
-    "still_signal": "none_visible"
+    "still_signal": "none_visible",
+    "still_t": 0.0
    },
    "model_agreement": false,
    "document": {

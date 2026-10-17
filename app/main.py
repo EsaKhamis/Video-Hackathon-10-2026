@@ -426,6 +426,9 @@ def load_data() -> dict:
     for item in data.get("incidents") or []:
         if not item.get("preview_source"):
             item["preview_source"] = resolve_source(item.get("source", ""))
+        vehicle = (item.get("facts") or {}).get("vehicle") or {}
+        if (vehicle.get("colour") or "").strip().lower() in ("cyclist to confirm", "unknown", "none"):
+            vehicle["colour"] = ""
         override = reviews.get(item["id"])
         if override:
             item["review"] = {**item.get("review", {}), **override}
@@ -784,6 +787,15 @@ def ride_label(ride: dict) -> str:
     return ride.get("title") or ride.get("id") or "Ride"
 
 
+def accuracy_html(ev: dict | None) -> str:
+    if not ev or not ev.get("total"):
+        return ""
+    return (f'<p><strong>On our hand-labelled clips:</strong> the engine agrees with the label on '
+            f'{esc(ev["agree"])} of {esc(ev["total"])}, including {esc(ev.get("heroes_ok"))} of {esc(ev.get("heroes"))} '
+            f'hero clips, and gave <strong>{esc(ev["wrong_driver"])}</strong> driver verdicts to clips where the driver '
+            f'was not at fault (rules {esc(ev.get("rules"))}). A small set checked by eye, not a benchmark.</p>')
+
+
 def about_page(data: dict) -> bytes:
     found = counts(data.get("incidents") or [])
     body = f"""<p class="kicker"><a href="{u('/')}">Your rides</a></p>
@@ -791,7 +803,8 @@ def about_page(data: dict) -> bytes:
 <p class="summary">A helmet-cam witness that drafts a report when a driver is at fault, and a private lesson when you are.</p>
 <section class="panel" style="margin:18px 0;">
   <h3>Pipeline</h3>
-  <p>Cosmos3-Reason screens the archive; YOLO measures closeness; plain rules decide fault; W&amp;B writes the report or lesson text. The app only reads the result and lets you review it.</p>
+  <p>Cosmos3-Reason screens every clip and re-checks each candidate five times; YOLO measures how close each vehicle got; plain rules decide fault. Report and lesson text are built from those facts. The app only reads the result and lets you review it.</p>
+  {accuracy_html(data.get("evaluation"))}
   <p class="meta">Data source now: <code>{esc(data_source())}</code> · {esc(len(data.get('incidents') or []))} incidents · {esc(len(load_segments()))} segments indexed for lead-up/aftermath.</p>
   <p class="meta">Ride safety on this load: {esc(summary_line(found))}.</p>
 </section>
@@ -1179,6 +1192,14 @@ def incident_detail(data: dict, incident_id: str) -> bytes:
         ("Peak height", f"{(geom.get('peak_h') or 0) * 100:.0f}% of frame"),
         ("Entered corridor", yn(geom.get("entered_corridor"))),
     ]
+    if geom.get("min_gap_m") is not None:
+        fact_rows.append(("Closest gap (YOLO)", f"about {geom['min_gap_m']:.2f} m"))
+    votes = item.get("votes") or {}
+    if votes.get("near_miss"):
+        fact_rows.append(("Cosmos checks", f"near miss {of_n(votes['near_miss'], True)}"
+                          + (f" · entered path {of_n(votes.get('entered_path'), True)}" if votes.get("entered_path") else "")))
+    if facts.get("still_t") is not None:
+        fact_rows.append((f"Signal still ({facts['still_t']} s)", SIGNAL_WORD.get(facts.get("still_signal"), facts.get("still_signal"))))
     if fault != "rider":
         fact_rows.extend(
             [
@@ -1512,6 +1533,121 @@ def report_summary(item: dict) -> str:
     return story_from_facts(item)
 
 
+RULE_TEXT = {
+    3: "The signal facing the rider was red as they entered.",
+    4: "The rider was on the sidewalk.",
+    5: "The rider changed line into the vehicle's path.",
+    7: "The vehicle entered the rider's path with no barrier between them and no red signal for the rider; "
+       "Cosmos and YOLO both saw it.",
+    8: "Cosmos and YOLO disagree, so a person decides.",
+    9: "No signal was visible on a crossing; the rider confirms right of way.",
+}
+SIGNAL_WORD = {"red": "red", "green": "green", "yellow": "yellow", "none_visible": "none visible", "unknown": "unclear"}
+
+
+def of_n(values: list | None, want: object) -> str:
+    if not values:
+        return ""
+    return f"{sum(v == want for v in values)} of {len(values)}"
+
+
+def evidence_rows(item: dict) -> list[tuple[str, str]]:
+    facts = item.get("facts") or {}
+    geom = item.get("geometry") or {}
+    votes = item.get("votes") or {}
+    rows: list[tuple[str, str]] = []
+    if geom.get("min_gap_m") is not None:
+        rows.append(("Closest gap (YOLO)", f"about {geom['min_gap_m']:.2f} m from the rider's line (estimated from box size)"))
+    if geom.get("peak_h"):
+        rows.append(("Vehicle size at peak", f"{geom['peak_h'] * 100:.0f}% of frame height at {item.get('t_peak')} s"))
+    if geom.get("lateral_toward_rider"):
+        rows.append(("Moving toward the rider", f"{geom['lateral_toward_rider']:.1f} m/s sideways"))
+    if votes.get("near_miss"):
+        line = f"near miss in {of_n(votes['near_miss'], True)} independent checks"
+        if votes.get("entered_path"):
+            line += f"; vehicle entered the rider's path in {of_n(votes['entered_path'], True)}"
+        rows.append(("Cosmos review", line))
+    dist = distance_phrase(facts.get("closest_distance"))
+    if dist:
+        rows.append(("Cosmos distance", dist))
+    still = facts.get("still_signal")
+    if still and facts.get("still_t") is not None:
+        agree = of_n(votes.get("still_signal"), still)
+        rows.append((f"Signal in still at {facts['still_t']} s",
+                     SIGNAL_WORD.get(still, still) + (f" ({agree} checks)" if agree else "")))
+    if facts.get("separator") in ("yes", "no"):
+        rows.append(("Physical barrier", "yes" if facts["separator"] == "yes" else "none (a painted line does not count)"))
+    if item.get("low_light"):
+        rows.append(("Light", "low light: distances and colours are less reliable"))
+    rule = item.get("fault_rule")
+    if rule in RULE_TEXT:
+        rows.append((f"Decided by rule {rule}", RULE_TEXT[rule]))
+    return rows
+
+
+def evidence_html(item: dict) -> str:
+    """Key frames cut client-side from the clip (box drawn on the peak), signal still, and the numbers behind the verdict."""
+    facts = item.get("facts") or {}
+    t_peak = item.get("t_peak") or 0
+    times = item.get("evidence_frames") or []
+    peak_t = min(times, key=lambda t: abs(t - t_peak)) if times else None
+    frames = [{"t": t, "box": t == peak_t,
+               "label": "peak · box = flagged vehicle" if t == peak_t else "before" if t < t_peak else "after"}
+              for t in times]
+    if facts.get("still_t") is not None and facts.get("still_signal") not in (None, "unknown"):
+        frames.append({"t": facts["still_t"], "box": False,
+                       "label": f"signal still · {SIGNAL_WORD.get(facts['still_signal'], facts['still_signal'])}"})
+    rows = "".join(f"<div><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>" for k, v in evidence_rows(item))
+    figs = "".join(f'<figure><canvas data-i="{i}"></canvas><figcaption>{esc(f["t"])} s · {esc(f["label"])}</figcaption></figure>'
+                   for i, f in enumerate(frames))
+    return f"""
+<style>
+  .frames {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 10px 0 14px; }}
+  .frames figure {{ margin: 0; }}
+  .frames canvas {{ width: 100%; aspect-ratio: 16 / 9; background: #111; display: block; }}
+  .frames figcaption {{ font: 12px/1.3 ui-sans-serif, system-ui, sans-serif; color: var(--muted); margin-top: 4px; }}
+  .ev-grid {{ display: grid; gap: 0; margin: 8px 0 12px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; }}
+  .ev-grid div {{ display: grid; grid-template-columns: 11rem 1fr; gap: 10px; border-bottom: 1px solid var(--line); padding: 7px 0; }}
+  .ev-grid dt {{ color: var(--muted); }}
+  .ev-grid dd {{ margin: 0; }}
+  @media print {{ .frames {{ grid-template-columns: repeat(4, 1fr); }} }}
+</style>
+<h2>Evidence</h2>
+<div class="frames" id="frames">{figs}</div>
+<dl class="ev-grid">{rows}</dl>
+<p class="meta">Closeness is estimated from the size of the vehicle's box, not measured. Frames are taken from the clip itself.</p>
+<script>
+(() => {{
+  const frames = {json.dumps(frames)};
+  const bbox = {json.dumps((item.get("geometry") or {}).get("bbox"))};
+  const src = {json.dumps(u('/api/stream'))} + '?source=' + encodeURIComponent({json.dumps(item.get("preview_source") or "")});
+  const grab = (i) => {{
+    if (i >= frames.length) return;
+    const f = frames[i];
+    const v = document.createElement('video');
+    v.muted = true; v.preload = 'auto'; v.playsInline = true;
+    v.addEventListener('loadeddata', () => {{ v.currentTime = Math.min(f.t, Math.max(0, v.duration - 0.05)); }}, {{once: true}});
+    v.addEventListener('seeked', () => {{
+      const c = document.querySelector('#frames canvas[data-i="' + i + '"]');
+      c.width = v.videoWidth; c.height = v.videoHeight;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(v, 0, 0);
+      if (f.box && bbox) {{
+        const [x1, y1, x2, y2] = bbox;
+        ctx.strokeStyle = '#f2c14e'; ctx.lineWidth = Math.max(4, c.width / 240);
+        ctx.strokeRect(x1 * c.width, y1 * c.height, (x2 - x1) * c.width, (y2 - y1) * c.height);
+      }}
+      v.removeAttribute('src'); v.load();
+      grab(i + 1);
+    }}, {{once: true}});
+    v.addEventListener('error', () => grab(i + 1), {{once: true}});
+    v.src = src;
+  }};
+  grab(0);
+}})();
+</script>"""
+
+
 def authority_report_page(data: dict, incident_id: str) -> bytes:
     item = next((row for row in data["incidents"] if row["id"] == incident_id), None)
     if item is None:
@@ -1532,7 +1668,7 @@ def authority_report_page(data: dict, incident_id: str) -> bytes:
     colour = (vehicle.get("colour") or "").strip()
     kind = vehicle.get("type") or "vehicle"
     kind = {"suv": "SUV"}.get(kind, kind)
-    vehicle_line = f"{colour} {kind}".strip() if colour else kind
+    vehicle_line = f"{colour} {kind}".strip() if colour else f"{kind} (colour: cyclist to confirm)"
     plate = review.get("plate") or "— (cyclist to confirm)"
     street = review.get("street") or "— (cyclist to confirm)"
     recorded = review.get("recorded_at") or "unknown — cyclist to confirm"
@@ -1576,13 +1712,14 @@ def authority_report_page(data: dict, incident_id: str) -> bytes:
       <div><dt>Location</dt><dd>{esc(street)}</dd></div>
       <div><dt>Vehicle</dt><dd>{esc(vehicle_line)} · side {esc(vehicle.get('side') or 'unknown')}</dd></div>
       <div><dt>License plate</dt><dd>{esc(plate)}</dd></div>
-      <div><dt>Event type</dt><dd>{esc(item.get('event_type'))}</dd></div>
+      <div><dt>Event type</dt><dd>{esc(str(item.get('event_type') or '').replace('_', ' '))}</dd></div>
       <div><dt>Severity</dt><dd>{esc(item.get('severity_label'))} ({esc(item.get('severity'))})</dd></div>
       <div><dt>Fault</dt><dd>{esc(FAULT_LABEL.get(fault, fault))}</dd></div>
-      <div><dt>Signal for rider</dt><dd>{esc(facts.get('signal_for_rider'))}</dd></div>
-      <div><dt>Rider position</dt><dd>{esc(facts.get('rider_position'))}</dd></div>
+      <div><dt>Signal for rider</dt><dd>{esc(SIGNAL_WORD.get(facts.get('signal_for_rider'), facts.get('signal_for_rider')))}</dd></div>
+      <div><dt>Rider position</dt><dd>{esc(str(facts.get('rider_position') or '').replace('_', ' '))}</dd></div>
       <div><dt>Clip</dt><dd>{esc(item.get('source'))}</dd></div>
     </div>
+    {evidence_html(item)}
     <p class="meta">Recording date/time and GPS are not in the archive; confirm them before filing.</p>
     <p class="status" id="send-status"></p>
   </section>
@@ -1652,6 +1789,7 @@ def lesson_page(data: dict, incident_id: str) -> bytes:
     <p>{esc(sections['why_risky'])}</p>
     <h2>Next time</h2>
     <ul class="reminders">{''.join(f'<li>{esc(line)}</li>' for line in sections.get('reminders') or [sections['next_time']])}</ul>
+    {evidence_html(item)}
     <p class="meta">A reminder for how to ride this spot again. General safety advice only.</p>
   </section>
 </div>

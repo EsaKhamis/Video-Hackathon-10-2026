@@ -10,9 +10,12 @@
   python3 engine/build_incidents.py                 # -> data/incidents.json
   python3 engine/build_incidents.py --only H1,H3    # halfway-gate cut: hero clips only (ids from probe/labels.csv)
 """
-import argparse, csv, json, os
+import argparse, csv, json, os, sys
 
 import fault
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'probe'))
+from eval_labels import evaluate  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 DATA = os.path.join(ROOT, 'data')
@@ -114,7 +117,7 @@ def stage_c_incident(seg, geo_row, row, hero):
                                       'side': v.get('side', 'none')},
                              closest_distance=f.get('closest_distance', 'unknown'),
                              evidence=evidence, model_fault=f.get('fault'),
-                             still_signal=row['still_signal']),
+                             still_signal=row['still_signal'], still_t=row.get('still_t')),
         'model_agreement': (f.get('fault') == verdict) if verdict != 'unclear' else False,
         'document': {'kind': {'driver': 'authority_report', 'rider': 'rider_lesson'}.get(verdict, 'both'),
                      'title': title if verdict != 'unclear' else
@@ -217,6 +220,7 @@ def main(out, only):
     json.dump({'generated_from': f'engine/build_incidents.py: stage_c.json (Cosmos facts, rules {fault.VERSION}) + '
                                  'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8)'
                                  + (f"; only {','.join(sorted(only))}" if only else ''),
+               'evaluation': {k: v for k, v in evaluate().items() if k != 'rows'},
                'rides': rides, 'incidents': incidents}, open(out, 'w'), indent=1)
     c = {}
     for i in incidents:

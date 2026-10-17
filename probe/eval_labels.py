@@ -11,23 +11,32 @@ import fault  # noqa: E402
 EXPECT = {'driver': 'driver', 'rider': 'rider', 'shared': 'unclear'}   # anything else should be dropped
 NEVER_DRIVER = {'rider', 'adjacent_lane', 'separated', 'rider_turning', 'other_fp', 'stationary'}
 
-geo = {r['id']: r for r in json.load(open(os.path.join(ROOT, 'data/geometry.json')))['rows']}
-sc = {r['id']: r for r in json.load(open(os.path.join(ROOT, 'data/stage_c.json')))['rows']}
-rows, agree, wrong_driver = [], 0, []
-for lab in csv.DictReader(open(os.path.join(ROOT, 'probe/labels.csv'))):
-    k = lab['segment']
-    if k not in sc:
-        continue
-    verdict, rule, _ = fault.decide(sc[k]['facts'], sc[k]['still_signal'], geo.get(k), sc[k].get('votes'))
-    want = EXPECT.get(lab['label'], 'drop')
-    ok = verdict == want
-    agree += ok
-    if verdict == 'driver' and lab['label'] in NEVER_DRIVER:
-        wrong_driver.append(k)
-    rows.append((lab['hero'] or '-', k, lab['label'], verdict, rule, 'ok' if ok else ('unclear' if verdict == 'unclear' else 'WRONG')))
 
-print(f'rules {fault.VERSION}')
-for r in rows:
-    print(f'{r[0]:3} {r[1]:34} label={r[2]:13} engine={r[3]:8} rule={r[4]:<3} {r[5]}')
-print(f'\nagree with label: {agree}/{len(rows)}')
-print(f'wrong driver verdicts (label rider/adjacent/separated/fp): {len(wrong_driver)} {wrong_driver}')
+def evaluate():
+    geo = {r['id']: r for r in json.load(open(os.path.join(ROOT, 'data/geometry.json')))['rows']}
+    sc = {r['id']: r for r in json.load(open(os.path.join(ROOT, 'data/stage_c.json')))['rows']}
+    rows, agree, wrong_driver = [], 0, []
+    for lab in csv.DictReader(open(os.path.join(ROOT, 'probe/labels.csv'))):
+        k = lab['segment']
+        if k not in sc:
+            continue
+        verdict, rule, _ = fault.decide(sc[k]['facts'], sc[k]['still_signal'], geo.get(k), sc[k].get('votes'))
+        want = EXPECT.get(lab['label'], 'drop')
+        ok = verdict == want
+        agree += ok
+        if verdict == 'driver' and lab['label'] in NEVER_DRIVER:
+            wrong_driver.append(k)
+        rows.append({'hero': lab['hero'], 'segment': k, 'label': lab['label'], 'engine': verdict, 'rule': rule,
+                     'result': 'ok' if ok else ('unclear' if verdict == 'unclear' else 'wrong')})
+    return {'rules': fault.VERSION, 'agree': agree, 'total': len(rows), 'wrong_driver': len(wrong_driver),
+            'heroes_ok': sum(r['result'] == 'ok' for r in rows if r['hero']),
+            'heroes': sum(1 for r in rows if r['hero']), 'rows': rows}
+
+
+if __name__ == '__main__':
+    e = evaluate()
+    print(f"rules {e['rules']}")
+    for r in e['rows']:
+        print(f"{r['hero'] or '-':3} {r['segment']:34} label={r['label']:13} engine={r['engine']:8} rule={r['rule']:<3} {r['result']}")
+    print(f"\nagree with label: {e['agree']}/{e['total']}")
+    print(f"wrong driver verdicts (label rider/adjacent/separated/fp): {e['wrong_driver']}")
