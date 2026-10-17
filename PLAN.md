@@ -211,6 +211,11 @@ If the bar isn't met at 13:30, freeze the current version and demo only clips wh
 - **Halfway gate (14:30): not met → cut to H1 + H3.** Cosmos says H1 (and H4) is "own lane, over 2 m" while YOLO says
   ~1 m, so the rules give `unclear`, never `driver`. Demo: H1 is "unclear, you decide"; the reviewer picks driver and
   gets the authority report. H3 = rider, red in video and still. `build_incidents.py --only H1,H3` → deployed.
+- v6 (15:25): Stage C blind (no hint; the hint made Cosmos agree with it) with a 5-way majority vote (Cosmos is
+  not deterministic at temperature 0). Every driver verdict needs 4/5 calls saying the vehicle entered the rider's
+  path; YOLO close-pass shape + that vote is a driver path (H1). Sidewalk and red stills are voted too.
+  12/18 agree, 0 wrong driver; H1, H4 driver, H3 rider (red 5/5), H5 sidewalk, H2 dropped. Full set: 13 driver
+  (11 unchecked by eye), 25 rider, 42 unclear.
 
 ## Prompts (fixed, shared by D and A)
 
