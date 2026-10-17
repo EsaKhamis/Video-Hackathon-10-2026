@@ -8,6 +8,8 @@
   data/segments.json  playable source + ride offset per segment
   data/reviews.json   the rider's reviews from the app (k8s/pull-reviews.sh)  -> the fault they chose wins
                       over the rules (rule 0); the rules' answer stays in `engine`
+  data/near_misses.json  clips a person checked (person in the roadway, or a vehicle in the lane)
+                      -> fills unknown colour / type / position on the matching incident. Not a fault verdict.
 
   python3 engine/build_incidents.py                 # -> data/incidents.json
   python3 engine/build_incidents.py --only H1,H3    # halfway-gate cut: hero clips only (ids from probe/labels.csv)
@@ -159,6 +161,110 @@ def apply_reviews(incidents, heroes):
     return matched, changed
 
 
+PLACEHOLDER_COLOUR = {'', 'unknown', 'none', 'cyclist to confirm'}
+SPECIFIC_TYPE = {'suv', 'taxi', 'van', 'truck', 'bus', 'motorcycle'}
+
+
+def _title_case_label(label):
+    return (label[:1].upper() + label[1:]) if label else label
+
+
+def apply_near_misses(incidents, by_key, geo, allow_add):
+    """Merge data/near_misses.json onto incidents.
+
+    The eye check says what was close. It does not assign fault. A person in the roadway
+    replaces a vehicle story, and a driver verdict on that clip becomes unclear (unknown
+    facts never become a driver report). A named colour or type fills 'cyclist to confirm'.
+    """
+    path = os.path.join(DATA, 'near_misses.json')
+    if not os.path.exists(path):
+        return 0, 0
+    payload = json.load(open(path))
+    by_source = {inc['source']: inc for inc in incidents}
+    updated = added = 0
+    for row in payload.get('rows') or []:
+        key = seg_key(row['source'])
+        inc = by_source.get(key)
+        if inc is None:
+            if not allow_add:
+                continue
+            seg = by_key.get(key)
+            if not seg:
+                print('near miss with no segment:', row['id'], key)
+                continue
+            inc = base(seg, geo.get(key))
+            inc.update({
+                'id': row['id'], 'event_type': 'close_vehicle', 'fault': 'unclear', 'fault_rule': 8,
+                'facts': blank_facts(evidence=''),
+                'model_agreement': None,
+                'document': {'kind': 'both', 'title': _title_case_label(row.get('label') or 'Near miss')},
+            })
+            incidents.append(inc)
+            by_source[key] = inc
+            added += 1
+        _merge_checked(inc, row)
+        updated += 1
+    return updated, added
+
+
+def _merge_checked(inc, row):
+    facts = inc.setdefault('facts', blank_facts())
+    given = row.get('facts') or {}
+    vehicle = facts.setdefault('vehicle', {'type': 'none', 'colour': '', 'side': 'none'})
+    given_v = given.get('vehicle') or {}
+    kind = row.get('kind')
+    if kind == 'person':
+        if inc.get('fault') == 'driver' and inc.get('fault_rule') != 0:
+            inc['engine'] = {'fault': inc['fault'], 'rule': inc['fault_rule']}
+            inc['fault'], inc['fault_rule'] = 'unclear', 8
+            inc['model_agreement'] = False
+        vehicle.clear()
+        vehicle.update({'type': 'person', 'colour': '', 'side': ''})
+        facts['vehicle_action'] = 'none'
+        if given.get('rider_position'):
+            facts['rider_position'] = given['rider_position']
+        inc['event_type'] = 'person_in_lane' if 'lane' in (row.get('label') or '') else 'people_in_crosswalk'
+        inc['document']['kind'] = 'both'
+        inc['document']['title'] = _title_case_label(row.get('label') or 'Person close to the bike')
+    else:
+        if given_v.get('type') in SPECIFIC_TYPE or (
+                given_v.get('type') == 'car' and vehicle.get('type') in (None, '', 'none', 'unknown')):
+            vehicle['type'] = given_v['type']
+        colour = (given_v.get('colour') or '').strip()
+        if colour.lower() not in PLACEHOLDER_COLOUR and (vehicle.get('colour') or '').strip().lower() in PLACEHOLDER_COLOUR:
+            vehicle['colour'] = colour
+        if given_v.get('side') in ('left', 'right', 'front'):
+            yolo_side = (inc.get('geometry') or {}).get('side')
+            if yolo_side and yolo_side != given_v['side']:
+                facts['yolo_side'] = yolo_side
+            vehicle['side'] = given_v['side']
+        if given.get('rider_position') and facts.get('rider_position') in (None, '', 'unknown'):
+            facts['rider_position'] = given['rider_position']
+        if inc.get('event_type') in (None, '', 'close_vehicle'):
+            inc['event_type'] = 'vehicle_in_lane'
+        title = (inc.get('document') or {}).get('title') or ''
+        if inc.get('fault') == 'unclear' and (title.lower().startswith('close ') or title.lower() == 'vehicle in the lane' or not title):
+            name = {'suv': 'SUV'}.get(vehicle.get('type'), vehicle.get('type') or 'vehicle')
+            colour_bit = (vehicle.get('colour') or '').strip()
+            if colour_bit:
+                colour_bit = colour_bit[:1].upper() + colour_bit[1:]
+            side_bit = f" on the {vehicle['side']}" if vehicle.get('side') else ''
+            inc['document']['title'] = f"{colour_bit} {name}{side_bit}".strip()
+            inc['document']['kind'] = 'both'
+    note = (row.get('note') or '').strip()
+    prefix = f"Checked by eye ({row['id']}): {note}"
+    yolo_side = facts.get('yolo_side')
+    if yolo_side and vehicle.get('side') and yolo_side != vehicle.get('side'):
+        prefix += (f" The eye check places the vehicle on the {vehicle['side']}; "
+                   f"the largest measured box is on the {yolo_side}.")
+    evidence = (facts.get('evidence') or '').strip()
+    if prefix and prefix not in evidence:
+        facts['evidence'] = (prefix + (' ' + evidence if evidence else '')).strip()
+    inc['checked'] = {
+        'id': row['id'], 'kind': kind, 'label': row.get('label'), 'note': note, 'liability': False,
+    }
+
+
 def main(out, only):
     segments = load('segments.json')
     by_chunk = {(s['ride'], s['chunk_index'], float(s['start_sec'])): s for s in segments}
@@ -229,6 +335,7 @@ def main(out, only):
     reviewed, overridden = apply_reviews(incidents, heroes)
     if only:
         incidents = [i for i in incidents if i['id'] in only]
+    checked_n, checked_added = apply_near_misses(incidents, by_key, geo, allow_add=not only)
 
     top = max((i['_raw'] for i in incidents), default=0) or 1
     for i in incidents:
@@ -249,14 +356,17 @@ def main(out, only):
 
     json.dump({'generated_from': f'engine/build_incidents.py: stage_c.json (Cosmos facts, rules {fault.VERSION}) + '
                                  'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + '
-                                 f'reviews.json ({reviewed} reviews, {overridden} verdicts changed, rule 0)'
+                                 f'reviews.json ({reviewed} reviews, {overridden} verdicts changed, rule 0) + '
+                                 f'near_misses.json ({checked_n} checked, {checked_added} added, not a fault verdict)'
                                  + (f"; only {','.join(sorted(only))}" if only else ''),
                'evaluation': {k: v for k, v in evaluate().items() if k != 'rows'},
-               'rides': rides, 'incidents': incidents}, open(out, 'w'), indent=1)
+               'rides': rides, 'incidents': incidents,
+               'near_misses': {'checked': checked_n, 'added': checked_added}}, open(out, 'w'), indent=1)
     c = {}
     for i in incidents:
         c[i['fault']] = c.get(i['fault'], 0) + 1
-    print(f'{len(incidents)} incidents {c} -> {out}; {reviewed} reviews applied, {overridden} changed the verdict')
+    print(f'{len(incidents)} incidents {c} -> {out}; {reviewed} reviews applied, {overridden} changed the verdict; '
+          f'{checked_n} eye-checked near misses, {checked_added} added')
 
 
 if __name__ == '__main__':

@@ -13,6 +13,7 @@ Everything lives in `data/`. The app reads only `segments.json`, `screen.json` a
 | `geometry.json` | Stage B, `engine/detect.py` | `build_incidents.py` |
 | `stage_d.json` | Stage D (data-engine): rider-on-red survivors | `build_incidents.py` |
 | `stage_c.json` | Stage C, `engine/confirm.py`: Cosmos facts per flagged segment | `build_incidents.py` |
+| `near_misses.json` | Eye check of clips (person in the roadway, or a vehicle in the lane). Not a fault verdict | `build_incidents.py` fills unknown colour, type and position; adds clips the rules had dropped |
 | `incidents.json` | `engine/build_incidents.py` | app |
 
 ```bash
