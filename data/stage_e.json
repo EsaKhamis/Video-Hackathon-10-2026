@@ -1,0 +1,578 @@
+{
+ "GOPR0130_chunk_0014_segment_002": {
+  "summary": "The cyclist was riding in the traffic lane when a car overtook from the left and cut into the cyclist's path. The vehicle entered the cyclist's lane, coming within about half a metre, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. No swerving or turning by the cyclist was observed.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GOPR0130_chunk_0016_segment_001": {
+  "summary": "The cyclist was riding in the traffic lane when a bus overtook from the left and cut into the cyclist's path. The bus entered the cyclist's lane, coming within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. No swerving or turning by the cyclist was observed.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GOPR0130_chunk_0024_segment_006": {
+  "what_happened": "You were riding in the bike lane and entered the intersection while the traffic signal facing you was red. A bus was travelling straight through the junction on its own lane at the same time.",
+  "why_risky": "Entering on a red signal meant you moved into the path of a vehicle that had the right of way, creating a close\u2011call situation.",
+  "next_time": "['Check the traffic lights before you reach the stop line and wait until the signal turns green for you.', 'If the light is red, stay in the bike lane and give the bus plenty of space to pass before you proceed.', 'Practice pausing at intersections to confirm that all traffic has stopped or is moving away before you move forward.']",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0021_segment_004": {
+  "summary": "A bus travelling on the right side of the road passed close to the cyclist. The video shows the gap between the bus and the cyclist was estimated at under about half a metre, though another estimate placed it at over two metres. No signals were visible and there was no physical separator. The exact positions of the cyclist and the vehicle at the moment are not known.",
+  "what_happened": "You were riding when a bus on your right side moved past you at a very close distance. The video shows the gap was very small, under about half a metre, although another estimate suggested it might have been larger.",
+  "why_risky": "A narrow gap leaves little room for either you or the bus to adjust if either changes speed or direction, increasing the chance of a collision, especially without a physical separator or signals.",
+  "next_time": "Try to maintain a larger buffer when sharing the road with large vehicles, especially on the right side. Look ahead for any signals or changes in vehicle behaviour, and consider adjusting your speed or position early to give yourself more space.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0005_segment_002": {
+  "summary": "The cyclist was travelling in a bike lane when a bus overtook on the left side and entered the cyclist's path. The bus came within an estimated distance of under about half a metre of the cyclist, according to the video. No physical separator was present and the cyclist did not move into the vehicle's path. The exact signalling situation could not be confirmed from the footage.",
+  "what_happened": "A bus overtook you on the left, moving into the space you were using in the bike lane, coming very close \u2013 less than about half a metre away.",
+  "why_risky": "The bus entered your lane with little clearance, leaving very little room to react, and there was no physical barrier to separate you from the vehicle.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially larger ones, and be prepared to adjust your position early if a vehicle signals an overtaking manoeuvre.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0014_segment_003": {
+  "summary": "The cyclist was travelling in a traffic lane when a car overtook on the left side and entered the cyclist's path. The vehicle moved into the cyclist's lane with an estimated gap of under about half a metre, as judged from the video. No signals were visible from the car and there was no physical separator between the road users. The video shows the cyclist remained in their lane and did not swerve.",
+  "what_happened": "A car overtook you on the left and cut into your lane, coming within about half a metre of you.",
+  "why_risky": "Being that close leaves very little room to react, and without any signals the manoeuvre can be unexpected and dangerous.",
+  "next_time": "Try to keep a safe distance from overtaking vehicles and stay alert for cars that may move into your lane without signalling.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0017_segment_001": {
+  "summary": "The cyclist was travelling in a traffic lane when a car overtook on the left side. The car entered the cyclist's path, coming within about half a metre, as estimated from the video. The traffic signal facing the cyclist was red at the time. No physical separator was present.",
+  "what_happened": "A car overtook on the left and cut into your lane, coming very close to you.",
+  "why_risky": "Being that close leaves little room to react, especially when the light is red and there is no barrier separating you from the vehicle.",
+  "next_time": "Try to keep a safe distance from overtaking vehicles and stay alert for cars moving into your lane, especially at red lights.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0021_segment_002": {
+  "summary": "At about 10 minutes and 35 seconds into the recording, a truck overtook on the right and entered the cyclist's lane. The video shows the truck moving into the cyclist's path while the cyclist remained in the traffic lane. The gap between them was estimated at about 2\u202fm, though one model suggested it might have been under 1\u202fm. No physical separator was present at the location.",
+  "what_happened": "The truck overtook on the right and cut into the lane you were riding in, closing the distance to about 2\u202fm.",
+  "why_risky": "Being overtaken so closely reduces the time you have to react, especially without a physical separator, and can increase the chance of a collision if either vehicle changes speed or direction.",
+  "next_time": "Try to maintain a safe distance from overtaking vehicles and stay alert for signals that may indicate their intentions. If possible, position yourself where you have a clear view of oncoming traffic and give yourself extra space when larger vehicles are nearby.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX050001_chunk_0001_segment_002": {
+  "summary": "A car overtook the cyclist in the bike lane, moving into the cyclist's path from the right. The vehicle entered the cyclist's lane with an estimated gap of under about half a metre, as judged from the video. No physical separator was present and the lighting was low. The cyclist remained in the bike lane and did not move into the vehicle's path.",
+  "what_happened": "You were riding in a bike lane when a car overtook you from the right, cutting into your space with a very small gap. The car entered your lane while you stayed on your line, and there was no barrier separating you from the vehicle.",
+  "why_risky": "The car moved into your lane at a very close distance, leaving little room to react, especially in low light and without a physical separator. This close proximity increases the chance of a collision if either party changes speed or direction.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially in low\u2011light conditions, and consider moving slightly towards the centre of the lane if safe to give a larger buffer. If you see a vehicle signalling to overtake, be prepared to adjust your position or speed to maintain a safe gap.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0019_segment_004": {
+  "summary": "A car overtook the cyclist from the right and entered the cyclist's lane. The vehicle moved into the cyclist's path while the cyclist remained in the traffic lane. The gap between them was estimated from the video at under about half a metre. No traffic signals facing the cyclist were visible and there was no physical separator.",
+  "what_happened": "You were riding in the traffic lane when a car overtook you on the right and drifted into your path. You stayed in your lane and did not swerve, and the car came very close, within about half a metre.",
+  "why_risky": "A vehicle moving into your lane from the right reduces the space you have to react, especially when the gap is that small. Without a physical separator or signals, the risk of a collision increases.",
+  "next_time": "Try to keep an eye on vehicles approaching from the right and maintain a safe distance where possible. If a car begins to encroach, consider adjusting your position early to give yourself more room. Using visible hand signals can also help alert drivers to your presence.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0005_segment_004": {
+  "summary": "A car overtook the cyclist from the left, entering the cyclist's path while the cyclist remained in the traffic lane. The vehicle moved into the cyclist's space, creating a gap of under about half a metre between them. The video shows no physical separator and no swerving by the cyclist. The exact signal status could not be confirmed from the footage.",
+  "what_happened": "The car overtook on the left and cut into the lane you were riding in, coming within about half a metre of you.",
+  "why_risky": "Being that close leaves very little room to react if either vehicle changes speed or direction, especially without a physical barrier separating you.",
+  "next_time": "Try to keep a larger buffer when a vehicle is overtaking, and if possible, position yourself where you can see the driver\u2019s signals clearly before they move into your lane.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0015_segment_002": {
+  "summary": "The cyclist was travelling in a bike lane when a truck overtook on the right and entered the cyclist's path. The video shows the truck moving into the lane with an estimated gap of under about half a metre between them. No physical separator was present and the cyclist did not move into the truck's path. The exact signalling from the truck could not be confirmed from the footage.",
+  "what_happened": "A truck overtook on the right and cut into the bike lane, coming within about half a metre of you.",
+  "why_risky": "The very small gap left little room for reaction, and without a physical barrier the truck\u2019s movement into your lane created a close\u2011call situation.",
+  "next_time": "Try to keep a safe distance from overtaking vehicles and stay alert for any signals they may give. If possible, position yourself where you have a clear view of traffic approaching from behind, and be ready to adjust your line if a vehicle moves unexpectedly.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0016_segment_001": {
+  "summary": "A car overtook the cyclist while travelling on the right-hand side and entered the cyclist's bike lane. The vehicle moved into the cyclist's path, coming within under about half a metre of the cyclist. There is no physical separator between the lane and the road. The exact signalling to the cyclist could not be confirmed from the video.",
+  "what_happened": "You were riding in a bike lane when a car overtook on the right and cut into your lane, coming very close to you.",
+  "why_risky": "The car entered your space with only a very small gap, leaving little room to react and increasing the chance of a collision, especially without a physical barrier.",
+  "next_time": "Try to maintain a safe distance from overtaking vehicles and stay alert for any signals they may give. If possible, position yourself where you have a clear view of approaching traffic and be prepared to adjust your line if a vehicle moves into your lane.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0014_segment_001": {
+  "summary": "The video shows a car overtaking in the right-hand lane and entering the cyclist's path while the cyclist was travelling in the traffic lane. The gap between the vehicle and the cyclist was estimated at under about half a metre, with the model suggesting it was under one metre. No physical separator was present and the cyclist did not move into the vehicle's path. The situation was recorded about seven minutes into the ride, with lighting conditions normal.",
+  "what_happened": "A car overtook on the right and cut into the lane you were using, coming within roughly half a metre of you.",
+  "why_risky": "The very close distance left little room for either party to react, and without a physical separator the vehicle entered your space unexpectedly.",
+  "next_time": "Try to keep a safe distance from overtaking vehicles and stay alert for cars moving into your lane, especially when there is no barrier separating you.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0018_segment_001": {
+  "summary": "The cyclist was travelling in a bike lane when a car on the right side began to pull out into the cyclist's path. The vehicle entered the lane with an estimated gap of under about half a metre, as judged from the video. No signal from the car was visible and there was no physical separator between the lane and the road. The video shows the cyclist remained in the lane and did not swerve.",
+  "what_happened": "A car tried to merge into the bike lane while you were riding, closing the distance to less than half a metre.",
+  "why_risky": "The very small gap left little room for you to react, and the lack of a signal meant you had no warning of the car's intention.",
+  "next_time": "Stay alert for vehicles pulling out, especially when there is no physical barrier, and be prepared to adjust your speed or position if you see a car approaching the lane.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0010_segment_005": {
+  "what_happened": "You rode into the traffic lane and entered the intersection while the traffic signal facing you was red. The video shows you crossing just before the light changed, with the gap to the nearest vehicle being under about half a metre.",
+  "why_risky": "Entering on red meant you moved into the path of traffic that had the right of way, creating a close\u2011call situation.",
+  "next_time": "1. Wait until the signal turns green before entering the intersection. 2. Use the pedestrian crossing phase if available, or check for a dedicated cycle green. 3. Give yourself a clear margin \u2013 aim for at least a metre gap from any approaching vehicle before crossing.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX010001_chunk_0020_segment_002": {
+  "summary": "A bus overtook the cyclist while travelling in the same lane. The bus entered the cyclist's path, leaving a gap of under about half a metre between them. No signals were visible from the bus and there was no physical separator. The closeness is estimated from the video footage.",
+  "what_happened": "The bus moved into your lane and passed you very closely, with less than half a metre separating you.",
+  "why_risky": "Being passed so closely leaves little room for reaction and can cause a collision if either vehicle changes speed or direction.",
+  "next_time": "Try to position yourself where you have a clear view of overtaking traffic and consider moving to a safer spot if a large vehicle is approaching.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0018_segment_003": {
+  "summary": "The cyclist was travelling in a bike lane when a car on the right overtook and entered the cyclist's path. The vehicle moved into the lane with an estimated gap of under about half a metre, as judged from the video. No signals were visible from the car and there was no physical separator between the lanes. The incident occurred about 9 minutes and 10 seconds into the recording.",
+  "what_happened": "You were riding in the bike lane when a car on your right overtook and drifted into your space, coming within less than half a metre of you.",
+  "why_risky": "The car entered your lane at a very close distance, leaving little room for you to react, and there were no signals to warn you of the manoeuvre.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially on the right, and be prepared to adjust your position if a car begins to drift into the bike lane.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0025_segment_003": {
+  "summary": "A cyclist was riding in a traffic lane when a car passed on the left side. The video shows the vehicle and the cyclist coming within an estimated distance of under about half a metre, though another estimate places the gap at over two metres. No signals or actions from either party were visible, and there was no physical separator between them. The lighting conditions were normal.",
+  "what_happened": "You were riding in the traffic lane and a car moved past you on the left, coming very close to your bike.",
+  "why_risky": "The close proximity, especially with no physical barrier, meant there was little room for error if either you or the driver had to change direction.",
+  "next_time": "Try to keep a larger gap when a vehicle is alongside you, and consider positioning yourself where you have a clear view of oncoming traffic.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0006_segment_001": {
+  "summary": "A car overtook the cyclist from the right and entered the cyclist's lane. The vehicle moved into the cyclist's path, closing the gap to under about half a metre. The cyclist remained in the traffic lane and did not change direction. The exact signal to the cyclist could not be confirmed from the video.",
+  "what_happened": "The car overtook on the right and cut into your lane, coming within about half a metre of you.",
+  "why_risky": "Being that close leaves very little room to react if either road user makes a sudden move, increasing the chance of a collision.",
+  "next_time": "Try to maintain a safe distance from overtaking vehicles and be prepared to adjust your line if a vehicle drifts into your path.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX050001_chunk_0018_segment_005": {
+  "summary": "The cyclist was riding in a traffic lane when a car overtook from the left and cut into the cyclist's path. The vehicle entered the cyclist's lane with no visible signal towards the cyclist and there was no physical separator between them. The car passed within about half a metre of the cyclist, under one metre according to the video estimate, in low\u2011light conditions.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GOPR0130_chunk_0013_segment_006": {
+  "summary": "The video shows a car overtaking on the right and entering the cyclist's path while the cyclist was travelling in the traffic lane. The gap between the vehicle and the cyclist was estimated at under about half a metre. No signal was visible from the car and there was no physical separator between the lanes. The incident occurred about 6 minutes 55 seconds into the recording.",
+  "what_happened": "A car on the right side overtook and moved into the lane you were using, coming within less than half a metre of you. You stayed in your lane and did not move into the car's path.",
+  "why_risky": "The very close distance left little room for reaction, and the car gave no visible signal, making it hard to anticipate its movement. Without a physical separator, the two paths were directly adjacent, increasing the chance of contact.",
+  "next_time": "Try to keep a clear buffer between you and overtaking vehicles, especially when they are on your right. Position yourself where you have the best view of approaching traffic and be ready to adjust your line if a vehicle signals or moves unexpectedly. Using a visible hand signal when you need to change direction can also help alert drivers to your intentions.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0023_segment_006": {
+  "summary": "The cyclist was riding in a bike lane when a truck overtook from the right and entered the cyclist's path. The truck came within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. The cyclist did not move into the vehicle's path, nor swerve or turn.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX010001_chunk_0003_segment_004": {
+  "summary": "The cyclist was riding in a bike lane when a car overtook from the right and entered the cyclist's path. The vehicle came to within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. No swerving or turning by the cyclist was observed.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX010001_chunk_0022_segment_006": {
+  "summary": "A truck overtook the cyclist in the traffic lane, moving into the cyclist's path. The truck entered from the right side and the gap between them was estimated at under about half a metre. No physical separator was present and the cyclist did not move into the vehicle's path. The video does not clearly show any signalling from the truck towards the cyclist.",
+  "what_happened": "The truck overtook you from the right, cutting into the lane you were riding in, with the distance between you and the vehicle being less than half a metre.",
+  "why_risky": "Being that close to a large vehicle with no physical barrier leaves little room for error, and the truck's movement into your lane reduced the space you had to react.",
+  "next_time": "Try to keep a larger buffer when sharing the lane with overtaking vehicles, especially large trucks, and stay alert for any signals they may give before they move into your path.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0014_segment_005": {
+  "summary": "A car passed the cyclist while both were travelling in the same traffic lane. The video shows the vehicle on the right side of the cyclist, with the gap between them estimated at under about half a metre, though an automated model gave a larger distance estimate. No physical separator was present and neither the cyclist nor the vehicle changed direction. The presence of any signalling towards the cyclist could not be confirmed from the footage.",
+  "what_happened": "The car continued straight alongside you, staying in its lane, while you maintained your line in the traffic lane. The distance between you was very close \u2013 roughly half a metre according to the video \u2013 but the automated analysis suggested it might have been over two metres. No one moved into the other's path and there was no swerving or turning.",
+  "why_risky": "Even when both parties stay in their lanes, a very small gap leaves little room for error, especially if a vehicle suddenly changes speed or direction. Without a physical separator, any unexpected movement could lead to a collision.",
+  "next_time": "Try to keep a larger buffer between you and passing vehicles, aiming for at least a metre where possible. Stay visible and consider positioning yourself where a lane line or road edge offers a clearer reference. If you\u2019re unsure whether a driver has signalled, give extra space and be prepared to adjust your line safely.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0026_segment_004": {
+  "summary": "A car passed on the left of a cyclist who was riding in a traffic lane. The video shows the vehicle and the cyclist coming within an estimated distance of under about half a metre, though another model suggested the gap might have been over two metres. No movement by either road user was recorded at the moment. The lighting conditions were normal and there was no physical separator between the lane and the vehicle.",
+  "what_happened": "You were riding in a traffic lane when a car travelled alongside you on the left, coming very close to your bike.",
+  "why_risky": "Being that close leaves little room for error; any sudden change in speed or direction by either party could lead to a collision, especially without a physical barrier.",
+  "next_time": "Try to maintain a larger lateral gap from vehicles, especially on the left, and consider positioning yourself where a lane marking or curb offers some separation.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0011_segment_001": {
+  "what_happened": "You rode into the crosswalk while the traffic signal facing you was red. The video shows you entering the intersection at that moment, with no vehicle present in your path.",
+  "why_risky": "Entering on a red signal puts you in conflict with traffic that has the right of way, increasing the chance of a collision.",
+  "next_time": "1. Wait until the signal turns green before crossing the intersection. 2. Use the pedestrian crossing lights as a cue to start moving, even if you feel there is a small gap. 3. Pause at the curb and double\u2011check traffic before proceeding, especially when the light is red.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX010001_chunk_0004_segment_004": {
+  "summary": "A car travelled parallel to the cyclist in its own lane, passing on the left side while the cyclist was in a bike lane. The video shows the vehicle and cyclist remained in separate paths with no physical separator. The gap between them was estimated from the video at about 1\u202fm, while the video model gave an estimate of over 2\u202fm. No signals were visible and lighting conditions were normal.",
+  "what_happened": "You were riding in a bike lane when a car passed you on the left, staying in its own lane and not entering your path. The vehicle kept moving parallel to you, and there was no swerving or turning by either party.",
+  "why_risky": "The close proximity \u2013 roughly a metre apart \u2013 left little room for error, increasing the chance of a collision if either vehicle changed speed or direction. Without a physical separator, the narrow gap can be unsettling and reduces reaction time.",
+  "next_time": "Try to keep a safe distance from passing vehicles and stay alert for any sudden movements. If possible, position yourself where a wider gap is available, and consider signalling your presence early to increase visibility.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0014_segment_002": {
+  "summary": "A car overtook the cyclist in the bike lane, moving into the cyclist's path. The vehicle entered from the right side and the gap between them was estimated at under about half a metre. No physical separator was present and the cyclist remained in the lane without swerving. The exact signalling and vehicle colour could not be confirmed from the footage.",
+  "what_happened": "You were riding in the bike lane when a car from the right overtook and cut into your path, coming within about half a metre of you.",
+  "why_risky": "The very close distance left little room for reaction, and the lack of a physical separator meant the car could easily drift into your space, increasing the chance of a collision.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially on the right, and be ready to adjust your position if a car appears to be moving into the lane. Using a reflective vest and ensuring you are visible can also help drivers see you earlier.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0018_segment_005": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a bus entered the area you were using. The bus did not stop or change direction, and you stayed on the sidewalk without moving into its path.",
+  "why_risky": "Riding on the sidewalk puts you close to pedestrians and can bring you into the path of larger vehicles that may not expect cyclists there.",
+  "next_time": "1. Keep to the road wherever possible, using the cycle lane or lane designated for cyclists. 2. If you must use the sidewalk, stay well clear of any vehicle entrances and give plenty of space to pedestrians. 3. Scan ahead for buses or other large vehicles and be ready to move back onto the road safely before they arrive.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX050001_chunk_0005_segment_005": {
+  "summary": "The cyclist was riding in a bike lane when a car overtook from the left and entered the cyclist's path. The vehicle came within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. The incident occurred in low\u2011light conditions.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX010001_chunk_0002_segment_002": {
+  "summary": "A truck passed the cyclist while the cyclist was travelling in a traffic lane. The video shows the vehicle on the right side of the cyclist and no physical separator was present. The gap between them was estimated from the video at under about half a metre, although one model gave a distance of over 2\u202fm. No signals facing the cyclist were visible and the lighting was normal.",
+  "what_happened": "The truck moved alongside the cyclist, coming very close \u2013 the video suggests the gap was under about half a metre. Neither the cyclist nor the truck entered each other's path, and the cyclist did not swerve or turn.",
+  "why_risky": "A separation of less than half a metre leaves very little room for error, especially with a large vehicle such as a truck, increasing the chance of a collision if either party changes speed or direction.",
+  "next_time": "Try to maintain a larger buffer when sharing the road with large vehicles, stay aware of their blind spots, and consider adjusting your position to give yourself more space if you notice a vehicle approaching closely.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0024_segment_002": {
+  "summary": "A car passed the cyclist who was riding in a bike lane. The vehicle stayed on the left side of the road and did not enter the cyclist's path. Video analysis shows the gap between them was estimated at under about half a metre, though another estimate placed it at over two metres. No signals or lights facing the cyclist were visible and there was no physical separator.",
+  "what_happened": "You were riding in a bike lane when a car travelled alongside you on the left. The car did not move into your lane and you did not change direction into its path. The distance between you was very close, with estimates ranging from under half a metre to over two metres.",
+  "why_risky": "Even when a vehicle stays in its lane, a very small gap can leave little room for reaction if either party needs to brake or swerve, increasing the chance of a collision.",
+  "next_time": "Try to maintain a larger buffer between you and passing vehicles, especially when the gap feels tight. Keep an eye on the speed of approaching cars and be ready to adjust your position if the space becomes too narrow.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0027_segment_001": {
+  "summary": "The cyclist was riding in a bike lane while a car travelled parallel in its own lane on the right. The car did not enter the cyclist's path and the cyclist did not move into the car's path. The gap between them was estimated to be under about half a metre, based on the video.",
+  "what_happened": "You were in the bike lane and a car passed alongside you, staying in its own lane. Neither you nor the car moved into each other's path, and the distance between you was very close \u2013 under about half a metre.",
+  "why_risky": "A gap of less than half a metre leaves little room for either road user to react if either vehicle changes speed or direction, increasing the chance of a collision.",
+  "next_time": "Try to maintain a larger buffer when a vehicle is travelling close beside you, and stay alert for any sudden movements. If possible, position yourself where you have a clear view of the vehicle\u2019s actions and consider adjusting your speed to increase the distance safely.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0012_segment_001": {
+  "summary": "A car overtook the cyclist from the left, moving into the cyclist's lane. The vehicle entered the cyclist's path while the cyclist remained in the traffic lane. The gap between them was estimated from the video at under about half a metre. No physical separator was present at the time.",
+  "what_happened": "You were riding in the traffic lane when a car passed on your left and briefly entered your space. The vehicle came very close, with less than half a metre separating you.",
+  "why_risky": "A narrow gap leaves little room for error, increasing the chance of a collision if either road user changes speed or direction. Without a physical barrier, the car\u2019s movement into your lane created a hazardous situation.",
+  "next_time": "Try to maintain a safe distance from overtaking vehicles and stay alert for cars moving into your lane. If possible, position yourself where you have a clear view of traffic and consider using a lane with a physical separator. Always be ready to adjust your line if a vehicle approaches too closely.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0018_segment_002": {
+  "what_happened": "You were riding your bike on the sidewalk, close to a line of pedestrians, when a car passed by on the road. The car stayed in its lane and did not enter the sidewalk.",
+  "why_risky": "Riding on the sidewalk puts you in a space meant for pedestrians, increasing the chance of a collision or a near\u2011miss with walkers.",
+  "next_time": "1. Keep your ride on the road where cyclists are expected, using the lane or cycle track if available. 2. If you must use the sidewalk, stay well clear of pedestrians and give them plenty of room, especially when the gap is less than half a metre. 3. Look ahead for any changes in the environment and be ready to move back onto the road safely before you approach a vehicle.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0017_segment_002": {
+  "summary": "The cyclist was travelling in a traffic lane when a car overtook on the left side. The car entered the cyclist's path, coming within about half a metre of the cyclist, as estimated from the video. No physical separator was present and the cyclist did not move into the vehicle's path. The signal facing the cyclist could not be confirmed from the footage.",
+  "what_happened": "A car overtook you on the left and cut into your lane, coming very close to you.",
+  "why_risky": "The car entered your path with only a very small gap, leaving little room to react and increasing the chance of a collision.",
+  "next_time": "Try to keep a safe distance from overtaking vehicles and stay alert for signals that may indicate their intentions.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0022_segment_003": {
+  "summary": "The cyclist was travelling in a traffic lane when a car overtook on the left side. The car entered the cyclist's path, closing to an estimated distance of under about half a metre. No physical separator was present and no signal was visible from the car. The video shows the gap was very small at the moment of the cut\u2011in.",
+  "what_happened": "A vehicle overtook you on the left and moved into your lane, coming within about half a metre of you.",
+  "why_risky": "The car entered your path with almost no clearance, leaving little room to react and increasing the chance of a collision, especially without a physical separator or a visible signal.",
+  "next_time": "Try to keep a safe distance from overtaking vehicles and position yourself where you have a clear view of traffic. If possible, move to a lane with a physical separator or give yourself extra space when a car is about to pass.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0013_segment_006": {
+  "summary": "The cyclist was travelling in a bike lane when a car on the right overtook and entered the cyclist's path. The vehicle moved into the lane with an estimated gap of under about half a metre, as judged from the video. No signals were visible from the car and there was no physical separator between the lanes. The video shows the cyclist remained in the bike lane and did not move into the vehicle's path.",
+  "what_happened": "A car overtook on the right and cut into the bike lane, coming within about half a metre of you.",
+  "why_risky": "The very close approach left little room for reaction, and the lack of signals meant you could not anticipate the car's movement.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially on the right, and consider adjusting your position if you see a car preparing to overtake. Using a reflective vest and ensuring you are visible can also help drivers see you earlier.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX050001_chunk_0016_segment_001": {
+  "summary": "The cyclist was travelling in a bike lane when a car on the right overtook and entered the cyclist's path. The video shows the vehicle moving into the lane with an estimated gap of under about half a metre between them. The cyclist did not move into the vehicle's path and no signal from the car was visible. The incident occurred in low\u2011light conditions and there was no physical separator between the lane and the road.",
+  "what_happened": "A car overtook on the right and cut into the bike lane, coming within about half a metre of you.",
+  "why_risky": "The very small gap left little room to react, and the lack of a physical separator meant the car could easily drift into your space, especially in the low light.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially in low\u2011light, and consider moving further into the bike lane if you see a car drifting close. If possible, use a light or reflective gear to increase your visibility.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0026_segment_002": {
+  "summary": "The cyclist was riding in a traffic lane when a car overtook from the right and entered the cyclist's path. The vehicle came within about half a metre of the cyclist, with no physical separator between them. The car\u2019s signal facing the cyclist could not be confirmed. The cyclist did not move into the vehicle\u2019s path and did not swerve or turn.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX050001_chunk_0017_segment_002": {
+  "summary": "The cyclist was riding in a bike lane when a car overtook from the right and entered the cyclist's path. The vehicle came to within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed. The incident occurred in low\u2011light conditions.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX010001_chunk_0009_segment_002": {
+  "summary": "At a crosswalk the cyclist was travelling when a car approached from the left and overtook, entering the cyclist's path. The traffic signal facing the cyclist was red. The video shows the vehicle coming within about half a metre of the cyclist, an estimated gap of under one metre. No physical separator was present at the location.",
+  "what_happened": "You were waiting at a crosswalk on a red signal when a car from the left overtook and moved into your lane, coming very close to you.",
+  "why_risky": "The car entered your path with only a very small gap, leaving little room for reaction, and there was no barrier to separate you from the vehicle.",
+  "next_time": "When you see a vehicle approaching from the side, especially at a red light, give extra space if possible and be ready to stop or move back if the car gets too close.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0017_segment_004": {
+  "summary": "A cyclist was travelling in a bike lane when a car passed nearby. The video shows the gap between them to be under about half a metre, although one model estimated the distance as over two metres. No signal from the driver was clearly visible and there was no physical separator between the lane and the road. The cyclist did not swerve or change direction.",
+  "what_happened": "You were riding in the bike lane when a car on its right side came close, with the space between you estimated at less than half a metre. The driver did not appear to give any signal, and there was no barrier separating the bike lane from the vehicle\u2019s path.",
+  "why_risky": "The very close proximity left little room for error, and the lack of a clear signal meant you could not anticipate the car\u2019s movement. Without a physical separator, any sudden change could increase the chance of contact.",
+  "next_time": "Try to maintain a larger buffer when sharing the road, especially when drivers show no signalling. Keep an eye on vehicles approaching from the side and be ready to adjust your position if needed. Using visible hand signals yourself can also help alert drivers to your intentions.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0019_segment_003": {
+  "summary": "A cyclist was riding in a bike lane when a truck travelled parallel on the right side of the road. The truck remained in its own lane and did not enter the cyclist's path. The gap between the cyclist and the truck was estimated from the video at under about half a metre, though a model gave a larger estimate. No signals were visible and there was no physical separator.",
+  "what_happened": "You were in the bike lane and a truck passed you on the right, travelling parallel in its own lane. The distance between you and the truck was very close \u2013 about half a metre according to the video \u2013 and there were no signals from the truck.",
+  "why_risky": "The very small gap left little room for either road user to react if either needed to change speed or direction. The lack of a physical separator and the absence of signals from the truck increased the chance of a collision.",
+  "next_time": "Try to maintain a larger distance from large vehicles, especially when they are travelling alongside you. Keep an eye on their signals and be prepared to adjust your position if the gap becomes too tight. Using a more central line in the bike lane can also give you extra space.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0019_segment_006": {
+  "summary": "A truck was overtaking in the left lane and entered the cyclist's path while the cyclist remained in the traffic lane. The vehicle moved into the cyclist's trajectory with an estimated gap of about 1\u202fm, as judged from the video. No signals were visible from the truck and there was no physical separator between the road users. The video shows the cyclist did not move into the vehicle's path and did not swerve or turn.",
+  "what_happened": "You were riding in the traffic lane when a truck overtook on its left side and cut into your path, coming within roughly a metre of you.",
+  "why_risky": "The truck entered your lane with very little clearance, leaving little room for either of you to react, and there were no signals to warn of the manoeuvre.",
+  "next_time": "Try to keep an eye on overtaking vehicles, especially large ones, and be prepared to adjust your position early if a vehicle appears to be moving into your lane. Maintaining a safe distance from the edge of the lane can give you more reaction time.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0026_segment_003": {
+  "summary": "The cyclist was riding in a traffic lane when a car overtook from the right and cut into the cyclist's path. The vehicle entered the cyclist's lane with no visible signal facing the cyclist and there was no physical separator between them. The closest gap between the car and the cyclist was about 1\u202fm, with the video model estimating the distance as under 1\u202fm.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GOPR0130_chunk_0016_segment_002": {
+  "summary": "The cyclist was riding in a bike lane when a car travelled parallel in its own lane. The video shows the vehicle passing within an estimated gap of under about half a metre of the cyclist, though another estimate placed the distance at over two metres. No signals were visible from the car and there was no physical separator between the lanes. The closeness is estimated from the video footage.",
+  "what_happened": "You were riding in the bike lane while a car moved alongside you in its lane, coming very close to your bike.",
+  "why_risky": "A vehicle passing that close leaves little room for error, especially without a physical barrier or signals, increasing the chance of a collision if either party changes speed or direction.",
+  "next_time": "Try to maintain a larger buffer between you and passing vehicles, stay alert for any sudden movements, and use hand signals to make your intentions clear to drivers.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0007_segment_004": {
+  "summary": "A car overtook the cyclist from the left and entered the cyclist's lane. The vehicle moved into the cyclist's path, leaving an estimated gap of under about half a metre. No physical separator was present and no signal facing the cyclist was visible. The video shows the cyclist remained in the traffic lane without swerving.",
+  "what_happened": "You were riding in the traffic lane when a car overtook you on the left and cut into your path, coming within about half a metre of you.",
+  "why_risky": "The car entered your lane with very little space, giving you little time to react and increasing the chance of a collision, especially without a physical separator or any signalling from the driver.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially on the left, and consider moving slightly further from the edge of the lane if safe to give more room for overtaking traffic.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0020_segment_006": {
+  "summary": "A car overtook the cyclist from the left and entered the cyclist's lane. The vehicle moved into the cyclist's path while the cyclist remained in the traffic lane. The gap between them was estimated from the video at under about half a metre. No physical separator was present.",
+  "what_happened": "You were riding in the traffic lane when a car overtook you on the left and cut into your path, coming within about half a metre of you.",
+  "why_risky": "The close proximity left little room for either road user to react, increasing the chance of a collision, especially without a physical separator.",
+  "next_time": "Try to maintain a safe distance from overtaking vehicles and stay alert for cars moving into your lane, especially when they are on your left.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0011_segment_006": {
+  "summary": "The cyclist was travelling in the traffic lane when a car approached from the left and began to overtake. The vehicle entered the cyclist's path, creating a gap of under about half a metre, as estimated from the video. No signals were visible from the car and there was no physical separator between the road users. The video shows the cyclist remained in their lane and did not move into the vehicle's path.",
+  "what_happened": "You were riding in the traffic lane when a car from the left moved to overtake you, coming very close \u2013 less than half a metre away. The car entered your path while you stayed in your lane and did not change direction.",
+  "why_risky": "A vehicle entering your path at such a short distance leaves very little time to react, increasing the chance of a collision, especially without any signals or a physical barrier to separate you.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind and on the side, especially when they are about to overtake. If you notice a car getting very close, consider adjusting your speed or position slightly to give a larger safety gap. Using visible signals and staying aware of blind spots can also help maintain a safer distance.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0013_segment_002": {
+  "summary": "The cyclist was riding in a traffic lane when a car overtook from the left and cut into the cyclist's path. The vehicle entered the cyclist's lane with no physical separator between them. The closest gap was estimated at under about half a metre, with video models indicating less than one metre. The signal facing the cyclist could not be confirmed. No swerving or turning by the cyclist was observed.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GOPR0130_chunk_0010_segment_001": {
+  "what_happened": "You rode into the traffic lane and entered the intersection while the traffic signal facing you was red. The vehicle on the right continued straight through its green phase, having the right of way.",
+  "why_risky": "Entering on red puts you into the path of vehicles that have the legal right of way, increasing the chance of a collision.",
+  "next_time": "1. Wait until the signal for cyclists shows green before entering the junction. 2. Pause at the stop line and check both traffic lights and any approaching traffic. 3. If the light is red, stay clear of the intersection until it turns green, even if there appears to be a small gap.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0023_segment_002": {
+  "summary": "A car overtook the cyclist from the left and entered the cyclist's lane. The vehicle moved into the cyclist's path while the cyclist remained in the traffic lane. The video shows the gap between them was under about half a metre, estimated from the footage. No signals were visible and there was no physical separator.",
+  "what_happened": "You were riding in the traffic lane when a car overtook on your left and cut into your path, coming within less than half a metre of you.",
+  "why_risky": "The very close distance left little room for either road user to react, and the lack of signals meant you could not anticipate the car's movement.",
+  "next_time": "Try to keep an eye on vehicles approaching from behind, especially on the left, and consider positioning yourself where you have a clearer view of overtaking traffic. If possible, maintain a safe buffer and be ready to adjust your line if a vehicle appears to be cutting in.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0028_segment_006": {
+  "what_happened": "You rode into the traffic lane and entered the intersection while the traffic signal facing you was red. The video shows you crossing about 1\u202fm into the junction before the light changed.",
+  "why_risky": "Entering on a red signal puts you into the path of vehicles that have the right of way, increasing the chance of a collision.",
+  "next_time": "1. Wait until the signal turns green before moving into the intersection. 2. Use the road markings or a stop line to gauge when the light has changed. 3. Keep an eye on the traffic lights and give yourself a few seconds to be sure they are green before proceeding.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX010001_chunk_0019_segment_001": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a car travelled parallel on the road. The sidewalk had a physical separator and you were about 2\u202fm away from the vehicle.",
+  "why_risky": "Riding on the sidewalk puts you close to pedestrians and can make it harder for drivers to see you, increasing the chance of a collision.",
+  "next_time": "Stay on the road where cyclists are expected, keep to the lane and use the cycle lane if available; if you must use the sidewalk, choose a spot with clear visibility and give pedestrians plenty of space; always check for traffic before moving onto the road.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX050001_chunk_0017_segment_004": {
+  "summary": "The cyclist was travelling in a bike lane when a car passed on the left side. The video shows the vehicle and the cyclist coming within an estimated distance of under about half a metre, though another estimate places the gap at over two metres. No signals were visible and the lighting was low. Neither the vehicle nor the cyclist changed direction or entered each other's path.",
+  "what_happened": "You were riding in the bike lane and a car passed close by on your left. The car did not turn or swerve, and you stayed in your lane without moving into the car's path.",
+  "why_risky": "The close proximity, especially in low light, reduced the margin for error and made it harder to see each other's actions. Without signals, both parties had limited information about intended movements.",
+  "next_time": "Try to keep a larger gap when vehicles pass, especially in low\u2011light conditions, and stay alert for any sudden changes. If possible, position yourself where you have a clear view of oncoming traffic and consider using reflective gear to improve visibility.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX010001_chunk_0015_segment_003": {
+  "summary": "At about 7 minutes and 40 seconds into the recording the cyclist was positioned at a crosswalk when a car on the right side overtook and entered the cyclist's path. The video shows the vehicle moving into the cyclist's lane with an estimated gap of under about half a metre, roughly consistent with the model estimate of under one metre. No physical separator was present at the crossing. The signal facing the cyclist could not be confirmed from the footage.",
+  "what_happened": "A car attempted to overtake on the right and cut into the lane you were using at the crosswalk, coming within a very close distance of your bike.",
+  "why_risky": "The vehicle entered your path with only a narrow gap, leaving little room for reaction and increasing the chance of a collision, especially without a physical separator.",
+  "next_time": "Try to ensure you have a clear view of any overtaking vehicles before proceeding, and consider waiting for a larger gap or a confirmed signal before moving across the crossing.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GOPR0130_chunk_0017_segment_005": {
+  "what_happened": "You were riding in the bike lane and entered the intersection while the traffic signal facing you was red. A car on the right was overtaking and entered your path, coming within about half a metre of you.",
+  "why_risky": "Entering on red meant you moved into the space the car had the right of way, creating a close\u2011call collision.",
+  "next_time": "1. Wait until the signal turns green before crossing the junction. 2. Pause at the stop line and check all directions, even if you are in a bike lane. 3. Give a clear gap of at least a metre before moving into the intersection, especially when vehicles are overtaking.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX010001_chunk_0018_segment_004": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a car travelled parallel in its own lane, about half a metre away from you. The sidewalk had a physical separator separating you from the road.",
+  "why_risky": "Riding on the sidewalk puts you close to pedestrians and can create uncertainty about who has right\u2011of\u2011way.",
+  "next_time": "1. Stay on the road where cyclists are expected and have clearer priority. 2. Keep a safe distance from pedestrians and any obstacles on the sidewalk. 3. Use a visible hand signal before moving off the sidewalk to let others know your intention.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX010001_chunk_0021_segment_001": {
+  "what_happened": "You were riding in the traffic lane when you changed line and moved into the path of an oncoming truck that was overtaking you. The truck was on your right and passed within about half a metre of you.",
+  "why_risky": "Changing line into the flow of traffic reduced the clearance between you and the vehicle, increasing the chance of a collision.",
+  "next_time": "1. Keep to your current lane until you are sure there is a safe gap before moving sideways. 2. Look ahead and check for vehicles approaching from behind before changing line. 3. If you need to change direction, signal early and wait until the gap is at least a metre clear.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0027_segment_006": {
+  "what_happened": "You rode in the bike lane and entered the intersection while the traffic signal facing you was red. The vehicle on the main road had the right of way and continued straight.",
+  "why_risky": "Entering on red meant you were crossing in front of traffic that was legally allowed to go, increasing the chance of a collision.",
+  "next_time": "Wait until the signal turns green before entering the junction. Keep an eye on the traffic lights even when you are in a bike lane. If you are unsure, stop at the stop line and check that all traffic has halted before proceeding.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0029_segment_006": {
+  "what_happened": "You rode into the intersection while the traffic signal facing you was red. The light for the crossing traffic was yellow, meaning vehicles still had the right of way.",
+  "why_risky": "Entering on red puts you into the path of vehicles that are still moving through the junction.",
+  "next_time": "1. Wait until the signal turns green before entering the intersection. 2. Check the traffic lights for all directions and make sure the crossing traffic has a red signal. 3. Give yourself a clear gap of at least a metre before moving forward, especially when the lights are changing.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0028_segment_005": {
+  "summary": "The cyclist was riding in a traffic lane when a truck overtook from the right and entered the cyclist's path. The truck came within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. The cyclist did not move into the vehicle's path, swerve, or turn.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX050001_chunk_0013_segment_005": {
+  "summary": "The cyclist was riding in a traffic lane when a car overtook from the right and entered the cyclist's path. The vehicle came within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. The incident occurred in low\u2011light conditions.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX010001_chunk_0019_segment_005": {
+  "summary": "The cyclist was travelling in a traffic lane when a truck overtook on the left side. The truck entered the cyclist's path, coming within about half a metre of the cyclist, as estimated from the video. No signals were visible from the truck and there was no physical separator between the road users. The incident occurred about 9 minutes and 50 seconds into the recording.",
+  "what_happened": "A truck overtook you on the left and moved into your lane, passing very close to you.",
+  "why_risky": "The truck entered your path with only a very small gap, leaving little room to react and increasing the chance of a collision, especially without any signals or a barrier.",
+  "next_time": "Try to keep a safe distance from larger vehicles, especially when they are overtaking, and stay alert for any sudden movements. If possible, position yourself where you have a clear view of on\u2011coming traffic and give overtaking vehicles plenty of space.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "unclear"
+ },
+ "GX050001_chunk_0003_segment_001": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a car passed by on the road. The car stayed in its lane and did not enter your path, and there was a physical separator between the road and the sidewalk.",
+  "why_risky": "Riding on the sidewalk can put you close to pedestrians and limit your visibility, especially in low\u2011light conditions.",
+  "next_time": "1. Keep to the road where cyclists are expected and have clearer right\u2011of\u2011way. 2. If you must use the sidewalk, stay near the edge and be extra vigilant for pedestrians and turning vehicles. 3. Use a front light and reflective gear to improve visibility in low light.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX010001_chunk_0021_segment_003": {
+  "summary": "The cyclist was riding in the traffic lane when a car overtook from the left and entered the cyclist's path. The vehicle came within about half a metre of the cyclist, with no physical separator between them. The signal facing the cyclist could not be confirmed from the video. The cyclist did not move into the vehicle's path and did not swerve or turn.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "driver"
+ },
+ "GX050001_chunk_0004_segment_003": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a car was travelling parallel in its own lane on the road. The sidewalk had a physical separator and the car stayed well away from you, with the closest gap being under about half a metre.",
+  "why_risky": "Riding on the sidewalk puts you among foot traffic and can make it harder for drivers to see you, especially in low light.",
+  "next_time": "1. Keep to the road where cyclists are expected and more visible to drivers. 2. Use a bright front light and reflective clothing in low\u2011light conditions to improve visibility. 3. Stay aware of pedestrians and give them plenty of space, signalling your intentions clearly when you need to move.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0006_segment_003": {
+  "what_happened": "You were riding in a bike lane and entered the intersection about 3 minutes into the recording while the traffic signal facing you was red. A car was travelling straight on its own lane on the left side and had the right of way.",
+  "why_risky": "Entering on red meant you moved into the path of a vehicle that was legally permitted to continue, creating a potential collision.",
+  "next_time": "1. Wait for the green signal before crossing the junction, even if the road looks clear. 2. Use the bike lane to position yourself well back from the stop line so you have enough time to see the signal change. 3. Keep an eye on the traffic lights and only move when you have a clear, green indication for cyclists.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX050001_chunk_0002_segment_003": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a motorcycle overtook you on the left, entering the narrow space you were using. The vehicle passed within about half a metre of you in low\u2011light conditions.",
+  "why_risky": "Riding on the sidewalk puts you close to pedestrians and leaves little room for overtaking vehicles, increasing the chance of a near\u2011miss.",
+  "next_time": "1. Stay on the road wherever possible, using the designated cycle lane or lane side. 2. If you must use the sidewalk, keep to the far edge away from pedestrians and be prepared to give way to faster traffic. 3. In low\u2011light, add extra visibility with lights and reflective gear so drivers see you earlier.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX010001_chunk_0018_segment_003": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a car travelled parallel on the road just to your right. The car stayed in its lane and did not enter your path, and there was a physical separator between the road and the sidewalk.",
+  "why_risky": "Riding on the sidewalk puts you close to pedestrians and can create uncertainty about who has right\u2011of\u2011way.",
+  "next_time": "1. Keep to the road where cyclists are expected and have clearer priority. 2. If you must use the sidewalk, stay well clear of pedestrians and be ready to step back onto the road quickly. 3. Look for any signs or markings that indicate whether cycling on the sidewalk is allowed and follow them.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX050001_chunk_0003_segment_003": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a car passed on the road beside you. The car stayed in its lane and did not enter your path, and there was a physical separator between the road and the sidewalk.",
+  "why_risky": "Riding on the sidewalk puts you close to pedestrians and can be unexpected for drivers, especially in low\u2011light conditions.",
+  "next_time": "1. Keep to the road where cyclists are expected, using the lane or cycle track if available. 2. If you must use the sidewalk, stay well clear of pedestrians and be ready to step back onto the road quickly. 3. In low\u2011light, add extra visibility with lights and reflective gear to make your presence clear to both pedestrians and drivers.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0029_segment_001": {
+  "what_happened": "You rode into the intersection while the traffic signal facing you was red. A car on the right was overtaking and entered your path, coming within about half a metre of you.",
+  "why_risky": "Entering on red meant you were in the vehicle's right\u2011of\u2011way, creating a very close encounter.",
+  "next_time": "1. Wait until the signal turns green before entering the junction. 2. Check both your own signal and any oncoming traffic before proceeding. 3. Give a clear gap of at least a metre to any vehicle that is already moving through the intersection.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0011_segment_005": {
+  "what_happened": "You rode into a crosswalk while the traffic signal facing you was red. The footage shows you entering the intersection at that moment, with no vehicle present in your path.",
+  "why_risky": "Entering on a red signal puts you in conflict with traffic that has the right of way, even if no vehicle is visible at that instant.",
+  "next_time": "1. Wait until the signal turns green before crossing the intersection. 2. Use the pedestrian crossing phase if it is available for cyclists. 3. Keep an eye on the signal and any approaching traffic, giving yourself a clear gap of at least a few metres before proceeding.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GX050001_chunk_0011_segment_001": {
+  "what_happened": "You were riding on the sidewalk alongside pedestrians when a motorcycle passed nearby on the road. The lighting was low and there was no physical separator between the road and the sidewalk.",
+  "why_risky": "Riding on the sidewalk puts you close to pedestrians and can make you less visible to drivers, especially in dim light.",
+  "next_time": "1. Keep to the road where cyclists are expected and more visible to motorists. 2. Use a front light and reflective gear to improve visibility in low\u2011light conditions. 3. Stay aware of the distance to passing vehicles and give them plenty of space, especially when there is no barrier separating you from the road.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0006_segment_002": {
+  "what_happened": "You rode along the bike lane and entered the intersection about three minutes into the recording while the traffic signal facing you was red. No vehicle was visible in the footage at that moment.",
+  "why_risky": "Entering on a red signal meant you moved into a space where vehicles had the right of way, increasing the chance of a collision.",
+  "next_time": "1. Look for the traffic signal that faces you and wait until it turns green before entering the junction. 2. Pause at the stop line or curb to double\u2011check that all traffic has stopped, even if you don\u2019t see a vehicle yet. 3. Use a brief, clear hand signal or a quick glance over your shoulder to confirm the intersection is clear before proceeding.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0010_segment_003": {
+  "what_happened": "You rode into the intersection while the traffic signal facing you was red. The light was still showing red for cyclists when you entered, and there were no vehicles in the video that entered your path.",
+  "why_risky": "Entering on a red signal means you could have collided with a vehicle that had the right of way.",
+  "next_time": "1. Wait until the signal turns green before crossing the junction. 2. Pause at the stop line and double\u2011check the lights for all directions. 3. If you\u2019re unsure, stay put until you see a clear green indication for cyclists.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ },
+ "GOPR0130_chunk_0028_segment_001": {
+  "what_happened": "You rode into the intersection while the traffic signal facing you was red. The road was clear of vehicles at that moment.",
+  "why_risky": "Entering on a red signal puts you in conflict with traffic that has the right of way.",
+  "next_time": "Stop before the stop line and wait for the green light. Check the signal carefully before crossing, even if the road looks empty. Keep a clear view of any approaching traffic before you move into the intersection.",
+  "generated_by": "W&B Inference \u00b7 openai/gpt-oss-120b",
+  "verdict": "rider"
+ }
+}

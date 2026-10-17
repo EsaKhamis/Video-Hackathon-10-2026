@@ -13,12 +13,14 @@ Everything lives in `data/`. The app reads only `segments.json`, `screen.json` a
 | `geometry.json` | Stage B, `engine/detect.py` | `build_incidents.py` |
 | `stage_d.json` | Stage D (data-engine): rider-on-red survivors | `build_incidents.py` |
 | `stage_c.json` | Stage C, `engine/confirm.py`: Cosmos facts per flagged segment | `build_incidents.py` |
-| `incidents.json` | `engine/build_incidents.py` | app |
+| `stage_e.json` | Stage E, `engine/report.py`: report / lesson text per segment | `build_incidents.py` |
+| `incidents.json` | `engine/build_incidents.py` (+ `report.py` adds text) | app |
 
 ```bash
 python3 engine/detect.py           # Stage B -> data/geometry.json (~2 min)
 python3 engine/confirm.py          # Stage C -> data/stage_c.json (~2.5 min, 102 segments)
 python3 engine/build_incidents.py  # -> data/incidents.json
+python3 engine/report.py           # Stage E -> W&B text in incidents.json (~1 min, cached in stage_e.json)
 k8s/update-data.sh                 # live in /app within about a minute
 ```
 
@@ -79,3 +81,14 @@ What we learned on the labelled clips, and why it is built this way:
 Result on the 18 labelled clips: H1 and H4 are driver; no adjacent-lane, separated or rider clip gets a
 driver verdict. Overall: 2 driver incidents, 11 sidewalk lessons (4-5 of 5 votes), 10 unclear (top by
 severity), plus the 13 Stage D rider-on-red lessons. Tuned on 18 clips: an honest limit, not a benchmark.
+
+## Stage E: report and lesson text (`report.py`)
+
+W&B Inference (`openai/gpt-oss-120b`, 6 calls in parallel, ~5 s each) writes one document per incident from
+curated facts only: driver -> authority report `summary`; rider -> lesson `what_happened` / `why_risky` /
+`next_time`; unclear -> both. Rider lessons are told which rule made them a lesson (red, sidewalk, line change),
+so they centre on the rider's choice. The signal is passed as one value: if the video and the still disagree it
+is "not confirmed", so a report never states two signals. Colour, plate, date and street are never invented;
+text that mentions fines or offences is rejected and retried. Text is cached per segment and verdict in
+`data/stage_e.json`; `build_incidents.py` merges it back, and an incident whose verdict changes falls back to
+the app's templates until `report.py` runs again.

@@ -8,6 +8,7 @@
   data/segments.json  playable source + ride offset per segment
   data/reviews.json   the rider's reviews from the app (k8s/pull-reviews.sh)  -> the fault they chose wins
                       over the rules (rule 0); the rules' answer stays in `engine`
+  data/stage_e.json   Stage E report / lesson text (engine/report.py)    -> document text, if the verdict matches
 
   python3 engine/build_incidents.py                 # -> data/incidents.json
   python3 engine/build_incidents.py --only H1,H3    # halfway-gate cut: hero clips only (ids from probe/labels.csv)
@@ -15,6 +16,7 @@
 import argparse, csv, json, os, sys
 
 import fault
+import report
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'probe'))
 from eval_labels import evaluate, load_reviews, review_segment  # noqa: E402
@@ -247,6 +249,9 @@ def main(out, only):
         rides.append({'id': rid, 'title': title, 'situation': situation, 'conditions': conditions,
                       'duration_min': round(dur / 60), 'segments': len(segs)})
 
+    stage_e = os.path.join(DATA, 'stage_e.json')  # Stage E text (engine/report.py), kept while the verdict holds
+    n_text = report.merge(incidents, json.load(open(stage_e))) if os.path.exists(stage_e) else 0
+
     json.dump({'generated_from': f'engine/build_incidents.py: stage_c.json (Cosmos facts, rules {fault.VERSION}) + '
                                  'stage_d.json (rider/red, rule 3) + geometry.json (unclear, rule 8) + '
                                  f'reviews.json ({reviewed} reviews, {overridden} verdicts changed, rule 0)'
@@ -256,7 +261,7 @@ def main(out, only):
     c = {}
     for i in incidents:
         c[i['fault']] = c.get(i['fault'], 0) + 1
-    print(f'{len(incidents)} incidents {c} -> {out}; {reviewed} reviews applied, {overridden} changed the verdict')
+    print(f'{len(incidents)} incidents {c}, {n_text} with Stage E text -> {out}; {reviewed} reviews applied, {overridden} changed the verdict')
 
 
 if __name__ == '__main__':
