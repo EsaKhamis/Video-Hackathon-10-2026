@@ -28,3 +28,4 @@ probe/*.json
 app/reviews.json
 app/devices.json
 app/__pycache__/
+data/bikelane/

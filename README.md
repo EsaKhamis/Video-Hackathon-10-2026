@@ -1,73 +1,91 @@
-# Video-Hackathon-10-2026
+# Witness: your helmet cam is a witness, and a coach
 
-Real-time video agent for the VAST Builders Challenge (London, Sat 17 Oct). Architecture and rules for the day are in [video-agent-stack.md](video-agent-stack.md).
+VAST Builders Challenge, London, Sat 17 Oct 2026.
 
-Two lanes feed one agent:
+Cyclists record close passes every day, and almost none get reported: finding the 5 seconds that matter
+in an hour of footage and filling in a police form takes too long. And nobody tells riders about the
+risks they take themselves.
 
-- **Search lane**: footage is cut into clips, each clip is described with our ingest prompt (VAST + Cosmos), and the descriptions are searchable in natural language.
-- **Real-time lane**: footage is replayed at 2–5 fps, YOLO11 tracks every frame, and only clips YOLO flags go to Cosmos Reason 2, which returns a JSON event.
-- **Agent**: an LLM on CoreWeave Forge / W&B Inference with tools `search_footage`, `ask_clip`, `send_alert`, `write_report`. Every step is traced in Weave.
-- **UI**: Streamlit with a live player, alert feed, Cosmos reasoning, search and agent chat.
+Witness watches a cyclist's ride footage, finds every risky moment and works out who caused it.
 
-Use case: **"Your helmet cam is a witness"**. Find close passes, cut-ins and blocked bike lanes
-in cyclists' GoPro/dashcam footage and draft reports the cyclist approves. See [INITIAL_IDEA.md](INITIAL_IDEA.md).
+| Who was at fault | What the agent writes | Who sees it |
+|---|---|---|
+| Driver | **Authority report**: police-form fields, clip, vehicle, blank plate and street for the cyclist to fill in | Police / 311 / insurer, **only if the cyclist exports it** (Send is a dummy outbox) |
+| Rider | **Rider lesson**: what happened, why it was risky, what to do next time | The cyclist only. Never sent anywhere |
+| Unclear | Both, side by side | The cyclist decides |
 
-## Setup (team VM)
+**Try it:** the App button on workshop.thecosmoslabs.com (`/app`). Open a ride, then an incident: the clip
+plays with the detection boxes drawn over it, the facts behind the verdict are listed, and you can approve,
+edit, dismiss or change the fault, then open the report or lesson.
 
-Requires [uv](https://docs.astral.sh/uv/) (already installed on the VM).
+![Black SUV close pass (H1)](docs/images/near-miss/black_suv_close_pass.jpg)
+![Taxi crossing on red: a rider lesson (H3)](docs/images/near-miss/taxi_crossing_signals_red.jpg)
 
-```bash
-uv sync
-cp .env.example .env   # set COSMOS_BASE_URL; everything else comes from the VM's environment
+## How it works: the models see, the rules decide
+
+```
+465 helmet-cam segments (3 NYC rides, VAST DataEngine index)
+  │
+  ├─ A  Cosmos3-Reason watches every 5 s clip (1280 px, 6 fps)  ─ near miss? signal? rider position?
+  ├─ B  YOLO11 boxes from the pipeline → geometry               ─ how close, which side, entered the rider's corridor?
+  ├─ C  Cosmos again on A ∪ B flags, 5 calls, majority vote     ─ + full-resolution still for the signal
+  ├─ D  Plain-Python fault rules (no LLM)                       ─ driver / rider / unclear, plus severity
+  └─ E  W&B Inference (gpt-oss-120b) writes the report or lesson from the facts
+        │
+        └─ data/incidents.json → stdlib web app on K8s (/app); video and boxes proxied from the VSS backend
 ```
 
-The VM already exports the W&B key/project/team, the VSS backend URL and login, and the GPU bearer
-token; `config.py` reads them directly. Search runs against the hosted VSS archive and Cosmos runs
-on the hosted `nvidia/cosmos3-nano-reasoner` NIM (max 5 frames per request).
+- **Cosmos is good at context and fault** (the signal, the rider on the sidewalk, what happened) and at
+  rejecting false alarms, but it is conservative about distance.
+- **YOLO is good at distance and side**, but it can't tell a car in the next lane from a car cutting in.
+- **So a driver verdict needs both:** a YOLO close-pass shape **and** at least 4 of 5 Cosmos calls saying
+  the vehicle entered the rider's path, with no separator, no red signal and the rider not on the sidewalk.
+  Missing or unknown facts never produce a driver verdict. A wrong "driver" puts a false accusation in front
+  of the police, so it is the error we try hardest to avoid.
+- Rider rules run first: entered on red (video **and** still), riding on the sidewalk, changing line into traffic.
+- Cosmos's own `fault` answer is stored for comparison and never used.
 
-## Run
+## Results
 
-```bash
-# UI (search + Cosmos check, agent chat, alert feed)
-uv run streamlit run app.py
-```
+On the 18 hand-labelled clips (`probe/labels.csv`, scored by `probe/eval_labels.py`):
+**12 of 18 agree with the label, and no rider, adjacent-lane or separated clip gets a driver verdict.**
+All five hero clips match: H1 and H4 driver, H3 rider (entered on red, 5/5 votes), H5 rider (sidewalk),
+H2 (a van in the next lane) dropped.
 
-Cursor forwards the port automatically; open the link it offers (or `http://localhost:8501`).
+Across all 465 segments: 80 incidents (13 driver, 25 rider, 42 unclear for a human).
+How the near-miss definition was tuned, round by round: [PLAN.md](PLAN.md) ("Near-miss definition") and
+[definition_log.md](definition_log.md).
 
-Optional local real-time lane (pulls in PyTorch; the hosted archive already has YOLO detections):
+## Honest limits
 
-```bash
-uv sync --extra realtime
-uv run scripts/run_realtime.py data/footage/cam1.mp4 --no-cosmos
-```
+- Closeness is estimated from box size, not measured distance.
+- Tuned and scored on a small hand-labelled set (18 clips), not a benchmark.
+- Most driver verdicts outside the hero clips have not been checked by eye yet; the cyclist reviews every one.
+- Cosmos is unreliable about vehicle colour, so colour and plate are always left for the cyclist to confirm.
+- The archive has no recording date or GPS; reports say "cyclist to confirm".
+- No face blurring in exported frames yet.
 
-`probe/` holds the earlier exploration scripts against the same API.
+## Built on
 
-## Where things live
+VAST DataEngine + VastDB (index, YOLO detections, video), NVIDIA Cosmos3-Reason (screening and fault facts),
+YOLO11 (geometry), W&B Inference `openai/gpt-oss-120b` (report and lesson text), Kubernetes on the VAST
+runtime, Cursor and Claude Code.
+
+## Repo
 
 | Path | What |
 |---|---|
-| `src/videoagent/schema.py` | The JSON event contract shared by both lanes |
-| `src/videoagent/prompts/ingest.txt` | Ingest prompt: decides what search can find. Write this first |
-| `src/videoagent/prompts/cosmos.txt` | Cosmos prompt for the use case; returns the event JSON |
-| `src/videoagent/realtime/pipeline.py` | OpenCV replay, YOLO11 tracking, trigger rule, clip writer |
-| `src/videoagent/reason/cosmos.py` | Cosmos Reason 2 client (OpenAI-compatible endpoint) |
-| `src/videoagent/search/vast.py` | VSS retrieval client (login, `/api/v1/search`, clip download), with a local JSON fallback |
-| `src/videoagent/agent/agent.py` | Tool-calling agent loop and tools |
-| `app.py` | Streamlit UI |
+| `engine/detect.py` | Stage B: YOLO geometry |
+| `engine/confirm.py` | Stage C: Cosmos confirmation with majority vote |
+| `engine/fault.py`, `engine/build_incidents.py` | Stage D: fault rules, severity, `data/incidents.json` |
+| `engine/report.py` | Stage E: W&B writes the reports and lessons |
+| `app/main.py` | Web app (stdlib `http.server`): rides, incidents, review, report, lesson |
+| `k8s/` | `deploy-app.sh` (deploy to `/app`), `update-data.sh` (push new data) |
+| `probe/` | Exploration, labelled set, evaluation |
+| `PLAN.md` | Full plan, fault rules, prompts and changelog |
 
-Runtime state goes to `data/` (gitignored): flagged clips in `data/clips/`, alerts in `data/events.jsonl`, local index in `data/index.json`.
+Rebuild and publish: see [engine/README.md](engine/README.md).
 
-## Build-day checklist
+## Team
 
-- [x] Fill in `.env`: W&B key, Cosmos endpoint, VAST endpoint
-- [x] Look at the footage, pick one use case, rewrite both prompts for it
-- [x] Match `search/vast.py` to the real VAST search API
-- [ ] Review queue: approve / edit / dismiss incidents, export report
-- [ ] Stop features at 3:30, record demo by 4:00, submit by 4:30
-
-## Submission
-
-- Team: _names + emails_
-- Demo video: _link_
-- Tools: VAST, NVIDIA Cosmos Reason 2, Ultralytics YOLO11, CoreWeave Forge / W&B Inference, W&B Weave, Streamlit, Cursor
+_names + emails_

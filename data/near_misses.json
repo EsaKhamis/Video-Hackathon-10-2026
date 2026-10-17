@@ -1,0 +1,158 @@
+{
+  "name": "near misses",
+  "camera_id": "nyc_bike_gopro-1",
+  "count": 9,
+  "counts": {
+    "person": 4,
+    "driver": 5
+  },
+  "note": "Clips a person checked. Four have people walking in the roadway close to the bike. Five have a vehicle in the rider's lane. Sidewalk clips where people were standing against a wall are not included. This flags the clip for review. It does not determine liability.",
+  "join": "rows[].id is the screen.json id. rows[].source is the segment in segments.json and incidents.json. kind is who was close (a person, or a vehicle). It is not a fault verdict. facts holds only what the note states, so unknown report fields can be filled without inventing a signal or a plate.",
+  "rows": [
+    {
+      "id": "N0072",
+      "kind": "person",
+      "label": "person in the lane",
+      "ride": "GX010001",
+      "clock": "5:55",
+      "chunk_index": 11,
+      "start_sec": 25.0,
+      "end_sec": 30.0,
+      "clip": "20261008_074125_GX010001_chunk_0011.mp4",
+      "note": "A woman stands in the traffic lane between a black SUV and a taxi, looking at her phone, right in front of the camera.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_074125_GX010001_chunk_0011_segment_006_of_006.mp4",
+      "facts": {
+        "rider_position": "traffic_lane"
+      }
+    },
+    {
+      "id": "N0124",
+      "kind": "person",
+      "label": "people in the crosswalk",
+      "ride": "GX010001",
+      "clock": "10:15",
+      "chunk_index": 20,
+      "start_sec": 15.0,
+      "end_sec": 20.0,
+      "clip": "20261008_074513_GX010001_chunk_0020.mp4",
+      "note": "A crowd walks through the crosswalk. A man in a black hoodie passes directly in front of the wheel.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_074513_GX010001_chunk_0020_segment_004_of_006.mp4",
+      "facts": {
+        "rider_position": "crosswalk"
+      }
+    },
+    {
+      "id": "N0129",
+      "kind": "person",
+      "label": "people in the crosswalk",
+      "ride": "GX010001",
+      "clock": "10:40",
+      "chunk_index": 21,
+      "start_sec": 10.0,
+      "end_sec": 15.0,
+      "clip": "20261008_074538_GX010001_chunk_0021.mp4",
+      "note": "People walk across the crosswalk close on the rider's right. A delivery cyclist rides ahead.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_074538_GX010001_chunk_0021_segment_003_of_006.mp4",
+      "facts": {
+        "rider_position": "crosswalk"
+      }
+    },
+    {
+      "id": "N0056",
+      "kind": "person",
+      "label": "people in the crosswalk",
+      "ride": "GX010001",
+      "clock": "4:35",
+      "chunk_index": 9,
+      "start_sec": 5.0,
+      "end_sec": 10.0,
+      "clip": "20261008_074034_GX010001_chunk_0009.mp4",
+      "note": "Two people are still in the crosswalk as the rider comes up to them. There is more room than in the other three.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_074034_GX010001_chunk_0009_segment_002_of_006.mp4",
+      "facts": {
+        "rider_position": "crosswalk"
+      }
+    },
+    {
+      "id": "N0074",
+      "kind": "driver",
+      "label": "vehicle in the lane",
+      "ride": "GX010001",
+      "clock": "6:05",
+      "chunk_index": 12,
+      "start_sec": 5.0,
+      "end_sec": 10.0,
+      "clip": "20261008_074151_GX010001_chunk_0012.mp4",
+      "note": "A black SUV fills the right side of a narrow lane.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_074151_GX010001_chunk_0012_segment_002_of_006.mp4",
+      "facts": {
+        "vehicle": {"type": "suv", "colour": "black", "side": "right"}
+      }
+    },
+    {
+      "id": "N0301",
+      "kind": "driver",
+      "label": "vehicle in the lane",
+      "ride": "GOPR0130",
+      "clock": "13:10",
+      "chunk_index": 26,
+      "start_sec": 10.0,
+      "end_sec": 15.0,
+      "clip": "20261008_073451_GOPR0130_chunk_0026.mp4",
+      "note": "A black SUV passes close on the right.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_073451_GOPR0130_chunk_0026_segment_003_of_006.mp4",
+      "facts": {
+        "vehicle": {"type": "suv", "colour": "black", "side": "right"}
+      }
+    },
+    {
+      "id": "N0228",
+      "kind": "driver",
+      "label": "vehicle in the lane",
+      "ride": "GOPR0130",
+      "clock": "7:05",
+      "chunk_index": 14,
+      "start_sec": 5.0,
+      "end_sec": 10.0,
+      "clip": "20261008_072948_GOPR0130_chunk_0014.mp4",
+      "note": "A car passes close on the left while the rider is in the lane.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_072948_GOPR0130_chunk_0014_segment_002_of_006.mp4",
+      "facts": {
+        "rider_position": "traffic_lane",
+        "vehicle": {"type": "car", "side": "left"}
+      }
+    },
+    {
+      "id": "N0300",
+      "kind": "driver",
+      "label": "vehicle in the lane",
+      "ride": "GOPR0130",
+      "clock": "13:05",
+      "chunk_index": 26,
+      "start_sec": 5.0,
+      "end_sec": 10.0,
+      "clip": "20261008_073451_GOPR0130_chunk_0026.mp4",
+      "note": "A yellow taxi swings across the lead cyclist. The camera rider is the witness.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_073451_GOPR0130_chunk_0026_segment_002_of_006.mp4",
+      "facts": {
+        "vehicle": {"type": "taxi", "colour": "yellow"}
+      }
+    },
+    {
+      "id": "N0245",
+      "kind": "driver",
+      "label": "vehicle in the lane",
+      "ride": "GOPR0130",
+      "clock": "8:30",
+      "chunk_index": 17,
+      "start_sec": 0.0,
+      "end_sec": 5.0,
+      "clip": "20261008_073104_GOPR0130_chunk_0017.mp4",
+      "note": "A yellow taxi is inches from the right handlebar.",
+      "source": "s3://team-1-vss-chunks-segments/segments/20261008_073104_GOPR0130_chunk_0017_segment_001_of_006.mp4",
+      "facts": {
+        "vehicle": {"type": "taxi", "colour": "yellow", "side": "right"}
+      }
+    }
+  ]
+}

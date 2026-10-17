@@ -18,19 +18,25 @@ NS="$TEAM_USER"
 APP_HOST="video-lab-team-${TEAM_USER#team-}.cosmos.vastdata.com"
 export KUBECONFIG="/config/${NS}-k8s.yaml"
 
+# The restart below wipes the pod's reviews, so save them first; data/reviews.json then seeds REVIEWS_PATH.
+"$REPO_DIR/k8s/pull-reviews.sh"
+
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
-# Keep the ConfigMap small and free of local device state / bytecode (reviews.json seeds REVIEWS_PATH).
+# Keep the ConfigMap small and free of local device state / bytecode.
 shopt -s nullglob
 for f in "$APP_DIR"/*.py "$APP_DIR"/*.json "$APP_DIR"/*.html "$APP_DIR"/requirements.txt "$APP_DIR"/art-*; do
   case "$(basename "$f")" in
-    devices.json) continue ;;
+    devices.json|reviews.json) continue ;;
   esac
   cp "$f" "$STAGE/"
 done
+if [[ -f "$REPO_DIR/data/reviews.json" ]]; then cp "$REPO_DIR/data/reviews.json" "$STAGE/reviews.json"; fi
 
+# Server-side: client-side apply stores the whole ConfigMap in last-applied-configuration,
+# which caps at 256 KiB and rejects the art assets.
 kubectl -n "$NS" create configmap "${APP_NAME}-code" --from-file="$STAGE" \
-  --dry-run=client -o yaml | kubectl apply -f -
+  --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
 "$REPO_DIR/k8s/update-data.sh"
 
 # In-cluster backend: same API as $INGRESS_URL, without the round trip through the Ingress.
